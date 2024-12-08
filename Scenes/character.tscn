@@ -1,0 +1,44 @@
+[gd_scene load_steps=7 format=3 uid="uid://bv2vog8is7vuk"]
+
+[ext_resource type="Script" path="res://Scenes/character.gd" id="1_fim1r"]
+[ext_resource type="Texture2D" uid="uid://cqv8be8v4x4qw" path="res://assets/BirdSprite.png" id="1_gajmb"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b6lnx"]
+atlas = ExtResource("1_gajmb")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uyywq"]
+atlas = ExtResource("1_gajmb")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ddd4e"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b6lnx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uyywq")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vfm1u"]
+radius = 6.08276
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_fim1r")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -8)
+sprite_frames = SubResource("SpriteFrames_ddd4e")
+animation = &"idle"
+autoplay = "idle"
+frame_progress = 0.61508
+flip_h = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -6)
+shape = SubResource("CircleShape2D_vfm1u")

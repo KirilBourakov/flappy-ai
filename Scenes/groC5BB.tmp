@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3 uid="uid://bggs7c44rjvcd"]
+
+[ext_resource type="Texture2D" uid="uid://crhvy5bwabvls" path="res://assets/ground.png" id="1_lu1vp"]
+[ext_resource type="Script" path="res://Scenes/ground.gd" id="1_n6rpn"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_uaq5v"]
+distance = 52.0
+
+[node name="Ground" type="Node2D"]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+script = ExtResource("1_n6rpn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("WorldBoundaryShape2D_uaq5v")
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D"]
+position = Vector2(-90, 15.5)
+scale = Vector2(1.53571, 1.27679)
+texture = ExtResource("1_lu1vp")
+
+[node name="adder" type="VisibleOnScreenNotifier2D" parent="StaticBody2D"]
+position = Vector2(-288, 15.5)
+scale = Vector2(5.8, 6.85)
+
+[node name="remover" type="VisibleOnScreenNotifier2D" parent="StaticBody2D"]
+position = Vector2(102, 16)
+scale = Vector2(6.5, 6.9)
+
+[connection signal="screen_entered" from="StaticBody2D/adder" to="StaticBody2D" method="add"]
+[connection signal="screen_exited" from="StaticBody2D/adder" to="StaticBody2D" method="_on_visible_on_screen_notifier_2d_screen_exited"]
+[connection signal="screen_exited" from="StaticBody2D/remover" to="StaticBody2D" method="remove"]

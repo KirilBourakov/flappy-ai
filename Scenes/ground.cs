@@ -12,7 +12,7 @@ public partial class ground : StaticBody2D
         _staticBody2D = this;
 	}
 
-	public void add(){
+	public void Add(){
 		StaticBody2D copyNode = (StaticBody2D)_staticBody2D.Duplicate();
 		copyNode.Position = new Vector2(_staticBody2D.Position.X + 330, _staticBody2D.Position.Y);
 

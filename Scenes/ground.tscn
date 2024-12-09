@@ -27,6 +27,6 @@ scale = Vector2(8.8, 10.275)
 position = Vector2(-159, -18.5)
 scale = Vector2(18.8, 10.25)
 
-[connection signal="screen_entered" from="StaticBody2D/adder" to="StaticBody2D" method="add"]
+[connection signal="screen_entered" from="StaticBody2D/adder" to="StaticBody2D" method="Add"]
 [connection signal="screen_exited" from="StaticBody2D/adder" to="StaticBody2D" method="_on_visible_on_screen_notifier_2d_screen_exited"]
 [connection signal="screen_exited" from="StaticBody2D/remover" to="StaticBody2D" method="remove"]

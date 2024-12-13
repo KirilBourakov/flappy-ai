@@ -5,7 +5,7 @@ public partial class Character : CharacterBody2D
 {
 	public const float Speed = 200.0f;
 	public const float JumpVelocity = -200.0f;
-
+	
 	public override void _PhysicsProcess(double delta)
 	{
 		Vector2 velocity = Velocity;

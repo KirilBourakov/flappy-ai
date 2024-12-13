@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://uwtcpscn2mes"]
+[gd_scene load_steps=4 format=3 uid="uid://uwtcpscn2mes"]
 
 [ext_resource type="PackedScene" uid="uid://bv2vog8is7vuk" path="res://Scenes/character.tscn" id="1_4na2q"]
 [ext_resource type="PackedScene" uid="uid://y3q8io78e4gm" path="res://Scenes/ground.tscn" id="2_8gyc7"]
+[ext_resource type="Script" path="res://Scenes/Camera2d.cs" id="2_e4ltt"]
 
 [node name="Node2D" type="Node2D"]
 
@@ -12,8 +13,8 @@ position = Vector2(7, -10)
 position = Vector2(0, -75)
 offset = Vector2(0, 50)
 zoom = Vector2(3, 3)
-limit_bottom = 50
 position_smoothing_enabled = true
+script = ExtResource("2_e4ltt")
 
 [node name="Ground" parent="." instance=ExtResource("2_8gyc7")]
 position = Vector2(48, 57)

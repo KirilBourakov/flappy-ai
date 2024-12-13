@@ -1,23 +1,31 @@
-[gd_scene load_steps=4 format=3 uid="uid://cy7b48sh67oxa"]
+[gd_scene load_steps=5 format=3 uid="uid://cy7b48sh67oxa"]
 
 [ext_resource type="Texture2D" uid="uid://b7pibuwel60lm" path="res://assets/pipe-green.png" id="1_eqp1y"]
+[ext_resource type="Script" path="res://Scenes/pipe/Pipe.cs" id="1_kouik"]
 [ext_resource type="PackedScene" uid="uid://cu5c6ja138dpb" path="res://Scenes/killZone.tscn" id="2_hlmp4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_r76ix"]
 size = Vector2(30.7543, 90.4988)
 
 [node name="Pipe" type="Node2D"]
+scale = Vector2(1.00661, 1.60674)
+script = ExtResource("1_kouik")
 
 [node name="KillZone" parent="." instance=ExtResource("2_hlmp4")]
-position = Vector2(-49.2661, -0.897644)
+position = Vector2(-0.0909996, 0.0956561)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KillZone"]
-position = Vector2(33.8343, -44.3702)
-scale = Vector2(1, 1)
+position = Vector2(-0.687614, -0.416672)
 shape = SubResource("RectangleShape2D_r76ix")
 
 [node name="Sprite2D" type="Sprite2D" parent="KillZone"]
 z_index = -1
-position = Vector2(33.7301, -45.0522)
+position = Vector2(-0.280293, -0.45454)
 scale = Vector2(0.673359, 0.290466)
 texture = ExtResource("1_eqp1y")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(-0.404313, -0.513196)
+scale = Vector2(1.52556, 4.5633)
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="KillZone" method="ScreenExit"]

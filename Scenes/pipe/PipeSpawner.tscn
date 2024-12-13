@@ -1,12 +1,19 @@
-[gd_scene load_steps=2 format=3 uid="uid://n1csuekki0s2"]
+[gd_scene load_steps=3 format=3 uid="uid://n1csuekki0s2"]
 
+[ext_resource type="Script" path="res://Scenes/pipe/PipeSpawner.cs" id="1_6shi4"]
 [ext_resource type="PackedScene" uid="uid://cy7b48sh67oxa" path="res://Scenes/pipe/Pipe.tscn" id="1_pibmj"]
 
 [node name="PipeSpawner" type="Node2D"]
+script = ExtResource("1_6shi4")
 
-[node name="Pipe" parent="." instance=ExtResource("1_pibmj")]
+[node name="Bottom" parent="." instance=ExtResource("1_pibmj")]
 position = Vector2(-18.4877, 0.190613)
 
-[node name="Pipe2" parent="." instance=ExtResource("1_pibmj")]
-position = Vector2(-51.531, -247.171)
+[node name="Top" parent="." instance=ExtResource("1_pibmj")]
+position = Vector2(-19.2715, -224.723)
 rotation = 3.14159
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.2
+
+[connection signal="timeout" from="Timer" to="." method="SpawnTimerDone"]

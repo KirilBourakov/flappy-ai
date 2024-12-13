@@ -1,0 +1,1 @@
+WIP project to write an evolutionary algorithm to play flappy bird

@@ -1,18 +1,18 @@
-[gd_scene load_steps=4 format=3 uid="uid://y3q8io78e4gm"]
+[gd_scene load_steps=6 format=3 uid="uid://y3q8io78e4gm"]
 
 [ext_resource type="Texture2D" uid="uid://crhvy5bwabvls" path="res://assets/ground.png" id="1_lu1vp"]
 [ext_resource type="Script" path="res://Scenes/ground.cs" id="1_vhynk"]
+[ext_resource type="PackedScene" uid="uid://cu5c6ja138dpb" path="res://Scenes/killZone.tscn" id="3_5xvp3"]
 
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_uaq5v"]
-distance = 52.0
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_3s7k2"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_ofbed"]
+distance = 49.0
 
 [node name="Ground" type="Node2D"]
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 script = ExtResource("1_vhynk")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-shape = SubResource("WorldBoundaryShape2D_uaq5v")
 
 [node name="Sprite2D" type="Sprite2D" parent="StaticBody2D"]
 position = Vector2(-90, 15.5)
@@ -26,6 +26,16 @@ scale = Vector2(8.8, 10.275)
 [node name="remover" type="VisibleOnScreenNotifier2D" parent="StaticBody2D"]
 position = Vector2(-159, -18.5)
 scale = Vector2(18.8, 10.25)
+
+[node name="KillZone" parent="StaticBody2D" instance=ExtResource("3_5xvp3")]
+position = Vector2(-2, -53)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D/KillZone"]
+shape = SubResource("WorldBoundaryShape2D_3s7k2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(0, 108)
+shape = SubResource("WorldBoundaryShape2D_ofbed")
 
 [connection signal="screen_entered" from="StaticBody2D/adder" to="StaticBody2D" method="Add"]
 [connection signal="screen_exited" from="StaticBody2D/adder" to="StaticBody2D" method="_on_visible_on_screen_notifier_2d_screen_exited"]

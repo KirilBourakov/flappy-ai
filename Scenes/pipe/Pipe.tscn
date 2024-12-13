@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://cy7b48sh67oxa"]
+
+[ext_resource type="Texture2D" uid="uid://b7pibuwel60lm" path="res://assets/pipe-green.png" id="1_eqp1y"]
+[ext_resource type="PackedScene" uid="uid://cu5c6ja138dpb" path="res://Scenes/killZone.tscn" id="2_hlmp4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r76ix"]
+size = Vector2(30.7543, 90.4988)
+
+[node name="Pipe" type="Node2D"]
+
+[node name="KillZone" parent="." instance=ExtResource("2_hlmp4")]
+position = Vector2(-49.2661, -0.897644)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KillZone"]
+position = Vector2(33.8343, -44.3702)
+scale = Vector2(1, 1)
+shape = SubResource("RectangleShape2D_r76ix")
+
+[node name="Sprite2D" type="Sprite2D" parent="KillZone"]
+z_index = -1
+position = Vector2(33.7301, -45.0522)
+scale = Vector2(0.673359, 0.290466)
+texture = ExtResource("1_eqp1y")

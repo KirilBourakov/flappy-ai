@@ -5,6 +5,7 @@ public partial class PipeSpawner : Node2D
 {
 	private Timer timer;
 	private PackedScene pipeScene;
+	private PackedScene pointScene;
 	private Random random;
 
 	private const int CENTER_MIN = -150;
@@ -20,6 +21,7 @@ public partial class PipeSpawner : Node2D
 	public override void _Ready()
 	{
 		this.pipeScene = GD.Load<PackedScene>("res://Scenes/pipe/Pipe.tscn");
+		this.pointScene = GD.Load<PackedScene>("res://Scenes/pipe/PointGiver.tscn");
 		this.timer = GetNode<Timer>("Timer");
 		this.timer.Start();
 
@@ -36,7 +38,6 @@ public partial class PipeSpawner : Node2D
 		center = Math.Min(CENTER_MAX, center);
 		int gap = Math.Max(LAST_GAP_MIN, this.lastGap + this.random.Next(-25, +25));
 		gap = Math.Min(LAST_GAP_MAX, gap);
-
 		
 		Pipe top = (Pipe)this.pipeScene.Instantiate();
 		top.Position = new Vector2(x, center-(gap/2)-75);
@@ -45,6 +46,17 @@ public partial class PipeSpawner : Node2D
 		Pipe bottom = (Pipe)this.pipeScene.Instantiate();
 		bottom.Position = new Vector2(x, center+(gap/2)+75);
 
+		PointGiver pointGiver = (PointGiver)this.pointScene.Instantiate();
+		pointGiver.Position = new Vector2(x, 0);
+		CollisionShape2D giverColliderNode = pointGiver.GetNode<CollisionShape2D>("CollisionShape2D");
+
+		// Check if the shape is a RectangleShape2D
+		if (giverColliderNode.Shape is RectangleShape2D rectangleShape)
+		{
+			// Set the extents of the RectangleShape2D
+			rectangleShape.Size = new Vector2(30, 400);
+		}
+		this.AddChild(pointGiver);
 		this.AddChild(bottom);
 		this.AddChild(top);
 	}

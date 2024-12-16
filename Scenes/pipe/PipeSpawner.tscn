@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://n1csuekki0s2"]
+[gd_scene load_steps=4 format=3 uid="uid://n1csuekki0s2"]
 
 [ext_resource type="Script" path="res://Scenes/pipe/PipeSpawner.cs" id="1_6shi4"]
 [ext_resource type="PackedScene" uid="uid://cy7b48sh67oxa" path="res://Scenes/pipe/Pipe.tscn" id="1_pibmj"]
+[ext_resource type="PackedScene" uid="uid://xwu6woi58vpu" path="res://Scenes/pipe/PointGiver.tscn" id="3_5pack"]
 
 [node name="PipeSpawner" type="Node2D"]
 script = ExtResource("1_6shi4")
@@ -15,5 +16,9 @@ rotation = 3.14159
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.2
+
+[node name="PointGiver" parent="." instance=ExtResource("3_5pack")]
+position = Vector2(-18.4877, -113.506)
+scale = Vector2(1.31252, 4.2002)
 
 [connection signal="timeout" from="Timer" to="." method="SpawnTimerDone"]

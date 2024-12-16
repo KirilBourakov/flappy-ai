@@ -5,8 +5,14 @@ public partial class Character : CharacterBody2D
 {
 	private float Speed = 200.0f;
 	private float JumpVelocity = -200.0f;
-	
-	public override void _PhysicsProcess(double delta)
+	private int points;
+
+    public override void _Ready()
+    {
+        this.points = 0;
+    }
+
+    public override void _PhysicsProcess(double delta)
 	{
 		Vector2 velocity = Velocity;
 
@@ -33,5 +39,10 @@ public partial class Character : CharacterBody2D
 	public void Kill(){
 		this.Speed = 0;
 		this.JumpVelocity = 0;
+	}
+
+	public void addPoint(){
+		GD.Print("+1 point");
+		this.points++;
 	}
 }

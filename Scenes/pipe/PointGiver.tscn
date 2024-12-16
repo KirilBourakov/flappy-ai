@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://xwu6woi58vpu"]
+
+[ext_resource type="Script" path="res://Scenes/pipe/PointGiver.cs" id="1_7kdh7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b0nm0"]
+
+[node name="PointGiver" type="Area2D"]
+collision_mask = 2
+script = ExtResource("1_7kdh7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_b0nm0")
+
+[connection signal="body_exited" from="." to="." method="OnPlayerExit"]

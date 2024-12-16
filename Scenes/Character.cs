@@ -42,7 +42,6 @@ public partial class Character : CharacterBody2D
 	}
 
 	public void addPoint(){
-		GD.Print("+1 point");
 		this.points++;
 	}
 }

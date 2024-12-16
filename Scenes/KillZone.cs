@@ -13,7 +13,6 @@ public partial class KillZone : Area2D
         Engine.TimeScale = .5;
         Character c = (Character) body;
         c.Kill();
-        GD.Print("die");
     }
 
     public void DeathTimerComplete(){

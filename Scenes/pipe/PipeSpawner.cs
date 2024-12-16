@@ -62,7 +62,6 @@ public partial class PipeSpawner : Node2D
 	}
 
 	public void SpawnTimerDone(){
-		GD.Print("Spawn " + SpawnPos.X);
 		SpawnPipes();
 		timer.WaitTime = this.random.NextDouble()+0.25;
 		this.timer.Start();

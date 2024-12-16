@@ -10,10 +10,14 @@ public partial class KillZone : Area2D
 
     public void Collide(Node2D body){
         this.timer.Start();
+        Engine.TimeScale = .5;
+        Character c = (Character) body;
+        c.Kill();
         GD.Print("die");
     }
 
     public void DeathTimerComplete(){
+        Engine.TimeScale = 1;
         GetTree().ReloadCurrentScene();
     }
 }

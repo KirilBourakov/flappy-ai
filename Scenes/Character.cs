@@ -3,8 +3,8 @@ using System;
 
 public partial class Character : CharacterBody2D
 {
-	public const float Speed = 200.0f;
-	public const float JumpVelocity = -200.0f;
+	private float Speed = 200.0f;
+	private float JumpVelocity = -200.0f;
 	
 	public override void _PhysicsProcess(double delta)
 	{
@@ -28,5 +28,10 @@ public partial class Character : CharacterBody2D
 
 		Velocity = velocity;
 		MoveAndSlide();
+	}
+
+	public void Kill(){
+		this.Speed = 0;
+		this.JumpVelocity = 0;
 	}
 }

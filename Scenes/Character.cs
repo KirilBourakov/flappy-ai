@@ -6,10 +6,14 @@ public partial class Character : CharacterBody2D
 	private float Speed = 200.0f;
 	private float JumpVelocity = -200.0f;
 	private int points;
+	private Label label;
+	private AudioStreamPlayer2D scorePlayer;
 
     public override void _Ready()
     {
         this.points = 0;
+		this.label = GetNode<Label>("Camera2D/CoinLabel");
+		this.scorePlayer = GetNode<AudioStreamPlayer2D>("ScorePlayer");
     }
 
     public override void _PhysicsProcess(double delta)
@@ -43,5 +47,7 @@ public partial class Character : CharacterBody2D
 
 	public void addPoint(){
 		this.points++;
+		this.label.Text = "Score " + this.points;
+		this.scorePlayer.Play();
 	}
 }

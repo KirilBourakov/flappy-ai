@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://y3q8io78e4gm"]
 
 [ext_resource type="Texture2D" uid="uid://crhvy5bwabvls" path="res://assets/ground.png" id="1_lu1vp"]
-[ext_resource type="Script" path="res://Scenes/ground.cs" id="1_vhynk"]
-[ext_resource type="PackedScene" uid="uid://cu5c6ja138dpb" path="res://Scenes/killZone.tscn" id="3_5xvp3"]
+[ext_resource type="Script" path="res://Scenes/World/ground.cs" id="1_vhynk"]
+[ext_resource type="PackedScene" uid="uid://cu5c6ja138dpb" path="res://Scenes/World/killZone.tscn" id="3_5xvp3"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_3s7k2"]
 

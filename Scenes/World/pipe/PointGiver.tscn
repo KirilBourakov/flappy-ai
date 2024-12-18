@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://xwu6woi58vpu"]
 
-[ext_resource type="Script" path="res://Scenes/pipe/PointGiver.cs" id="1_7kdh7"]
+[ext_resource type="Script" path="res://Scenes/World/pipe/PointGiver.cs" id="1_7kdh7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_b0nm0"]
 

@@ -1,10 +1,10 @@
 [gd_scene load_steps=7 format=3 uid="uid://uwtcpscn2mes"]
 
-[ext_resource type="PackedScene" uid="uid://bv2vog8is7vuk" path="res://Scenes/character.tscn" id="1_4na2q"]
-[ext_resource type="PackedScene" uid="uid://y3q8io78e4gm" path="res://Scenes/ground.tscn" id="2_8gyc7"]
-[ext_resource type="Script" path="res://Scenes/Camera2d.cs" id="2_e4ltt"]
+[ext_resource type="PackedScene" uid="uid://bv2vog8is7vuk" path="res://Scenes/Player/character.tscn" id="1_4na2q"]
+[ext_resource type="PackedScene" uid="uid://y3q8io78e4gm" path="res://Scenes/World/ground.tscn" id="2_8gyc7"]
+[ext_resource type="Script" path="res://Scenes/Player/Camera2d.cs" id="2_e4ltt"]
 [ext_resource type="FontFile" uid="uid://cj3yts03tkw43" path="res://fonts/PixelOperator8.ttf" id="3_ytsgu"]
-[ext_resource type="PackedScene" uid="uid://n1csuekki0s2" path="res://Scenes/pipe/PipeSpawner.tscn" id="4_5yc7b"]
+[ext_resource type="PackedScene" uid="uid://n1csuekki0s2" path="res://Scenes/World/pipe/PipeSpawner.tscn" id="4_5yc7b"]
 [ext_resource type="AudioStream" uid="uid://ds2uf6aj4vgg6" path="res://sfx/score.wav" id="4_87qwf"]
 
 [node name="Node2D" type="Node2D"]

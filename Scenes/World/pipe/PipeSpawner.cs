@@ -20,8 +20,8 @@ public partial class PipeSpawner : Node2D
 	private Vector2 SpawnPos;
 	public override void _Ready()
 	{
-		this.pipeScene = GD.Load<PackedScene>("res://Scenes/pipe/Pipe.tscn");
-		this.pointScene = GD.Load<PackedScene>("res://Scenes/pipe/PointGiver.tscn");
+		this.pipeScene = GD.Load<PackedScene>("res://Scenes/World/pipe/Pipe.tscn");
+		this.pointScene = GD.Load<PackedScene>("res://Scenes/World/pipe/PointGiver.tscn");
 		this.timer = GetNode<Timer>("Timer");
 		this.timer.Start();
 

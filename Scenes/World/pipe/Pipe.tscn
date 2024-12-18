@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://cy7b48sh67oxa"]
 
 [ext_resource type="Texture2D" uid="uid://b7pibuwel60lm" path="res://assets/pipe-green.png" id="1_eqp1y"]
-[ext_resource type="Script" path="res://Scenes/pipe/Pipe.cs" id="1_kouik"]
-[ext_resource type="PackedScene" uid="uid://cu5c6ja138dpb" path="res://Scenes/killZone.tscn" id="2_hlmp4"]
+[ext_resource type="Script" path="res://Scenes/World/pipe/Pipe.cs" id="1_kouik"]
+[ext_resource type="PackedScene" uid="uid://cu5c6ja138dpb" path="res://Scenes/World/killZone.tscn" id="2_hlmp4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_r76ix"]
 size = Vector2(30.7543, 90.4988)

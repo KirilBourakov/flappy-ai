@@ -1,12 +1,13 @@
 using Godot;
 
-abstract partial class Agent : CharacterBody2D
+abstract public partial class Agent : CharacterBody2D
 {
-    private float Speed = 200.0f;
-	private float JumpVelocity = -200.0f;
-    private int points;
+    protected float Speed = 200.0f;
+	protected float JumpVelocity = -200.0f;
+    protected int points = 0;
 
     abstract public void Kill();
     abstract public void AddPoint();
+    abstract override public void _PhysicsProcess(double delta);
 
 }

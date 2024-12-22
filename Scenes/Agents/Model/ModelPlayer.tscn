@@ -2,11 +2,11 @@
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_466e4"]
 
-[node name="ModelPlayer" type="Node2D"]
+[node name="ModelPlayer" type="Node"]
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
 shape = SubResource("CircleShape2D_466e4")
+
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D"]

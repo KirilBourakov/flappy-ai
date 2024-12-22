@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://bv2vog8is7vuk"]
 
 [ext_resource type="Texture2D" uid="uid://cqv8be8v4x4qw" path="res://assets/BirdSprite.png" id="1_gajmb"]
-[ext_resource type="Script" path="res://Scenes/Player/Character.cs" id="1_o62oo"]
+[ext_resource type="Script" path="res://Scenes/Agents/Player/Character.cs" id="1_o62oo"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_b6lnx"]
 atlas = ExtResource("1_gajmb")

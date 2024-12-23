@@ -6,14 +6,18 @@ using System.Linq;
 
 public partial class ModelPlayer : Agent
 {
-	private bool dead = false;
+	public bool dead {get; set;} = false;
 
-	private double[] weights;
+	public double[] weights;
 
 	private RayCast2D[] inputs = new RayCast2D[9];
 
     // distance from ground
     // 'sight'
+
+	public ModelPlayer(){
+		this.InitWeights();
+	}
 
     public override void _Ready()
     {
@@ -28,8 +32,6 @@ public partial class ModelPlayer : Agent
 				break;
 			}
 		}
-
-		this.InitWeights();
     }
 
 	public void InitWeights(){
@@ -78,4 +80,7 @@ public partial class ModelPlayer : Agent
     {
         this.points++;
     }
+	public int GetPoints(){
+		return this.points++;
+	}
 }

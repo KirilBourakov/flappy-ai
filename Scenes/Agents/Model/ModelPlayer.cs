@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 public partial class ModelPlayer : Agent
@@ -27,33 +28,46 @@ public partial class ModelPlayer : Agent
 				break;
 			}
 		}
+
+		this.InitWeights();
     }
+
+	public void InitWeights(){
+		Random random = new Random();
+		this.weights = new double[9];
+		for (int i = 0; i < 9; i++){
+			this.weights[i] = (float)(random.NextDouble() * 20 - 10);
+		}
+	}
 
     public override void _PhysicsProcess(double delta)
 	{
 		Vector2 velocity = Velocity;
+		velocity += GetGravity() * (float)delta;
 
-		// Add the gravity.
-		if (!IsOnFloor())
-		{
-			velocity += GetGravity() * (float)delta;
-		}
 
 		// Handle Jump.
+		int i = 0;
+		double total = 0;
 		foreach (var input in this.inputs){
 			if (input.IsColliding()){
-				GD.Print(input.Name + " is collding");
+				total += this.weights[i];
 			}
+			i++;
 		}
-		if (Input.IsActionJustPressed("ui_accept"))
-		{
+		bool activated = this.StepFunction(total);
+
+		if(activated){
 			velocity.Y = JumpVelocity;
-		}
+		}	
 
 		velocity.X = Speed;
-
 		Velocity = velocity;
 		MoveAndSlide();
+	}
+
+	private bool StepFunction(double inp){
+		return inp > 0;
 	}
 
     public override void Kill()

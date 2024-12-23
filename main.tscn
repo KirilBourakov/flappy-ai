@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://uwtcpscn2mes"]
+[gd_scene load_steps=9 format=3 uid="uid://uwtcpscn2mes"]
 
 [ext_resource type="PackedScene" uid="uid://bv2vog8is7vuk" path="res://Scenes/Agents/Player/character.tscn" id="1_4na2q"]
 [ext_resource type="PackedScene" uid="uid://y3q8io78e4gm" path="res://Scenes/World/ground.tscn" id="2_8gyc7"]
@@ -7,6 +7,9 @@
 [ext_resource type="PackedScene" uid="uid://n1csuekki0s2" path="res://Scenes/World/pipe/PipeSpawner.tscn" id="4_5yc7b"]
 [ext_resource type="AudioStream" uid="uid://ds2uf6aj4vgg6" path="res://sfx/score.wav" id="4_87qwf"]
 [ext_resource type="PackedScene" uid="uid://ccxqbaditnjl" path="res://Scenes/Agents/Model/ModelPlayer.tscn" id="7_738ck"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_5tqt0"]
+distance = 311.0
 
 [node name="Node2D" type="Node2D"]
 position = Vector2(0, -29)
@@ -44,3 +47,10 @@ position = Vector2(56, 85)
 
 [node name="PipeSpawner" parent="." instance=ExtResource("4_5yc7b")]
 position = Vector2(177, 1)
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(20, -611)
+rotation = 3.14159
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("WorldBoundaryShape2D_5tqt0")

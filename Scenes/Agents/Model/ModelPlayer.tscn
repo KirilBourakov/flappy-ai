@@ -15,38 +15,56 @@ script = ExtResource("1_kdnt3")
 [node name="1" type="RayCast2D" parent="Raycasts"]
 position = Vector2(0, -6)
 target_position = Vector2(222, -120)
+collision_mask = 4
+collide_with_areas = true
 
 [node name="2" type="RayCast2D" parent="Raycasts"]
 position = Vector2(0, -6)
 target_position = Vector2(225, -90)
+collision_mask = 4
+collide_with_areas = true
 
 [node name="3" type="RayCast2D" parent="Raycasts"]
 position = Vector2(0, -6)
 target_position = Vector2(229, -60)
+collision_mask = 4
+collide_with_areas = true
 
 [node name="4" type="RayCast2D" parent="Raycasts"]
 position = Vector2(0, -6)
 target_position = Vector2(230, -30)
+collision_mask = 4
+collide_with_areas = true
 
 [node name="5" type="RayCast2D" parent="Raycasts"]
 position = Vector2(0, -6)
 target_position = Vector2(227, 0)
+collision_mask = 4
+collide_with_areas = true
 
 [node name="6" type="RayCast2D" parent="Raycasts"]
 position = Vector2(0, -6)
 target_position = Vector2(230, 30)
+collision_mask = 4
+collide_with_areas = true
 
 [node name="7" type="RayCast2D" parent="Raycasts"]
 position = Vector2(0, -6)
 target_position = Vector2(229, 60)
+collision_mask = 4
+collide_with_areas = true
 
 [node name="8" type="RayCast2D" parent="Raycasts"]
 position = Vector2(0, -6)
 target_position = Vector2(225, 90)
+collision_mask = 4
+collide_with_areas = true
 
 [node name="9" type="RayCast2D" parent="Raycasts"]
 position = Vector2(0, -5)
 target_position = Vector2(222, 120)
+collision_mask = 4
+collide_with_areas = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(0, -6)

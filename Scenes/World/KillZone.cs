@@ -9,10 +9,16 @@ public partial class KillZone : Area2D
     }
 
     public void Collide(Node2D body){
-        this.timer.Start();
-        Engine.TimeScale = .5;
-        Character c = (Character) body;
-        c.Kill();
+        if (body is Character character)
+        {
+            this.timer.Start();
+            Engine.TimeScale = .5;
+            character.Kill();
+        }
+        else if (body is ModelPlayer modelPlayer){
+            modelPlayer.Kill();
+        }
+        
     }
 
     public void DeathTimerComplete(){

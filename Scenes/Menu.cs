@@ -4,7 +4,7 @@ using System;
 public partial class Menu : Control
 {
 	public void PlayPressed(){
-		GetTree().ChangeSceneToFile("Play.tscn");
+		GetTree().ChangeSceneToFile("res://Scenes/Play.tscn");
 	}
 	
 	public void TrainPressed(){

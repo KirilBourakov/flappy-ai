@@ -1,11 +1,11 @@
 [gd_scene load_steps=8 format=3 uid="uid://uwtcpscn2mes"]
 
-[ext_resource type="PackedScene" uid="uid://bv2vog8is7vuk" path="res://Scenes/Agents/Player/character.tscn" id="1_sj28w"]
-[ext_resource type="Script" path="res://Scenes/Agents/Player/Camera2d.cs" id="2_o6kx0"]
-[ext_resource type="FontFile" uid="uid://cj3yts03tkw43" path="res://fonts/PixelOperator8.ttf" id="3_8w66k"]
-[ext_resource type="AudioStream" uid="uid://ds2uf6aj4vgg6" path="res://sfx/score.wav" id="4_fipsd"]
-[ext_resource type="PackedScene" uid="uid://y3q8io78e4gm" path="res://Scenes/World/ground.tscn" id="5_r0t8f"]
-[ext_resource type="PackedScene" uid="uid://n1csuekki0s2" path="res://Scenes/World/pipe/PipeSpawner.tscn" id="6_fyds8"]
+[ext_resource type="PackedScene" uid="uid://bv2vog8is7vuk" path="res://Scenes/Agents/Player/character.tscn" id="1_31lt5"]
+[ext_resource type="Script" path="res://Scenes/Agents/Player/Camera2d.cs" id="2_uc0th"]
+[ext_resource type="FontFile" uid="uid://cj3yts03tkw43" path="res://fonts/PixelOperator8.ttf" id="3_v6y1h"]
+[ext_resource type="AudioStream" uid="uid://ds2uf6aj4vgg6" path="res://sfx/score.wav" id="4_dnlkp"]
+[ext_resource type="PackedScene" uid="uid://y3q8io78e4gm" path="res://Scenes/World/ground.tscn" id="5_ra1q1"]
+[ext_resource type="PackedScene" uid="uid://n1csuekki0s2" path="res://Scenes/World/pipe/PipeSpawner.tscn" id="6_y17s3"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_5tqt0"]
 distance = 311.0
@@ -13,7 +13,7 @@ distance = 311.0
 [node name="Node2D" type="Node2D"]
 position = Vector2(0, -29)
 
-[node name="Player" parent="." instance=ExtResource("1_sj28w")]
+[node name="Player" parent="." instance=ExtResource("1_31lt5")]
 position = Vector2(0, -27)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
@@ -21,7 +21,7 @@ position = Vector2(-1, -5)
 scale = Vector2(0.5, 1)
 offset = Vector2(0, -50)
 zoom = Vector2(2.5, 2.5)
-script = ExtResource("2_o6kx0")
+script = ExtResource("2_uc0th")
 
 [node name="CoinLabel" type="Label" parent="Player/Camera2D"]
 z_index = 2
@@ -29,19 +29,19 @@ offset_left = -460.0
 offset_top = -180.0
 offset_right = -358.0
 offset_bottom = -157.0
-theme_override_fonts/font = ExtResource("3_8w66k")
+theme_override_fonts/font = ExtResource("3_v6y1h")
 theme_override_font_sizes/font_size = 16
 text = "Score: 0"
 
 [node name="ScorePlayer" type="AudioStreamPlayer2D" parent="Player"]
 position = Vector2(-231, -185)
 scale = Vector2(0.5, 1)
-stream = ExtResource("4_fipsd")
+stream = ExtResource("4_dnlkp")
 
-[node name="Ground" parent="." instance=ExtResource("5_r0t8f")]
+[node name="Ground" parent="." instance=ExtResource("5_ra1q1")]
 position = Vector2(56, 85)
 
-[node name="PipeSpawner" parent="." instance=ExtResource("6_fyds8")]
+[node name="PipeSpawner" parent="." instance=ExtResource("6_y17s3")]
 position = Vector2(177, 1)
 
 [node name="Area2D" type="Area2D" parent="."]

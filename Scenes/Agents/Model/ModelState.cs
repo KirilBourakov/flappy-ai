@@ -92,7 +92,7 @@ public partial class ModelState : Node
 	public double GetGaussianMutation(){
 		double u1 = random.NextDouble();
 		double u2 = random.NextDouble();
-		return random.Next(0, 2) - 1 + 0.1 * Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Cos(2.0 * Math.PI * u2);
+		return 0.1 * Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Cos(2.0 * Math.PI * u2);
 	}
 
 

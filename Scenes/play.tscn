@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://uwtcpscn2mes"]
+[gd_scene load_steps=9 format=3 uid="uid://uwtcpscn2mes"]
 
 [ext_resource type="PackedScene" uid="uid://bv2vog8is7vuk" path="res://Scenes/Agents/Player/character.tscn" id="1_31lt5"]
 [ext_resource type="Script" path="res://Scenes/Agents/Player/Camera2d.cs" id="2_uc0th"]
@@ -6,9 +6,11 @@
 [ext_resource type="AudioStream" uid="uid://ds2uf6aj4vgg6" path="res://sfx/score.wav" id="4_dnlkp"]
 [ext_resource type="PackedScene" uid="uid://y3q8io78e4gm" path="res://Scenes/World/ground.tscn" id="5_ra1q1"]
 [ext_resource type="PackedScene" uid="uid://n1csuekki0s2" path="res://Scenes/World/pipe/PipeSpawner.tscn" id="6_y17s3"]
+[ext_resource type="PackedScene" uid="uid://cu5c6ja138dpb" path="res://Scenes/World/killZone.tscn" id="7_4o3kx"]
 
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_5tqt0"]
-distance = 311.0
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_4rn58"]
+normal = Vector2(0, 1)
+distance = 79.0
 
 [node name="Node2D" type="Node2D"]
 position = Vector2(0, -29)
@@ -40,13 +42,14 @@ stream = ExtResource("4_dnlkp")
 
 [node name="Ground" parent="." instance=ExtResource("5_ra1q1")]
 position = Vector2(56, 85)
+metadata/_edit_lock_ = true
 
 [node name="PipeSpawner" parent="." instance=ExtResource("6_y17s3")]
 position = Vector2(177, 1)
+metadata/_edit_lock_ = true
 
-[node name="Area2D" type="Area2D" parent="."]
-position = Vector2(20, -611)
-rotation = 3.14159
+[node name="KillZone" parent="." instance=ExtResource("7_4o3kx")]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource("WorldBoundaryShape2D_5tqt0")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KillZone"]
+position = Vector2(-1, -290)
+shape = SubResource("WorldBoundaryShape2D_4rn58")

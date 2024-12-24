@@ -44,6 +44,10 @@ public partial class ModelPlayer : Agent
 
     public override void _PhysicsProcess(double delta)
 	{
+		if (dead){
+			return;
+		}
+		
 		Vector2 velocity = Velocity;
 		velocity += GetGravity() * (float)delta;
 
@@ -78,9 +82,11 @@ public partial class ModelPlayer : Agent
     }
     public override void AddPoint()
     {
-        this.points++;
+		if(!this.dead){
+			this.points++;
+		}
     }
 	public int GetPoints(){
-		return this.points++;
+		return this.points;
 	}
 }

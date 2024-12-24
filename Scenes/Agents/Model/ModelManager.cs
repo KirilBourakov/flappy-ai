@@ -9,11 +9,13 @@ public partial class ModelManager : Node2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		this.modelScene = GD.Load<PackedScene>("res://Scenes/Agents/Model/ModelManager.tscn");
-		this.modelState = GD.Load<ModelState>("res://Scenes/Agents/Model/ModelState.cs");
-		
+		this.modelScene = GD.Load<PackedScene>("res://Scenes/Agents/Model/ModelPlayer.tscn");
+
+		this.modelState = ModelState.Instance;
+		GD.Print(this.modelState.internalManaged);
 		if (!this.modelState.internalManaged)
 		{
+			GD.Print("Adding");
 			for (int i = 0; i < ModelState.GEN_SIZE; i++)
 			{
 				var newModel = (ModelPlayer)this.modelScene.Instantiate();
@@ -27,7 +29,8 @@ public partial class ModelManager : Node2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (AllDead()){
+		bool finished = AllDead();
+		if (finished){
 			this.modelState.Reproduce();
 			// reload scene
 			GetTree().ReloadCurrentScene();

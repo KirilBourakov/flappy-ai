@@ -3,17 +3,20 @@ using System;
 
 public partial class ModelState : Node
 {
-	public const int GEN_SIZE = 1000;
+	public static ModelState Instance { get; private set; }
+	public const int GEN_SIZE = 2;
 
 	public ModelPlayer[] models {get;set;}
 	private int modelsCount;
 	public bool internalManaged = false;
 	private Random random = new Random();
 
-	public ModelState(){
+	public override void _Ready()
+    {
+        Instance = this;
 		this.models = new ModelPlayer[GEN_SIZE];
 		this.modelsCount = 0;
-	}
+    }
 
 	public bool AddModel(ModelPlayer model){
 		bool success = false;
@@ -27,17 +30,20 @@ public partial class ModelState : Node
 
 	public void Reproduce(){
 		int totalFitness = 0;
+		this.internalManaged = true;
 
 		// generate the reproduction wheel
 		foreach (var model in this.models)
 		{
 			totalFitness += model.GetPoints()+1;
 		}
+
 		ModelPlayer[] wheel = new ModelPlayer[totalFitness];
 		int index = 0;
+
 		foreach (var model in this.models)
 		{
-			for (int j = 0; j < model.GetPoints(); j++)
+			for (int j = 0; j < model.GetPoints()+1; j++)
 			{
 				wheel[index] = model;
 				index++;
@@ -46,7 +52,6 @@ public partial class ModelState : Node
 
 		//reproduce
 		ModelPlayer[] newGeneration = new ModelPlayer[GEN_SIZE];
-
 
 		// elitism; keep top 5% of models that have more then 1 point
 		int elitismSize = (int)Math.Floor(0.05 * GEN_SIZE);
@@ -70,10 +75,10 @@ public partial class ModelState : Node
 			}
 
 			ModelPlayer child = new ModelPlayer();
+
 			for (int j = 0; j < child.weights.Length; j++){
 				// choose a random parent gene
 				child.weights[j] = random.Next(0, 2) == 1 ? mate2.weights[j] : mate1.weights[j];
-
 				//apply a mutation between +1 and -1
 				child.weights[j] += GetGaussianMutation();
 			}

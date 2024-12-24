@@ -8,6 +8,7 @@ radius = 6.0
 
 [node name="ModelPlayer" type="CharacterBody2D"]
 position = Vector2(0, 6)
+collision_layer = 2
 script = ExtResource("1_kdnt3")
 
 [node name="Raycasts" type="Node2D" parent="."]

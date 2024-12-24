@@ -12,7 +12,7 @@ public partial class Train : Node2D
 		camera.Enabled = true;
 		AddChild(camera);
         camera.MakeCurrent();
-		
+
         camera.GlobalPosition = new Vector2(0, -65);
 	}
 
@@ -20,6 +20,5 @@ public partial class Train : Node2D
 	public override void _Process(double delta)
 	{
 		camera.GlobalPosition = new Vector2(camera.GlobalPosition.X + (float)(200*delta), camera.GlobalPosition.Y);
-		GD.Print(camera.GlobalPosition);
 	}
 }

@@ -53,10 +53,12 @@ public partial class ModelState : Node
 		//reproduce
 		ModelPlayer[] newGeneration = new ModelPlayer[GEN_SIZE];
 
-		// elitism; keep top 5% of models that have more then 1 point
-		int elitismSize = (int)Math.Floor(0.05 * GEN_SIZE);
+		// elitism; keep top 5% of models (min 1) that have more then 1 point
+		int elitismSize = (int)Math.Ceiling(0.05 * GEN_SIZE);
 		Array.Sort(models, (x, y) => y.GetPoints().CompareTo(x.GetPoints()));
-		for (int i = 0; i < elitismSize; i++){
+
+		int i = 0;
+		while(i < elitismSize){
 			if (models[i].GetPoints() > 1){
 				newGeneration[i] = models[i];
 				i++;
@@ -66,7 +68,7 @@ public partial class ModelState : Node
 			}
 		}
 
-		for (int i = elitismSize; i < GEN_SIZE; i++){
+		while(i < GEN_SIZE){
 			// get the two parents
 			ModelPlayer mate1 = this.models[random.Next(0, totalFitness)];
 			ModelPlayer mate2 = wheel[random.Next(0, totalFitness)];

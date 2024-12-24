@@ -67,10 +67,9 @@ public partial class ModelState : Node
 				break;
 			}
 		}
-
 		while(i < GEN_SIZE){
 			// get the two parents
-			ModelPlayer mate1 = this.models[random.Next(0, totalFitness)];
+			ModelPlayer mate1 = wheel[random.Next(0, totalFitness)];
 			ModelPlayer mate2 = wheel[random.Next(0, totalFitness)];
 			while (mate1 == mate2){
 				mate2 = wheel[random.Next(0, totalFitness)];
@@ -93,7 +92,7 @@ public partial class ModelState : Node
 	public double GetGaussianMutation(){
 		double u1 = random.NextDouble();
 		double u2 = random.NextDouble();
-		return 0.1 * Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Cos(2.0 * Math.PI * u2);
+		return random.Next(0, 2) - 1 + 0.1 * Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Cos(2.0 * Math.PI * u2);
 	}
 
 

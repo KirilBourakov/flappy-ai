@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://bmb27wtou4bue"]
+
+[ext_resource type="Script" path="res://Scenes/Train.cs" id="1_e1hiy"]
+[ext_resource type="PackedScene" uid="uid://y3q8io78e4gm" path="res://Scenes/World/ground.tscn" id="1_lwrar"]
+[ext_resource type="PackedScene" uid="uid://n1csuekki0s2" path="res://Scenes/World/pipe/PipeSpawner.tscn" id="2_wddb0"]
+[ext_resource type="Script" path="res://Scenes/Agents/Player/Camera2d.cs" id="4_n6nfd"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_6myh8"]
+distance = 311.0
+
+[node name="Train" type="Node2D"]
+script = ExtResource("1_e1hiy")
+
+[node name="Ground" parent="." instance=ExtResource("1_lwrar")]
+position = Vector2(56, 85)
+
+[node name="PipeSpawner" parent="." instance=ExtResource("2_wddb0")]
+position = Vector2(177, 1)
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(20, -611)
+rotation = 3.14159
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("WorldBoundaryShape2D_6myh8")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(-1, -5)
+scale = Vector2(0.5, 1)
+offset = Vector2(0, -50)
+zoom = Vector2(2.5, 2.5)
+script = ExtResource("4_n6nfd")

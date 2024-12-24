@@ -17,7 +17,9 @@ public partial class ModelManager : Node2D
 			for (int i = 0; i < ModelState.GEN_SIZE; i++)
 			{
 				var newModel = (ModelPlayer)this.modelScene.Instantiate();
+				newModel.Position = new Vector2(0, -65);
 				this.modelState.AddModel(newModel);
+				AddChild(newModel);
 			}
 		}
 	}

@@ -8,9 +8,7 @@ public partial class Menu : Control
 	}
 	
 	public void TrainPressed(){
-		return;
-		// TODO: create Train Scene
-		GetTree().ChangeSceneToFile("Train.tscn");
+		GetTree().ChangeSceneToFile("res://Scenes/Train.tscn");
 	}
 	
 	public void ExitPressed(){

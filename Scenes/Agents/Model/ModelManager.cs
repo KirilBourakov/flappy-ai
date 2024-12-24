@@ -12,15 +12,21 @@ public partial class ModelManager : Node2D
 		this.modelScene = GD.Load<PackedScene>("res://Scenes/Agents/Model/ModelPlayer.tscn");
 
 		this.modelState = ModelState.Instance;
-		GD.Print(this.modelState.internalManaged);
 		if (!this.modelState.internalManaged)
 		{
-			GD.Print("Adding");
 			for (int i = 0; i < ModelState.GEN_SIZE; i++)
 			{
 				var newModel = (ModelPlayer)this.modelScene.Instantiate();
 				newModel.Position = new Vector2(0, -65);
 				this.modelState.AddModel(newModel);
+				AddChild(newModel);
+			}
+		} else {
+			foreach (ModelPlayer model in this.modelState.models)
+			{
+				var newModel = (ModelPlayer)this.modelScene.Instantiate();
+				newModel.Position = new Vector2(0, -65);
+				newModel.weights = model.weights;
 				AddChild(newModel);
 			}
 		}

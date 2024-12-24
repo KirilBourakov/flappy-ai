@@ -1,7 +1,5 @@
 using Godot;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 
 public partial class ModelPlayer : Agent
@@ -12,8 +10,6 @@ public partial class ModelPlayer : Agent
 
 	private RayCast2D[] inputs = new RayCast2D[9];
 
-    // distance from ground
-    // 'sight'
 
 	public ModelPlayer(){
 		this.InitWeights();

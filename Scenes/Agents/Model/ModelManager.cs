@@ -22,11 +22,13 @@ public partial class ModelManager : Node2D
 				AddChild(newModel);
 			}
 		} else {
-			foreach (ModelPlayer model in this.modelState.models)
+			for (int i = 0; i < this.modelState.models.Length; i++)
 			{
 				var newModel = (ModelPlayer)this.modelScene.Instantiate();
 				newModel.Position = new Vector2(0, -65);
-				newModel.weights = model.weights;
+				newModel.weights = this.modelState.models[i].weights;
+
+				this.modelState.models[i] = newModel;
 				AddChild(newModel);
 			}
 		}

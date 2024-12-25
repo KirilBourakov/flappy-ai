@@ -11,6 +11,10 @@ public partial class ModelState : Node
 	public bool internalManaged = false;
 	private Random random = new Random();
 
+	public int generationNumber = 0;
+	public float furthestDistanceTraveled = 0;
+	public float currentGenerationDistancedTraveled = 0;
+
 	public override void _Ready()
     {
         Instance = this;
@@ -29,6 +33,10 @@ public partial class ModelState : Node
 	}
 
 	public void Reproduce(){
+		this.generationNumber++;
+		this.furthestDistanceTraveled = Math.Max(this.furthestDistanceTraveled, this.currentGenerationDistancedTraveled);
+		this.currentGenerationDistancedTraveled = 0;
+
 		int totalFitness = 0;
 		this.internalManaged = true;
 

@@ -8,7 +8,7 @@ public partial class ModelPlayer : Agent
 
 	public double[] weights;
 
-	private const int INPUT_NUM = 11;
+	private const int INPUT_NUM = 13;
 	private RayCast2D[] inputs = new RayCast2D[INPUT_NUM];
 	public float distance = 0;
 

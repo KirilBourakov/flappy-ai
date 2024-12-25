@@ -13,6 +13,12 @@ script = ExtResource("1_kdnt3")
 
 [node name="Raycasts" type="Node2D" parent="."]
 
+[node name="0" type="RayCast2D" parent="Raycasts"]
+position = Vector2(0, -12)
+target_position = Vector2(0, -50)
+collision_mask = 4
+collide_with_areas = true
+
 [node name="1" type="RayCast2D" parent="Raycasts"]
 position = Vector2(0, -6)
 target_position = Vector2(222, -120)
@@ -64,6 +70,11 @@ collide_with_areas = true
 [node name="9" type="RayCast2D" parent="Raycasts"]
 position = Vector2(0, -5)
 target_position = Vector2(222, 120)
+collision_mask = 4
+collide_with_areas = true
+
+[node name="10" type="RayCast2D" parent="Raycasts"]
+position = Vector2(0, -5)
 collision_mask = 4
 collide_with_areas = true
 

@@ -8,7 +8,8 @@ public partial class ModelPlayer : Agent
 
 	public double[] weights;
 
-	private RayCast2D[] inputs = new RayCast2D[9];
+	private const int INPUT_NUM = 11;
+	private RayCast2D[] inputs = new RayCast2D[INPUT_NUM];
 	public float distance = 0;
 
 
@@ -22,7 +23,7 @@ public partial class ModelPlayer : Agent
 		int i = 0;
 		foreach (RayCast2D child in children.Cast<RayCast2D>())
 		{
-			if (i < 9){
+			if (i < INPUT_NUM){
 				inputs[i] = child;
 				i++;
 			} else {
@@ -33,8 +34,8 @@ public partial class ModelPlayer : Agent
 
 	public void InitWeights(){
 		Random random = new Random();
-		this.weights = new double[9];
-		for (int i = 0; i < 9; i++){
+		this.weights = new double[INPUT_NUM];
+		for (int i = 0; i < INPUT_NUM; i++){
 			this.weights[i] = (float)(random.NextDouble() * 20 - 10);
 		}
 	}

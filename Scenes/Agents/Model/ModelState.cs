@@ -4,7 +4,7 @@ using System;
 public partial class ModelState : Node
 {
 	public static ModelState Instance { get; private set; }
-	public const int GEN_SIZE = 2;
+	public const int GEN_SIZE = 20;
 
 	public ModelPlayer[] models {get;set;}
 	private int modelsCount;
@@ -35,7 +35,7 @@ public partial class ModelState : Node
 		// generate the reproduction wheel
 		foreach (var model in this.models)
 		{
-			totalFitness += model.GetPoints()+1;
+			totalFitness += model.GetFitness();
 		}
 
 		ModelPlayer[] wheel = new ModelPlayer[totalFitness];
@@ -43,7 +43,7 @@ public partial class ModelState : Node
 
 		foreach (var model in this.models)
 		{
-			for (int j = 0; j < model.GetPoints()+1; j++)
+			for (int j = 0; j < model.GetFitness(); j++)
 			{
 				wheel[index] = model;
 				index++;
@@ -55,11 +55,11 @@ public partial class ModelState : Node
 
 		// elitism; keep top 5% of models (min 1) that have more then 1 point
 		int elitismSize = (int)Math.Ceiling(0.05 * GEN_SIZE);
-		Array.Sort(models, (x, y) => y.GetPoints().CompareTo(x.GetPoints()));
+		Array.Sort(models, (x, y) => y.GetFitness().CompareTo(x.GetFitness()));
 
 		int i = 0;
 		while(i < elitismSize){
-			if (models[i].GetPoints() > 1){
+			if (models[i].GetFitness() > 1){
 				newGeneration[i] = models[i];
 				i++;
 			} 
@@ -67,6 +67,7 @@ public partial class ModelState : Node
 				break;
 			}
 		}
+
 		while(i < GEN_SIZE){
 			// get the two parents
 			ModelPlayer mate1 = wheel[random.Next(0, totalFitness)];
@@ -74,9 +75,8 @@ public partial class ModelState : Node
 			while (mate1 == mate2){
 				mate2 = wheel[random.Next(0, totalFitness)];
 			}
-
+			GD.Print(mate1, mate2);
 			ModelPlayer child = new ModelPlayer();
-
 			for (int j = 0; j < child.weights.Length; j++){
 				// choose a random parent gene
 				child.weights[j] = random.Next(0, 2) == 1 ? mate2.weights[j] : mate1.weights[j];

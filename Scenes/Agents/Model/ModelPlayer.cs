@@ -9,6 +9,7 @@ public partial class ModelPlayer : Agent
 	public double[] weights;
 
 	private RayCast2D[] inputs = new RayCast2D[9];
+	public float distance = 0;
 
 
 	public ModelPlayer(){
@@ -43,6 +44,7 @@ public partial class ModelPlayer : Agent
 		if (dead){
 			return;
 		}
+		this.distance +=  this.Speed * (float)delta;
 		
 		Vector2 velocity = Velocity;
 		velocity += GetGravity() * (float)delta;
@@ -82,7 +84,7 @@ public partial class ModelPlayer : Agent
 			this.points++;
 		}
     }
-	public int GetPoints(){
-		return this.points;
+	public int GetFitness(){
+		return (int) Math.Ceiling(distance / 200f);
 	}
 }

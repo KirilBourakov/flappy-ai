@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bmb27wtou4bue"]
+[gd_scene load_steps=9 format=3 uid="uid://bmb27wtou4bue"]
 
 [ext_resource type="PackedScene" uid="uid://y3q8io78e4gm" path="res://Scenes/World/ground.tscn" id="1_lwrar"]
 [ext_resource type="PackedScene" uid="uid://n1csuekki0s2" path="res://Scenes/World/pipe/PipeSpawner.tscn" id="2_wddb0"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bdagmxprd0xwr" path="res://Scenes/Agents/Model/ModelManager.tscn" id="5_6pa4i"]
 [ext_resource type="PackedScene" uid="uid://cu5c6ja138dpb" path="res://Scenes/World/killZone.tscn" id="5_308ga"]
 [ext_resource type="Script" path="res://Scenes/World/CameraMover.cs" id="6_vl0fk"]
+[ext_resource type="FontFile" uid="uid://cj3yts03tkw43" path="res://fonts/PixelOperator8.ttf" id="8_ek3xe"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_jqxl4"]
 normal = Vector2(0, 1)
@@ -36,3 +37,16 @@ scale = Vector2(0.5, 1)
 offset = Vector2(0, -50)
 zoom = Vector2(2.5, 2.5)
 script = ExtResource("4_n6nfd")
+
+[node name="InfoLabel" type="Label" parent="CameraMover/Camera2D"]
+z_index = 2
+offset_left = -460.0
+offset_top = -180.0
+offset_right = -358.0
+offset_bottom = -157.0
+theme_override_fonts/font = ExtResource("8_ek3xe")
+theme_override_font_sizes/font_size = 16
+text = "Generation: 1
+Furthest Distance: 0px
+Current Distance: 0px"
+metadata/_edit_use_anchors_ = true

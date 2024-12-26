@@ -8,8 +8,10 @@ public partial class ModelPlayer : Agent
 
 	public double[] weights;
 
-	private const int INPUT_NUM = 13;
-	private RayCast2D[] inputs = new RayCast2D[INPUT_NUM];
+	private const int RAY_NUM = 13;
+	private const int INPUT_NUM = RAY_NUM+1;
+	
+	private RayCast2D[] inputs = new RayCast2D[RAY_NUM];
 	public float distance = 0;
 
 
@@ -23,7 +25,7 @@ public partial class ModelPlayer : Agent
 		int i = 0;
 		foreach (RayCast2D child in children.Cast<RayCast2D>())
 		{
-			if (i < INPUT_NUM){
+			if (i < RAY_NUM){
 				inputs[i] = child;
 				i++;
 			} else {
@@ -66,7 +68,8 @@ public partial class ModelPlayer : Agent
 			}
 			i++;
 		}
-		bool activated = this.StepFunction(total);
+		total += this.Velocity.Y * this.weights[INPUT_NUM-1];
+		bool activated = StepFunction(total);
 
 		if(activated){
 			velocity.Y = JumpVelocity;
@@ -77,7 +80,7 @@ public partial class ModelPlayer : Agent
 		MoveAndSlide();
 	}
 
-	private bool StepFunction(double inp){
+	private static bool StepFunction(double inp){
 		return inp > 0;
 	}
 

@@ -56,7 +56,13 @@ public partial class ModelPlayer : Agent
 		double total = 0;
 		foreach (var input in this.inputs){
 			if (input.IsColliding()){
-				total += this.weights[i];
+				Vector2 collision = input.GetCollisionPoint();
+				double distance = Math.Sqrt(
+					Math.Pow(collision.X - this.Position.X, 2) +
+					Math.Pow(collision.Y - this.Position.Y, 2)
+				);
+
+				total += distance * this.weights[i];
 			}
 			i++;
 		}

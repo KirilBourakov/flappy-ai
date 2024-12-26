@@ -88,8 +88,10 @@ public partial class ModelState : Node
 			for (int j = 0; j < child.weights.Length; j++){
 				// choose a random parent gene
 				child.weights[j] = random.Next(0, 2) == 1 ? mate2.weights[j] : mate1.weights[j];
-				//apply a mutation between +1 and -1
-				child.weights[j] += GetGaussianMutation();
+				//apply a mutation 1% of the time
+				if(random.Next(100) == 0){
+					child.weights[j] += GetGaussianMutation();
+				}
 			}
 			newGeneration[i] = child;
 			i++;

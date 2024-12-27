@@ -1,9 +1,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using Godot;
-
 public class NeuralNetwork{
     private readonly Random random = new();
     public class Neuron{

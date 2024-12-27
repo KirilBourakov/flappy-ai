@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
+using Godot;
 
 public class NeuralNetwork{
     private readonly Random random = new();
@@ -56,11 +57,13 @@ public class NeuralNetwork{
             {
                 layer.Add(new Neuron(nueronsInNextLayer));
             }
+            network.Add(layer);
         }
     }
 
     public int[] Evaluate(float[] inputs){
-        for(int i = 0; i< inputs.Length; i++){
+        // GD.Print(inputs.Length + " " + network[0].Count);
+        for(int i = 0; i<inputs.Length; i++){
             network[0][i].SetValue(inputs[i]);
         }
 

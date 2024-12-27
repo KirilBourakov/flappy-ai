@@ -84,27 +84,12 @@ public partial class ModelState : Node
 				mate2 = wheel[random.Next(0, totalFitness)];
 			}
 			GD.Print(mate1, mate2);
-			ModelPlayer child = new ModelPlayer();
-			for (int j = 0; j < child.weights.Length; j++){
-				// choose a random parent gene
-				child.weights[j] = random.Next(0, 2) == 1 ? mate2.weights[j] : mate1.weights[j];
-				//apply a mutation 1% of the time
-				if(random.Next(100) == 0){
-					child.weights[j] += GetGaussianMutation();
-				}
-			}
+            ModelPlayer child = new();
+            child.neuralNetwork = mate1.neuralNetwork.Reproduce(mate2.neuralNetwork);
 			newGeneration[i] = child;
-			i++;
+            i++;
 		}
 		this.models = newGeneration;
 	}
-
-	public double GetGaussianMutation(){
-		double u1 = random.NextDouble();
-		double u2 = random.NextDouble();
-		return 0.1 * Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Cos(2.0 * Math.PI * u2);
-	}
-
-
 
 }

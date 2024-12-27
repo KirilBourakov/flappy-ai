@@ -4,19 +4,18 @@ using System.Linq;
 
 public partial class ModelPlayer : Agent
 {
-	public bool dead {get; set;} = false;
-
-	public double[] weights;
-
 	private const int RAY_NUM = 13;
 	private const int INPUT_NUM = RAY_NUM+1;
-	
-	private RayCast2D[] inputs = new RayCast2D[RAY_NUM];
-	public float distance = 0;
 
+	public float distance = 0;
+	public bool dead {get; set;} = false;
+
+	public NeuralNetwork neuralNetwork;
+	private RayCast2D[] inputs = new RayCast2D[RAY_NUM];
+	
 
 	public ModelPlayer(){
-		this.InitWeights();
+		this.neuralNetwork = new NeuralNetwork(new int[] {INPUT_NUM, 12, 1});
 	}
 
     public override void _Ready()
@@ -34,14 +33,6 @@ public partial class ModelPlayer : Agent
 		}
     }
 
-	public void InitWeights(){
-		Random random = new Random();
-		this.weights = new double[INPUT_NUM];
-		for (int i = 0; i < INPUT_NUM; i++){
-			this.weights[i] = (float)(random.NextDouble() * 20 - 10);
-		}
-	}
-
     public override void _PhysicsProcess(double delta)
 	{
 		if (dead){
@@ -53,24 +44,25 @@ public partial class ModelPlayer : Agent
 		velocity += GetGravity() * (float)delta;
 
 
-		// Handle Jump.
+		// run neural network
+		float[] inputs = new float[INPUT_NUM];
 		int i = 0;
-		double total = 0;
 		foreach (var input in this.inputs){
 			if (input.IsColliding()){
 				Vector2 collision = input.GetCollisionPoint();
-				double distance = Math.Sqrt(
+				float distance = (float) Math.Sqrt(
 					Math.Pow(collision.X - this.Position.X, 2) +
 					Math.Pow(collision.Y - this.Position.Y, 2)
 				);
 
-				total += distance * this.weights[i];
+				inputs[i] = distance;
 			}
 			i++;
 		}
-		total += this.Velocity.Y * this.weights[INPUT_NUM-1];
-		bool activated = StepFunction(total);
+		inputs[INPUT_NUM-1] = this.Velocity.Y;
+		bool activated = this.neuralNetwork.Evaluate(inputs)[0] == 1;
 
+		// handle jump
 		if(activated){
 			velocity.Y = JumpVelocity;
 		}	
@@ -78,10 +70,6 @@ public partial class ModelPlayer : Agent
 		velocity.X = Speed;
 		Velocity = velocity;
 		MoveAndSlide();
-	}
-
-	private static bool StepFunction(double inp){
-		return inp > 0;
 	}
 
     public override void Kill()

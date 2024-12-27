@@ -26,7 +26,7 @@ public partial class ModelManager : Node2D
 			{
 				var newModel = (ModelPlayer)this.modelScene.Instantiate();
 				newModel.Position = new Vector2(0, -65);
-				newModel.weights = this.modelState.models[i].weights;
+				newModel.neuralNetwork = this.modelState.models[i].neuralNetwork;
 
 				this.modelState.models[i] = newModel;
 				AddChild(newModel);

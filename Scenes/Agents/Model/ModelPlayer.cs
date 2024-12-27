@@ -45,7 +45,7 @@ public partial class ModelPlayer : Agent
 
 
 		// run neural network
-		float[] inputs = new float[INPUT_NUM];
+		float[] networkInputs = new float[INPUT_NUM];
 		int i = 0;
 		foreach (var input in this.inputs){
 			if (input.IsColliding()){
@@ -55,12 +55,12 @@ public partial class ModelPlayer : Agent
 					Math.Pow(collision.Y - this.Position.Y, 2)
 				);
 
-				inputs[i] = distance;
+				networkInputs[i] = distance;
 			}
 			i++;
 		}
-		inputs[INPUT_NUM-1] = this.Velocity.Y;
-		bool activated = this.neuralNetwork.Evaluate(inputs)[0] == 1;
+		networkInputs[INPUT_NUM-1] = this.Velocity.Y;
+		bool activated = this.neuralNetwork.Evaluate(networkInputs)[0] == 1;
 
 		// handle jump
 		if(activated){

@@ -6,7 +6,7 @@ using Godot;
 
 public class NeuralNetwork{
     private readonly Random random = new();
-    public struct Neuron{
+    public class Neuron{
         public float[] weights;
         public float value;
        
@@ -19,6 +19,10 @@ public class NeuralNetwork{
             {
 		        this.weights[i] = (float)(random.NextDouble() * 20 - 10);
             }
+        }
+        public Neuron(float value, float[] weights){
+            this.value = value;
+            this.weights = weights;
         }
         public void SetValue(float newval){
             this.value = newval;
@@ -39,12 +43,26 @@ public class NeuralNetwork{
         public float[] GetWeights(){
             return this.weights;
         }
+
+        public Neuron DeepCopy(){
+            return new Neuron(value, (float[])weights.Clone());
+        }
     }
     
     public List<List<Neuron>> network = new List<List<Neuron>>();
     
     public NeuralNetwork(List<List<Neuron>> network){
-        this.network = network;
+        List<List<Neuron>> newNetwork = new();
+        foreach (List<Neuron> listNodes in network)
+        {
+            List<Neuron> newListNodes = new();
+            foreach (Neuron node in listNodes)
+            {
+                newListNodes.Add(node.DeepCopy());
+            }
+            newNetwork.Add(newListNodes);
+        }
+        this.network = newNetwork;
     }
     public NeuralNetwork(int[] layerNeuronCounts){
         for (int i = 0; i < layerNeuronCounts.Length; i++)
@@ -62,7 +80,6 @@ public class NeuralNetwork{
     }
 
     public int[] Evaluate(float[] inputs){
-        // GD.Print(inputs.Length + " " + network[0].Count);
         for(int i = 0; i<inputs.Length; i++){
             network[0][i].SetValue(inputs[i]);
         }
@@ -73,6 +90,7 @@ public class NeuralNetwork{
                 for (int k = 0; k < network[i-1].Count; k++){
                     new_val += network[i-1][k].GetValue() * network[i-1][k].GetWeight(j);
                 }
+                
                 network[i][j].SetValue(new_val);
             }
         }

@@ -4,7 +4,7 @@ using System;
 public partial class ModelState : Node
 {
 	public static ModelState Instance { get; private set; }
-	public const int GEN_SIZE = 20;
+	public const int GEN_SIZE = 50;
 
 	public ModelPlayer[] models {get;set;}
 	private int modelsCount;
@@ -83,7 +83,6 @@ public partial class ModelState : Node
 			while (mate1 == mate2){
 				mate2 = wheel[random.Next(0, totalFitness)];
 			}
-			GD.Print(mate1, mate2);
             ModelPlayer child = new();
             child.neuralNetwork = mate1.neuralNetwork.Reproduce(mate2.neuralNetwork);
 			newGeneration[i] = child;

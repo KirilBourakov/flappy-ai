@@ -15,7 +15,7 @@ public partial class ModelPlayer : Agent
 	
 
 	public ModelPlayer(){
-		this.neuralNetwork = new NeuralNetwork(new int[] {INPUT_NUM, 29, 1});
+		this.neuralNetwork = new NeuralNetwork(new int[] {INPUT_NUM, 29, 16, 1});
 	}
 
     public override void _Ready()

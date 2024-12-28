@@ -34,7 +34,6 @@ public partial class PipeSpawner : Node2D
 
 		int newCenter = this.center + this.random.Next(-40, 40);
 		while (newCenter > CENTER_MAX || newCenter < CENTER_MIN){
-			GD.Print("looking for new center");
 			newCenter = this.center + this.random.Next(-40, 40);
 		}
 		this.center = newCenter;

@@ -2,7 +2,7 @@ using System;
 
 public class NodeGene{
     public enum Type {INPUT, HIDDEN, OUTPUT};
-    private static int IdCounter = 0;
+    private static int IdCounter = 1;
     public double Value;
     public Type nodeType;
     public int nodeId;

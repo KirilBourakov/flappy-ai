@@ -1,29 +1,34 @@
 using System;
 using System.Collections.Generic;
+using Godot;
 
 namespace NEAT
 {
     public class GenePool{
-        public static List<NodeGene> genes = new List<NodeGene>();
-        public static Dictionary<int, NodeGene> geneById = new Dictionary<int, NodeGene>();
+        public static Dictionary<NodeGene.Type, List<NodeGene>> genesByType = new Dictionary<NodeGene.Type, List<NodeGene>> {
+            {NodeGene.Type.INPUT, new List<NodeGene>()},        
+            {NodeGene.Type.HIDDEN, new List<NodeGene>()},
+            {NodeGene.Type.OUTPUT, new List<NodeGene>()}
+        };
+        public static Dictionary<int, NodeGene> geneById = new();
 
-        public static List<ConnectGene> connectGene = new List<ConnectGene>();
-        public static Dictionary<long, ConnectGene> connectGeneByHash = new Dictionary<long, ConnectGene>();
+        public static List<ConnectGene> connectGene = new();
+        public static Dictionary<long, ConnectGene> connectGeneByHash = new();
         
 
         public List<NodeGene> getGeneByType(NodeGene.Type type){
-            List<NodeGene> inputs = new List<NodeGene>();
-            foreach(NodeGene inputGene in genes){
-                if (inputGene.nodeType == type){
-                    inputs.Add(inputGene);
-                }
+            if (!genesByType.TryGetValue(type, out List<NodeGene> layer)){
+                throw new Exception("Invalid Type: " + type);
             }
-            return inputs;
+            return layer;
         }
 
         public NodeGene CreateNode(NodeGene.Type type){
             NodeGene newNode = new(type);
-            genes.Add(newNode);
+            if (!genesByType.TryGetValue(type, out List<NodeGene> layer)){
+                throw new Exception("Invalid Type: " + type);
+            }
+            layer.Add(newNode);
             geneById.Add(newNode.nodeId, newNode);
             return newNode;
         }

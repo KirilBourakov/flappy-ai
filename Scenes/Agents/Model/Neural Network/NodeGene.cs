@@ -1,6 +1,8 @@
 using System;
 
-public class NodeGene{
+namespace NEAT
+{
+    public class NodeGene{
     public enum Type {INPUT, HIDDEN, OUTPUT};
     private static int IdCounter = 1;
     public double Value;
@@ -13,5 +15,5 @@ public class NodeGene{
         this.nodeId = IdCounter;
         IdCounter++;
     }
-    
+}
 }

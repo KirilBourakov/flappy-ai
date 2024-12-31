@@ -1,7 +1,7 @@
 using System;
 
 namespace NEAT{
-    public class ConnectGene{
+    public struct ConnectGene{
         public int inGene;
         public int outGene;
         public double weight;
@@ -14,6 +14,7 @@ namespace NEAT{
         public ConnectGene(int inGene, int outGene){
             this.inGene = inGene;
             this.outGene = outGene;
+            this.enabled = true;
             this.weight = random.NextDouble() * random.Next(-10, 10);
             this.innovation = InnovationCount;
             InnovationCount++;

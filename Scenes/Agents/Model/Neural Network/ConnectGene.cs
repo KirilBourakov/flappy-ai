@@ -1,7 +1,7 @@
 using System;
 
 namespace NEAT{
-    public struct ConnectGene{
+    public class ConnectGene{
         public int inGene;
         public int outGene;
         public double weight;

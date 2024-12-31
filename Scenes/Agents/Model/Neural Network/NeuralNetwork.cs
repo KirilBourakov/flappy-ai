@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Xml;
 
 namespace NEAT{
     public class NeuralNetwork{
@@ -42,8 +43,13 @@ namespace NEAT{
             }
 
 
-            
-            return new double[] {1};
+            var output = this.pool.getGeneByType(NodeGene.Type.OUTPUT);
+            double[] result = new double[output.Count];
+            for (int i = 0; i < output.Count; i++){
+                result[i] = output[i].Value;
+            }
+
+            return result;
         }
     }
 }

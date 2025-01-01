@@ -18,7 +18,7 @@ namespace NEAT{
             this.inGene = inGene;
             this.outGene = outGene;
             this.enabled = true;
-            this.weight = random.NextDouble() * random.Next(-10, 10);
+            this.weight = random.NextDouble() * random.Next(-2, 3);
             this.innovation = InnovationCount;
             InnovationCount++;
         }
@@ -45,6 +45,10 @@ namespace NEAT{
             var B = (ulong)(outp >= 0 ? 2 * (long)outp : -2 * (long)outp - 1);
             var C = (long)((A >= B ? A * A + A + B : A + B * B) / 2);
             return inp < 0 && outp < 0 || inp >= 0 && outp >= 0 ? C : -C - 1;
+        }
+
+        public ConnectGene Copy(){
+            return (ConnectGene)this.MemberwiseClone();
         }
     }
 }

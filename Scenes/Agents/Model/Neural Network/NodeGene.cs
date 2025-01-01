@@ -15,5 +15,6 @@ namespace NEAT
         this.nodeId = IdCounter;
         IdCounter++;
     }
+    
 }
 }

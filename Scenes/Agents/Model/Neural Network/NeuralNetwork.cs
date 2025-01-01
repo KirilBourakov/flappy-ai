@@ -6,8 +6,7 @@ namespace NEAT{
     public class NeuralNetwork{
         public GenePool pool;
         
-        // sort topologically, then by id among inputs
-        public List<ConnectGene> structure = new List<ConnectGene>();
+        public List<ConnectGene> structure = new();
         public bool hasBias;
 
         public NeuralNetwork(GenePool pool, int inputs, int outputs, bool useBias){
@@ -32,17 +31,27 @@ namespace NEAT{
         }
 
         public double[] Evaluate(double[] inpt){
-
+            // prepare nodes for insertion
+            this.pool.ClearLayer(NodeGene.Type.OUTPUT);
+            this.pool.ClearLayer(NodeGene.Type.HIDDEN);
             for (int i = 0; i < inpt.Length; i++)
             {
                 pool.SafeGetNode(i, NodeGene.Type.INPUT).Value = inpt[i];
             }
-
             if (hasBias){
                 pool.SafeGetNode(inpt.Length, NodeGene.Type.INPUT).Value = 1;
             }
 
+            // run through the hidden layer connections (list assumed to be topologically sorted)
+            foreach (var connection in structure){
+                if (connection.enabled){
+                    NodeGene inp = pool.SafeGetNode(connection.inGene);
+                    NodeGene outp = pool.SafeGetNode(connection.outGene);
+                    outp.Value += connection.weight * inp.Value;
+                }
+            }
 
+            // get the values
             var output = this.pool.getGeneByType(NodeGene.Type.OUTPUT);
             double[] result = new double[output.Count];
             for (int i = 0; i < output.Count; i++){

@@ -43,6 +43,12 @@ namespace NEAT
 
             return value;
         }
+        public NodeGene SafeGetNode(int id){
+            if (!geneById.TryGetValue(id, out NodeGene value)){
+                    throw new Exception("Failure to find node in Evaluate");
+            }   
+            return value;
+        }
 
         public ConnectGene SafeCreateConnectionGene(int inp, int outp){
             ConnectGene connection;
@@ -58,5 +64,12 @@ namespace NEAT
             return connection;
         }
 
+        public void ClearLayer(NodeGene.Type type){
+            var layer = getGeneByType(type);
+            foreach (var node in layer)
+            {
+                node.Value = 0;
+            }
+        }
     }
 }

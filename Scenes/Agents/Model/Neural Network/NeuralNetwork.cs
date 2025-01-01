@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Xml;
-using Godot;
 
 namespace NEAT{
     public class NeuralNetwork{
         public GenePool pool;
         public int fitness;
         public List<ConnectGene> structure = new();
+        // TODO: create a structure sorted by innovation number to avoid calculation when crossover occurs.
         public bool hasBias;
         private readonly Random random = new();
 
@@ -26,6 +24,10 @@ namespace NEAT{
             this.structure = structure;
         }
         public NeuralNetwork(GenePool pool, int inputs, int outputs, bool useBias){
+            if (inputs <= 0 || outputs <= 0){
+                throw new Exception("Invalid input or output decleration");
+            }
+
             this.hasBias = useBias;
             this.pool = pool;
 
@@ -83,6 +85,11 @@ namespace NEAT{
             return result;
         }
 
+        /// <summary>
+        /// Given an NeuralNetwork, creates a new child NeuralNeywork
+        /// </summary>
+        /// <param name="other">The other NeuralNetwork</param>
+        /// <returns>A new NeuralNetwork</returns>
         public NeuralNetwork Crossover(NeuralNetwork other){
             var newStructure = new List<ConnectGene>();
 
@@ -101,49 +108,56 @@ namespace NEAT{
             highestFitness.Sort((x, y) => x.innovation.CompareTo(y.innovation));
             lowestFitness.Sort((x, y) => x.innovation.CompareTo(y.innovation));
 
+
             // cross over
             bool done = false;
             int i = 0;
             while (!done){
                 
-                var currHighGene = highestFitness?[i];
-                var currLowGene = lowestFitness?[i];
+                var currHighGene = (i >= 0 && i < highestFitness.Count) ? highestFitness[i] : null;
+                var currLowGene = (i >= 0 && i < lowestFitness.Count) ? lowestFitness[i] : null;
                 
                 // if i does not exist somewhere we have entered excess genes 
                 if (currHighGene == null){
                     done = true;
                 }
                 else if (currLowGene == null){
+                    int j = i+1;
                     while (currHighGene != null){
                         newStructure.Add(currHighGene.Copy());
-                        currHighGene = highestFitness?[i+1];
+                        currHighGene = (j >= 0 && j < highestFitness.Count) ? highestFitness[j] : null;;
+                        j++;
                     }
                     done = true;
                 }
-                // inovations match
+                // innovations match
                 else if (currHighGene.innovation == currLowGene.innovation){
                     if (this.random.Next(0,2) == 0){
                         newStructure.Add(currHighGene.Copy());
                     } else {
-                        newStructure.Add(currHighGene.Copy());
+                        newStructure.Add(currLowGene.Copy());
                     }
                 }
                 // disjoint
                 else if (currHighGene.innovation < currLowGene.innovation){
                     newStructure.Add(currHighGene.Copy());
                 }
-                else if (currHighGene.innovation < highestFitness[i].innovation){
+                else if (currLowGene.innovation < currHighGene.innovation){
                     newStructure.Add(currLowGene.Copy());
                 }
                 i++;
             }
+            
 
+            // TODO: blend genes when fitness is the same
             // mutation
             i = 0;
             foreach (var connection in newStructure){
-                if (MutationRoll() <= WEIGHT_MUTATION_RATE){
+                int roll = MutationRoll();
+                if (roll <= WEIGHT_MUTATION_RATE){
                     // replace or mutate weight
-                    if (MutationRoll() <= REPLACEMENT_RATE){
+
+                        if (roll <= REPLACEMENT_RATE){
                         connection.weight = random.Next(-2, 3) * random.NextDouble();
                     }
                     else{
@@ -187,6 +201,10 @@ namespace NEAT{
             return new NeuralNetwork(this.pool, this.hasBias, newStructure);
         }
 
+        /// <summary>
+        /// Chooses a random precentage between 0-100
+        /// </summary>
+        /// <returns>An int between 0-100</returns>
         private int MutationRoll(){
             return this.random.Next(0, 101);
         }

@@ -1,21 +1,35 @@
 using System;
 using System.Collections.Generic;
-using Godot;
 
 namespace NEAT
 {
     public class GenePool{
+        /// <summary>
+        /// A dictionary that stores each node gene by it's type
+        /// </summary>
         public static Dictionary<NodeGene.Type, List<NodeGene>> genesByType = new Dictionary<NodeGene.Type, List<NodeGene>> {
             {NodeGene.Type.INPUT, new List<NodeGene>()},        
             {NodeGene.Type.HIDDEN, new List<NodeGene>()},
             {NodeGene.Type.OUTPUT, new List<NodeGene>()}
         };
+        /// <summary>
+        /// A dictionary that stores each node gene by it's id.
+        /// </summary>
         public static Dictionary<int, NodeGene> geneById = new();
 
+        /// <summary>
+        /// A List that stores every connection gene
+        /// </summary>
         public static List<ConnectGene> connectGene = new();
+        /// <summary>
+        /// A dictionary that stores each connection gene by it's hash.
+        /// </summary>
         public static Dictionary<long, ConnectGene> connectGeneByHash = new();
         
 
+        /// <summary>
+        /// Given a type, return every node of that type
+        /// </summary>
         public List<NodeGene> getGeneByType(NodeGene.Type type){
             if (!genesByType.TryGetValue(type, out List<NodeGene> layer)){
                 throw new Exception("Invalid Type: " + type);
@@ -23,6 +37,9 @@ namespace NEAT
             return layer;
         }
 
+        /// <summary>
+        /// Create a new node
+        /// </summary>
         public NodeGene CreateNode(NodeGene.Type type){
             NodeGene newNode = new(type);
             if (!genesByType.TryGetValue(type, out List<NodeGene> layer)){
@@ -32,7 +49,10 @@ namespace NEAT
             geneById.Add(newNode.nodeId, newNode);
             return newNode;
         }
-
+        
+        /// <summary>
+        /// Gets a node by id, and ensures it is of an expected type
+        /// </summary>
         public NodeGene SafeGetNode(int id, NodeGene.Type expected){
             if (!geneById.TryGetValue(id, out NodeGene value)){
                     throw new Exception("Failure to find node in Evaluate");
@@ -43,6 +63,9 @@ namespace NEAT
 
             return value;
         }
+        /// <summary>
+        /// Gets a node by id.
+        /// </summary>
         public NodeGene SafeGetNode(int id){
             if (!geneById.TryGetValue(id, out NodeGene value)){
                     throw new Exception("Failure to find node in Evaluate");
@@ -50,6 +73,9 @@ namespace NEAT
             return value;
         }
 
+        /// <summary>
+        /// Creates a connection gene between those an input and output, or returns the one that already exists.
+        /// </summary>
         public ConnectGene SafeCreateConnectionGene(int inp, int outp){
             ConnectGene connection;
             if(connectGeneByHash.ContainsKey(ConnectGene.Hash(inp, outp))){
@@ -64,6 +90,9 @@ namespace NEAT
             return connection;
         }
 
+        /// <summary>
+        /// Given a layer, 0's it.
+        /// </summary>
         public void ClearLayer(NodeGene.Type type){
             var layer = getGeneByType(type);
             foreach (var node in layer)

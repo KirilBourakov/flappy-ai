@@ -30,6 +30,11 @@ namespace NEAT{
             }
         }
 
+        /// <summary>
+        /// Runs the neural network for a set of inputs 
+        /// </summary>
+        /// <param name="inpt">A list of doubles representing the input.</param>
+        /// <returns>The outputs of the network</returns>
         public double[] Evaluate(double[] inpt){
             // prepare nodes for insertion
             this.pool.ClearLayer(NodeGene.Type.OUTPUT);

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Godot;
 
 namespace NEAT{
     public class NeuralNetwork{
@@ -199,6 +200,57 @@ namespace NEAT{
 
 
             return new NeuralNetwork(this.pool, this.hasBias, newStructure);
+        }
+
+        private void TopologicSort(){
+            int count = structure.Count;
+            bool[] visited = new bool[count];
+            List<ConnectGene> ordered = new List<ConnectGene>();
+            for (int k = 0; k < count; k++) {
+                ordered.Add(null);
+            }
+            int i = count-1;
+
+            for (int at = 0; at < count; at++){
+                if (!visited[at]){
+                    i = dfs(i, at, visited, ordered);
+                }
+            }
+            if (ordered.Contains(null)) {
+                throw new InvalidOperationException("Topological sorting failed.");
+            }
+            
+            this.structure = ordered;
+        }   
+        private int dfs(int i, int at, bool[] visited, List<ConnectGene> ordered){
+            visited[at] = true;
+        
+            List<ConnectGene> edges = this.GetStructuralConnections(structure[at], out List<int> trueIndexs);
+            int j=0;
+            foreach(var edge in edges){
+                if(!visited[trueIndexs[j]]){
+                    i = dfs(i, trueIndexs[j], visited, ordered);
+                }
+                j++;
+            }
+
+            ordered[i] = structure[at];
+            return i-1;
+        }
+
+        private List<ConnectGene> GetStructuralConnections(ConnectGene target, out List<int> trueIndexs){
+            List<ConnectGene> output = new();
+            trueIndexs = new();
+
+            int i = 0;
+            foreach(ConnectGene test in structure){
+                if(test.inGene == target.outGene){
+                    output.Add(test);
+                    trueIndexs.Add(i);
+                }
+                i++;
+            }
+            return output;
         }
 
         /// <summary>

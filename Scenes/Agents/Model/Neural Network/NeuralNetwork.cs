@@ -66,8 +66,7 @@ namespace NEAT{
                 pool.SafeGetNode(inpt.Length, NodeGene.Type.INPUT).Value = 1;
             }
 
-            // run through the hidden layer connections (list assumed to be topologically sorted)
-            // TODO: NEED to sort list topologically
+            this.TopologicSort();
             foreach (var connection in structure){
                 if (connection.enabled){
                     NodeGene inp = pool.SafeGetNode(connection.inGene);
@@ -202,6 +201,10 @@ namespace NEAT{
             return new NeuralNetwork(this.pool, this.hasBias, newStructure);
         }
 
+        /// <summary>
+        /// Topologically sorts the neural networks structure
+        /// </summary>
+        /// <exception cref="InvalidOperationException"></exception>
         private void TopologicSort(){
             int count = structure.Count;
             bool[] visited = new bool[count];
@@ -219,9 +222,12 @@ namespace NEAT{
             if (ordered.Contains(null)) {
                 throw new InvalidOperationException("Topological sorting failed.");
             }
-            
+
             this.structure = ordered;
         }   
+        /// <summary>
+        /// DFS helper for the TopologicSort method
+        /// </summary>
         private int dfs(int i, int at, bool[] visited, List<ConnectGene> ordered){
             visited[at] = true;
         
@@ -238,6 +244,12 @@ namespace NEAT{
             return i-1;
         }
 
+        /// <summary>
+        /// Gets the ConnectGene that a certain target leads to.
+        /// </summary>
+        /// <param name="target">The target whos outgene you want to search</param>
+        /// <param name="trueIndexs">The indexs of each target within the structure array</param>
+        /// <returns>A list of ConnectGenes that the input leads to.</returns>
         private List<ConnectGene> GetStructuralConnections(ConnectGene target, out List<int> trueIndexs){
             List<ConnectGene> output = new();
             trueIndexs = new();

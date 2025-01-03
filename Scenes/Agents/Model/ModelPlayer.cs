@@ -10,12 +10,12 @@ public partial class ModelPlayer : Agent
 	public float distance = 0;
 	public bool dead {get; set;} = false;
 
-	public NeuralNetwork neuralNetwork;
+	// public NeuralNetwork neuralNetwork;
 	private RayCast2D[] inputs = new RayCast2D[RAY_NUM];
 	
 
 	public ModelPlayer(){
-		this.neuralNetwork = new NeuralNetwork(new int[] {INPUT_NUM, 29, 16, 1});
+		// this.neuralNetwork = new NEAT.NeuralNetwork(1,true);
 	}
 
     public override void _Ready()
@@ -60,7 +60,8 @@ public partial class ModelPlayer : Agent
 			i++;
 		}
 		networkInputs[INPUT_NUM-1] = this.Velocity.Y;
-		bool activated = this.neuralNetwork.Evaluate(networkInputs)[0] == 1;
+		// bool activated = this.neuralNetwork.Evaluate(networkInputs)[0] == 1;
+		bool activated = true;
 
 		// handle jump
 		if(activated){

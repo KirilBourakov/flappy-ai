@@ -78,15 +78,15 @@ public partial class ModelState : Node
 
 		while(i < GEN_SIZE){
 			// get the two parents
-			ModelPlayer mate1 = wheel[random.Next(0, totalFitness)];
-			ModelPlayer mate2 = wheel[random.Next(0, totalFitness)];
-			while (mate1 == mate2){
-				mate2 = wheel[random.Next(0, totalFitness)];
-			}
-            ModelPlayer child = new();
-            child.neuralNetwork = mate1.neuralNetwork.Reproduce(mate2.neuralNetwork);
-			newGeneration[i] = child;
-            i++;
+			// ModelPlayer mate1 = wheel[random.Next(0, totalFitness)];
+			// ModelPlayer mate2 = wheel[random.Next(0, totalFitness)];
+			// while (mate1 == mate2){
+			// 	mate2 = wheel[random.Next(0, totalFitness)];
+			// }
+            // ModelPlayer child = new();
+            // child.neuralNetwork = mate1.neuralNetwork.Reproduce(mate2.neuralNetwork);
+			// newGeneration[i] = child;
+            // i++;
 		}
 		this.models = newGeneration;
 	}

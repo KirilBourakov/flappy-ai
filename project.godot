@@ -23,6 +23,10 @@ ModelState="*res://Scenes/Agents/Model/ModelState.cs"
 
 project/assembly_name="flappy-ai"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg")
+
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0

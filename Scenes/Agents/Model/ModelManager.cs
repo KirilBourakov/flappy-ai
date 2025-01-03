@@ -22,15 +22,15 @@ public partial class ModelManager : Node2D
 				AddChild(newModel);
 			}
 		} else {
-			for (int i = 0; i < this.modelState.models.Length; i++)
-			{
-				var newModel = (ModelPlayer)this.modelScene.Instantiate();
-				newModel.Position = new Vector2(0, -65);
-				newModel.neuralNetwork = this.modelState.models[i].neuralNetwork;
+			// for (int i = 0; i < this.modelState.models.Length; i++)
+			// {
+			// 	var newModel = (ModelPlayer)this.modelScene.Instantiate();
+			// 	newModel.Position = new Vector2(0, -65);
+			// 	newModel.neuralNetwork = this.modelState.models[i].neuralNetwork;
 
-				this.modelState.models[i] = newModel;
-				AddChild(newModel);
-			}
+			// 	this.modelState.models[i] = newModel;
+			// 	AddChild(newModel);
+			// }
 		}
 	}
 

@@ -20,11 +20,11 @@ namespace NEAT
         /// <summary>
         /// A List that stores every connection gene
         /// </summary>
-        public List<ConnectGene> connectGene = new();
+        public List<ConnectGene> connectGenes = new();
         /// <summary>
         /// A dictionary that stores each connection gene by it's hash.
         /// </summary>
-        public Dictionary<long, ConnectGene> connectGeneByHash = new();
+        public Dictionary<long, ConnectGene> connectGenesByHash = new();
         
 
         /// <summary>
@@ -78,14 +78,15 @@ namespace NEAT
         /// </summary>
         public ConnectGene SafeCreateConnectionGene(int inp, int outp){
             ConnectGene connection;
-            if(connectGeneByHash.ContainsKey(ConnectGene.Hash(inp, outp))){
-                bool success = connectGeneByHash.TryGetValue(ConnectGene.Hash(inp, outp), out connection);
+            if(connectGenesByHash.ContainsKey(ConnectGene.Hash(inp, outp))){
+                bool success = connectGenesByHash.TryGetValue(ConnectGene.Hash(inp, outp), out connection);
                 if (!success){
                     throw new Exception("TryGetValue failed.");
                 }
             } else {
                 connection = new(inp, outp);
-                connectGeneByHash.Add(connection.Hash(), connection);
+                connectGenesByHash.Add(connection.Hash(), connection);
+                connectGenes.Add(connection);
             }  
             return connection;
         }

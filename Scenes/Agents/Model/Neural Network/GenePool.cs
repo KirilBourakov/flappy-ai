@@ -55,7 +55,7 @@ namespace NEAT
         /// </summary>
         public NodeGene SafeGetNode(int id, NodeGene.Type expected){
             if (!geneById.TryGetValue(id, out NodeGene value)){
-                    throw new Exception("Failure to find node in Evaluate");
+                    throw new Exception($"Failure to find node in Evaluate. Node ID: {id}");
             }   
             if (value.nodeType != expected){
                 throw new Exception("Node found not of type INPUT");
@@ -68,7 +68,7 @@ namespace NEAT
         /// </summary>
         public NodeGene SafeGetNode(int id){
             if (!geneById.TryGetValue(id, out NodeGene value)){
-                    throw new Exception("Failure to find node in Evaluate");
+                    throw new Exception($"Failure to find node in Evaluate. Node ID: {id}");
             }   
             return value;
         }

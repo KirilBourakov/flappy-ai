@@ -55,7 +55,6 @@ namespace NEAT{
         /// <param name="inpt">A list of doubles representing the input.</param>
         /// <returns>The outputs of the network</returns>
         public double[] Evaluate(double[] inpt){
-            GD.Print("running");
             // prepare nodes for calculation
             this.pool.ClearLayer(NodeGene.Type.OUTPUT);
             this.pool.ClearLayer(NodeGene.Type.HIDDEN);
@@ -63,7 +62,7 @@ namespace NEAT{
             var inputNodes = this.pool.getGeneByType(NodeGene.Type.INPUT);
             int i = 0;
             foreach (var input in inputNodes){
-                input.Value = (i >= 0 && i < inputNodes.Count) ? inpt[i] : 1;
+                input.Value = (i >= 0 && i < inpt.Length) ? inpt[i] : 1;
                 i++;
             }
 

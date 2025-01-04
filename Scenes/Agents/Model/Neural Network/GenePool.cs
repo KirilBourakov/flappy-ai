@@ -7,7 +7,7 @@ namespace NEAT
         /// <summary>
         /// A dictionary that stores each node gene by it's type
         /// </summary>
-        public static Dictionary<NodeGene.Type, List<NodeGene>> genesByType = new Dictionary<NodeGene.Type, List<NodeGene>> {
+        public Dictionary<NodeGene.Type, List<NodeGene>> genesByType = new Dictionary<NodeGene.Type, List<NodeGene>> {
             {NodeGene.Type.INPUT, new List<NodeGene>()},        
             {NodeGene.Type.HIDDEN, new List<NodeGene>()},
             {NodeGene.Type.OUTPUT, new List<NodeGene>()}
@@ -15,16 +15,16 @@ namespace NEAT
         /// <summary>
         /// A dictionary that stores each node gene by it's id.
         /// </summary>
-        public static Dictionary<int, NodeGene> geneById = new();
+        public Dictionary<int, NodeGene> geneById = new();
 
         /// <summary>
         /// A List that stores every connection gene
         /// </summary>
-        public static List<ConnectGene> connectGene = new();
+        public List<ConnectGene> connectGene = new();
         /// <summary>
         /// A dictionary that stores each connection gene by it's hash.
         /// </summary>
-        public static Dictionary<long, ConnectGene> connectGeneByHash = new();
+        public Dictionary<long, ConnectGene> connectGeneByHash = new();
         
 
         /// <summary>

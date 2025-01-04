@@ -172,7 +172,7 @@ namespace NEAT{
                     // create a new connection
                     if (MutationRoll() <= ADD_CONNECTION_RATE){
                         int inp = connection.inGene;
-                        int target_count = GenePool.genesByType[NodeGene.Type.INPUT].Count + GenePool.genesByType[NodeGene.Type.OUTPUT].Count;
+                        int target_count = pool.genesByType[NodeGene.Type.INPUT].Count + pool.genesByType[NodeGene.Type.OUTPUT].Count;
                         if (inp < target_count){
                             int outp = random.Next(inp+1, target_count+1);
                             ConnectGene newConnection = this.pool.SafeCreateConnectionGene(inp, outp).Copy();

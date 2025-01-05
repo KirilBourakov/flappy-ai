@@ -8,9 +8,31 @@ namespace NEAT {
         private const double c2 = 1;
         private const double c3 = 0.4;
 
-        // penalize species that do not evolve
-        public List<NeuralNetwork> CreateNewGeneration(List<NeuralNetwork> newGeneration){
+        private const double threshold = 4;
+
+        // TODO: penalize species that do not evolve
+        public List<NeuralNetwork> CreateNewGeneration(List<NeuralNetwork> oldGeneration){
             // speciation
+            List<List<NeuralNetwork>> species = new();
+            int currentSpecies = 1;
+            bool done = false;
+
+            NeuralNetwork baseLine;
+            int i = 0;
+            while (!done){
+                NeuralNetwork examined = (i >= 0 && i < oldGeneration.Count) ? oldGeneration[i] : null;
+                if (examined == null){
+                    done = true;
+                }
+                else if (species.Count < currentSpecies){
+                    baseLine = examined;
+                    species.Add(new List<NeuralNetwork>([baseLine]));
+                }
+                else {
+                   species[currentSpecies-1].Add(examined);
+                }
+                i++;
+            }
 
             //
 

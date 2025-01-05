@@ -5,7 +5,7 @@ using Godot;
 namespace NEAT{
     public class NeuralNetwork{
         public GenePool pool;
-        public int fitness;
+        public double fitness;
         public List<ConnectGene> structure = new();
         // TODO: create a structure sorted by innovation number to avoid calculation when crossover occurs.
         public bool hasBias;

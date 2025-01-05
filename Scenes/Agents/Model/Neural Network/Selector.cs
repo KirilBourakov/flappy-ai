@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 
 namespace NEAT {
-    public class Selector(){
+    public class Selector{
 
         private const double c1 = 1;
         private const double c2 = 1;
@@ -12,8 +12,10 @@ namespace NEAT {
 
         // TODO: penalize species that do not evolve
         public List<NeuralNetwork> CreateNewGeneration(List<NeuralNetwork> oldGeneration){
+            List<NeuralNetwork> newGeneration = new();
+
             // speciation
-            List<List<NeuralNetwork>> species = new();
+            List<Species> species = new();
             int currentSpecies = 1;
             bool done = false;
 
@@ -26,18 +28,32 @@ namespace NEAT {
                 }
                 else if (species.Count < currentSpecies){
                     baseLine = examined;
-                    species.Add(new List<NeuralNetwork>([baseLine]));
+                    Species newSpeices = new(baseLine);
+                    species.Add(newSpeices);
                 }
                 else {
-                   species[currentSpecies-1].Add(examined);
+                   species[currentSpecies-1].memebers.Add(examined);
                 }
                 i++;
             }
 
-            //
+            // adjust fitness
+            double fitAvg = 0;
+            foreach (var singularSpecies in species)
+            {
+                foreach (var member in singularSpecies.memebers){
+                    member.fitness /= singularSpecies.memebers.Count;
+                }
+                fitAvg += singularSpecies.updateAvgFitness();
+            }
+            fitAvg /= species.Count;
 
+            foreach (var singularSpecies in species)
+            {
+                newGeneration.AddRange(singularSpecies.CreateNewGeneration(fitAvg));
+            }
 
-            return new List<NeuralNetwork>();
+            return newGeneration;
         }
 
         private double Compare(NeuralNetwork baseline, NeuralNetwork target){

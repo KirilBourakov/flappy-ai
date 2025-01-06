@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Godot;
 
 namespace NEAT{
     public class Species{
@@ -8,10 +9,14 @@ namespace NEAT{
         public static readonly Random random = new();
 
         public Species(NeuralNetwork firstMember){
-            memebers.Add(firstMember);
+            memebers = [firstMember];
+        }
+        public Species(List<NeuralNetwork> members){
+            this.memebers = members;
         }
 
         public double updateAvgFitness(){
+            this.avgFitness = 0;
             foreach (var member in memebers)
             {
                 avgFitness += member.fitness;
@@ -21,9 +26,15 @@ namespace NEAT{
         }
 
         public List<NeuralNetwork> CreateNewGeneration(double globalAvg){
-            List<NeuralNetwork> newGen = new();
-            int newSize = (int) (avgFitness / globalAvg) * memebers.Count;
+            if (memebers == null || memebers.Count == 0)
+                throw new InvalidOperationException("Cannot create a new generation: memebers list is null or empty.");
 
+            List<NeuralNetwork> newGen = new();
+            int newSize = 1;
+            if (globalAvg > 0) {
+                newSize = Math.Max(1, (int) (avgFitness / globalAvg) * memebers.Count);
+            } 
+            GD.Print("NEW SIZE:    " + newSize + "");
             // todo: update how parents are chosen;
             for (int i = 0; i < newSize; i++)
             {

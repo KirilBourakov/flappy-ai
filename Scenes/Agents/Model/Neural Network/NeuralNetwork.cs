@@ -20,6 +20,9 @@ namespace NEAT{
 
 
         public NeuralNetwork(GenePool pool, bool hasBias, List<ConnectGene> structure){
+            if (structure == null){
+                throw new ArgumentNullException("structure cannot be null");
+            }
             this.pool = pool;
             this.hasBias = hasBias;
             this.structure = structure;
@@ -91,6 +94,9 @@ namespace NEAT{
         /// <param name="other">The other NeuralNetwork</param>
         /// <returns>A new NeuralNetwork</returns>
         public NeuralNetwork Crossover(NeuralNetwork other){
+            if (other == null){
+                throw new ArgumentNullException("Cannot Reproduce with other");
+            }
             var newStructure = new List<ConnectGene>();
 
             // get the structure of the parent with the highest and lowest fitness (chosen randomly if the parents have the same fitness)

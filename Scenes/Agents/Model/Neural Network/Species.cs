@@ -9,10 +9,14 @@ namespace NEAT{
         public static readonly Random random = new();
 
         public Species(NeuralNetwork firstMember){
+            if (firstMember == null)
+            {
+                throw new ArgumentNullException("Member cannot be null");
+            }
             memebers = [firstMember];
         }
         public Species(List<NeuralNetwork> members){
-            this.memebers = members;
+            this.memebers = members ?? throw new ArgumentNullException("Member cannot be null");
         }
 
         public double updateAvgFitness(){

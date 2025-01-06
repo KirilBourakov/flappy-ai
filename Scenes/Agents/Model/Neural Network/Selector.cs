@@ -8,7 +8,7 @@ namespace NEAT {
         private const double c2 = 1;
         private const double c3 = 0.4;
 
-        private const double threshold = 4;
+        public const double threshold = 4;
 
         // TODO: penalize species that do not evolve
         public List<NeuralNetwork> CreateNewGeneration(List<NeuralNetwork> oldGeneration){
@@ -56,7 +56,7 @@ namespace NEAT {
             return newGeneration;
         }
 
-        private double Compare(NeuralNetwork baseline, NeuralNetwork target){
+        public double Compare(NeuralNetwork baseline, NeuralNetwork target){
             baseline.structure.Sort((x, y) => x.innovation.CompareTo(y.innovation));
             target.structure.Sort((x, y) => x.innovation.CompareTo(y.innovation));
             
@@ -73,6 +73,7 @@ namespace NEAT {
 
             int baselineSize = 0;
             int targetSize = 0;
+            
             while (!done){
                 var currBaseline = (baseLinePointer >= 0 && baseLinePointer < target.structure.Count) ? target.structure[baseLinePointer] : null;
                 while(currBaseline != null && !currBaseline.enabled){
@@ -87,11 +88,14 @@ namespace NEAT {
                 }
                 targetSize++;
 
+                if (currBaseline == null && currTarget == null){
+                    done = true;
+                }
                 // excess
-                if (currTarget == null){
+                else if (currTarget == null){
                     do
                     {
-                        if (currTarget.enabled){
+                        if (currBaseline.enabled){
                             targetSize++;
                             excess++;
                         }
@@ -104,7 +108,7 @@ namespace NEAT {
                 else if (currBaseline == null){
                     do
                     {
-                        if (currBaseline.enabled){
+                        if (currTarget.enabled){
                             excess++; 
                             baselineSize++;
                         } 

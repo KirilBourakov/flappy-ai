@@ -1,11 +1,14 @@
 using Godot;
 using System;
+using NEAT;
+using System.Collections.Generic;
 
 public partial class ModelManager : Node2D
 {
 	
 	PackedScene modelScene;
 	ModelState modelState;
+	GenePool pool = new();
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -14,24 +17,28 @@ public partial class ModelManager : Node2D
 		this.modelState = ModelState.Instance;
 		if (!this.modelState.internalManaged)
 		{
-			for (int i = 0; i < ModelState.GEN_SIZE; i++)
+			for (int i = 0; i < ModelState.INITAL_SIZE; i++)
 			{
-				var newModel = (ModelPlayer)this.modelScene.Instantiate();
+				var newModel = (ModelPlayer) modelScene.Instantiate();
 				newModel.Position = new Vector2(0, -65);
-				this.modelState.AddModel(newModel);
+				newModel.neuralNetwork = new(pool, ModelPlayer.INPUT_NUM, 1, true);
+
+				ModelState.Instance.models.Add(newModel);
 				AddChild(newModel);
 			}
 		} else {
-			// for (int i = 0; i < this.modelState.models.Length; i++)
-			// {
-			// 	var newModel = (ModelPlayer)this.modelScene.Instantiate();
-			// 	newModel.Position = new Vector2(0, -65);
-			// 	newModel.neuralNetwork = this.modelState.models[i].neuralNetwork;
+			List<ModelPlayer> newModels = new();
+			for (int i = 0; i < ModelState.Instance.models.Count; i++){
+				var newModel = (ModelPlayer) modelScene.Instantiate();
+				newModel.Position = new Vector2(0, -65);
+				newModel.neuralNetwork = ModelState.Instance.models[i].neuralNetwork;
 
-			// 	this.modelState.models[i] = newModel;
-			// 	AddChild(newModel);
-			// }
+				newModels.Add(newModel);
+				AddChild(newModel);
+			}
+			ModelState.Instance.models = newModels;
 		}
+		GD.Print(pool.connectGenes.Count);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -46,6 +53,9 @@ public partial class ModelManager : Node2D
 	}
 
 	public bool AllDead(){
+		if (this.modelState.models.Count == 0){
+			throw new Exception("No models within modelState");
+		}
 		foreach (var model in this.modelState.models)
 		{
 			if (!model.dead){

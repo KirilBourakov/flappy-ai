@@ -38,7 +38,6 @@ namespace NEAT{
             if (globalAvg > 0) {
                 newSize = Math.Max(1, (int) (avgFitness / globalAvg) * memebers.Count);
             } 
-            GD.Print("NEW SIZE:    " + newSize + "");
             // todo: update how parents are chosen;
             for (int i = 0; i < newSize; i++)
             {

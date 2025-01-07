@@ -1,21 +1,26 @@
 using Godot;
+using NEAT;
 using System;
 using System.Linq;
 
 public partial class ModelPlayer : Agent
 {
 	private const int RAY_NUM = 13;
-	private const int INPUT_NUM = RAY_NUM+1;
+	public const int INPUT_NUM = RAY_NUM+1;
 
 	public float distance = 0;
 	public bool dead {get; set;} = false;
+	public NeuralNetwork neuralNetwork;
 
-	// public NeuralNetwork neuralNetwork;
 	private RayCast2D[] inputs = new RayCast2D[RAY_NUM];
 	
 
-	public ModelPlayer(){
-		// this.neuralNetwork = new NEAT.NeuralNetwork(1,true);
+	// public ModelPlayer(GenePool pool){
+	// 	neuralNetwork = new NeuralNetwork(pool, INPUT_NUM, 1, true);
+	// }
+	public ModelPlayer(){}
+	public ModelPlayer(NeuralNetwork neuralNetwork){
+		this.neuralNetwork = neuralNetwork;
 	}
 
     public override void _Ready()
@@ -45,12 +50,12 @@ public partial class ModelPlayer : Agent
 
 
 		// run neural network
-		float[] networkInputs = new float[INPUT_NUM];
+		double[] networkInputs = new double[INPUT_NUM];
 		int i = 0;
 		foreach (var input in this.inputs){
 			if (input.IsColliding()){
 				Vector2 collision = input.GetCollisionPoint();
-				float distance = (float) Math.Sqrt(
+				double distance = Math.Sqrt(
 					Math.Pow(collision.X - this.Position.X, 2) +
 					Math.Pow(collision.Y - this.Position.Y, 2)
 				);
@@ -59,10 +64,7 @@ public partial class ModelPlayer : Agent
 			}
 			i++;
 		}
-		networkInputs[INPUT_NUM-1] = this.Velocity.Y;
-		// bool activated = this.neuralNetwork.Evaluate(networkInputs)[0] == 1;
-		bool activated = true;
-
+		bool activated = this.neuralNetwork.Evaluate(networkInputs)[0] > 0;
 		// handle jump
 		if(activated){
 			velocity.Y = JumpVelocity;
@@ -76,6 +78,7 @@ public partial class ModelPlayer : Agent
     public override void Kill()
     {
         this.dead = true;
+		this.neuralNetwork.fitness = this.distance;
     }
     public override void AddPoint()
     {

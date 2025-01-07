@@ -207,6 +207,19 @@ namespace NEAT{
             return new NeuralNetwork(this.pool, this.hasBias, newStructure);
         }
 
+        public ConnectGene NextGene(ref int currIndex, ref int currSize){
+            ConnectGene currGene;
+            do {
+                currIndex++;
+                currGene = (currIndex >= 0 && currIndex < this.structure.Count) ? this.structure[currIndex] : null;
+            }  while (currGene != null && !currGene.enabled);
+
+            if (currGene != null){
+                currSize++;
+            }
+            return currGene;
+        }
+
         /// <summary>
         /// Topologically sorts the neural networks structure
         /// </summary>

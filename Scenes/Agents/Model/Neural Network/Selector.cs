@@ -68,77 +68,42 @@ namespace NEAT {
             double absDifference = 0;
             int matchCount = 0;
 
-            int baseLinePointer = 0;
+            int baseLinePointer = -1;
             int targetPointer = 0;
 
-            int baselineSize = 0;
+            int baselineSize = -1;
             int targetSize = 0;
-            
+
+            // TODO: handling disjoint and excess incorreclty (See: [1,2,4,5] & [1,2,3,4])
             while (!done){
-                var currBaseline = (baseLinePointer >= 0 && baseLinePointer < target.structure.Count) ? target.structure[baseLinePointer] : null;
-                while(currBaseline != null && !currBaseline.enabled){
-                    baseLinePointer++;
-                    currBaseline = (baseLinePointer >= 0 && baseLinePointer < target.structure.Count) ? target.structure[baseLinePointer] : null;
-                }
-                baselineSize++;
-                var currTarget = (targetPointer >= 0 && targetPointer < baseline.structure.Count) ? baseline.structure[targetPointer] : null;
-                while(currTarget != null && !currTarget.enabled){
-                    targetPointer++;
-                    currTarget = (targetPointer >= 0 && targetPointer < baseline.structure.Count) ? baseline.structure[targetPointer] : null;
-                }
-                targetSize++;
+                ConnectGene currBaseline = baseline.NextGene(ref baseLinePointer, ref baselineSize);
+                ConnectGene currTarget = target.NextGene(ref targetPointer, ref targetSize);
 
                 if (currBaseline == null && currTarget == null){
                     done = true;
                 }
                 // excess
-                else if (currTarget == null){
-                    do
-                    {
-                        if (currBaseline.enabled){
-                            targetSize++;
-                            excess++;
-                        }
-
-                        baseLinePointer++;
-                        currBaseline = (baseLinePointer >= 0 && baseLinePointer < target.structure.Count) ? target.structure[baseLinePointer] : null;
-                    } while (currBaseline != null);
-                    done = true;
+                else if (currTarget == null || currBaseline == null){
+                    excess++;
                 }
-                else if (currBaseline == null){
-                    do
-                    {
-                        if (currTarget.enabled){
-                            excess++; 
-                            baselineSize++;
-                        } 
-                        targetPointer++;
-                        currTarget = (targetPointer >= 0 && targetPointer < baseline.structure.Count) ? baseline.structure[targetPointer] : null;
-                    } while (currTarget != null);
-                    done = true;
-                }
-
                 // innovations match
                 else if (currBaseline.innovation == currTarget.innovation){
                     absDifference = Math.Abs(currBaseline.weight - currTarget.weight);
                     matchCount++;
-
-                    baseLinePointer++;
-                    targetPointer++;
-                }
-
-                // disjoint case
-                else if (currBaseline.innovation > currTarget.innovation) {
-                    disjoint++;
-                    targetPointer++;
-                }
-                else if (currBaseline.innovation < currTarget.innovation) {
-                    disjoint++;
-                    baseLinePointer++;
-                }          
+                } else {
+                    // disjoint case
+                    while (currTarget != null && currBaseline.innovation > currTarget.innovation){
+                        disjoint++;
+                        currTarget = target.NextGene(ref targetPointer, ref targetSize);
+                    }
+                    while (currBaseline != null && currBaseline.innovation < currTarget.innovation){
+                        disjoint++;
+                        currBaseline = baseline.NextGene(ref baseLinePointer, ref baselineSize);
+                    } 
+                }       
             }
-
             double N = targetSize > baselineSize ? targetSize : baselineSize;
+            return N;
             double difference = c1*(excess/N) + c2*(disjoint/N) + c3*(absDifference/matchCount);
             return difference;
         }

@@ -1,6 +1,8 @@
 using GdUnit4;
 using NEAT;
 
+namespace Test;
+
 [TestSuite]
 public class GenePoolTest
 {

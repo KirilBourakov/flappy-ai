@@ -3,6 +3,8 @@ using GdUnit4;
 using Godot;
 using NEAT;
 
+namespace Test;
+
 [TestSuite]
 public class SpeciesTest 
 {

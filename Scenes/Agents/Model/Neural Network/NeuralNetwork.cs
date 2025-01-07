@@ -50,7 +50,13 @@ namespace NEAT{
                     this.pool.CreateNode(NodeGene.Type.OUTPUT);
                 }
             }
-            this.structure.Add(pool.SafeCreateConnectionGene(inputNodes[^1].nodeId, outputNodes[0].nodeId));
+
+            //TODO: replace starting with a fully connected node with smarter evolution
+            for (int i = 0; i < inputNodes.Count; i++){
+                for (int j = 0; j < outputNodes.Count; j++){
+                    this.structure.Add(pool.SafeCreateConnectionGene(inputNodes[i].nodeId, outputNodes[j].nodeId));
+                }
+            }  
         }
 
         /// <summary>

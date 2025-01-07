@@ -96,14 +96,13 @@ namespace NEAT {
                         disjoint++;
                         currTarget = target.NextGene(ref targetPointer, ref targetSize);
                     }
-                    while (currBaseline != null && currBaseline.innovation < currTarget.innovation){
+                    while (currBaseline != null && currTarget != null && currBaseline.innovation < currTarget.innovation){
                         disjoint++;
                         currBaseline = baseline.NextGene(ref baseLinePointer, ref baselineSize);
                     } 
                 }       
             }
             double N = targetSize > baselineSize ? targetSize : baselineSize;
-            return N;
             double difference = c1*(excess/N) + c2*(disjoint/N) + c3*(absDifference/matchCount);
             return difference;
         }

@@ -50,6 +50,7 @@ namespace NEAT{
                     this.pool.CreateNode(NodeGene.Type.OUTPUT);
                 }
             }
+            this.structure.Add(pool.SafeCreateConnectionGene(inputNodes[^1].nodeId, outputNodes[0].nodeId));
         }
 
         /// <summary>

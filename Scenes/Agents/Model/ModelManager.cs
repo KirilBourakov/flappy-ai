@@ -8,7 +8,6 @@ public partial class ModelManager : Node2D
 	
 	PackedScene modelScene;
 	ModelState modelState;
-	GenePool pool = new();
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -21,7 +20,7 @@ public partial class ModelManager : Node2D
 			{
 				var newModel = (ModelPlayer) modelScene.Instantiate();
 				newModel.Position = new Vector2(0, -65);
-				newModel.neuralNetwork = new(pool, ModelPlayer.INPUT_NUM, 1, true);
+				newModel.neuralNetwork = new(modelState.pool, ModelPlayer.INPUT_NUM, 1, true);
 
 				ModelState.Instance.models.Add(newModel);
 				AddChild(newModel);
@@ -38,7 +37,7 @@ public partial class ModelManager : Node2D
 			}
 			ModelState.Instance.models = newModels;
 		}
-		GD.Print(pool.connectGenes.Count);
+		GD.Print(modelState.pool.connectGenes.Count);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

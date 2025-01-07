@@ -8,6 +8,8 @@ public partial class ModelState : Node
 	public static ModelState Instance { get; private set; }
 	public const int INITAL_SIZE = 50;
 
+	public	GenePool pool = new();
+
 	public List<ModelPlayer> models =  new(INITAL_SIZE);
 	public bool internalManaged = false;
 	private Selector selector = new Selector();

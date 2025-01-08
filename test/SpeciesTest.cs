@@ -25,19 +25,19 @@ public class SpeciesTest
     [TestCase]
     public void updateAvgFitnessTest(){
         Species species = genSpecies();
-        double avg = species.updateAvgFitness();
+        double avg = species.updateFitnessFields();
 
         Assertions.AssertThat(avg).Equals(3d);
-        Assertions.AssertThat(species.avgFitness).Equals(3d);
+        Assertions.AssertThat(species.avgAdjustedFitness).Equals(3d);
     }
 
     [TestCase]
     public void CreateNewGenerationCorrectLengthTest(){
         Species species = genSpecies();
-        species.updateAvgFitness();
+        species.updateFitnessFields();
 
-        Assertions.AssertInt(species.CreateNewGeneration(species.avgFitness).Count).IsEqual(species.memebers.Count);
-        Assertions.AssertInt(species.CreateNewGeneration(species.avgFitness*2).Count).IsEqual(species.memebers.Count/2);
-        Assertions.AssertInt(species.CreateNewGeneration(species.avgFitness/2).Count).IsEqual(species.memebers.Count*2);
+        Assertions.AssertInt(species.CreateNewGeneration(species.avgAdjustedFitness).Count).IsEqual(species.memebers.Count);
+        Assertions.AssertInt(species.CreateNewGeneration(species.avgAdjustedFitness*2).Count).IsEqual(species.memebers.Count/2);
+        Assertions.AssertInt(species.CreateNewGeneration(species.avgAdjustedFitness/2).Count).IsEqual(species.memebers.Count*2);
     }
 }

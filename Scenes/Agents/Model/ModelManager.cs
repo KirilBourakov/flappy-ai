@@ -44,7 +44,7 @@ public partial class ModelManager : Node2D
 	public override void _Process(double delta)
 	{
 		bool finished = AllDead();
-		if (finished){
+		if (finished && !this.modelState.reproductionLocked){
 			this.modelState.Reproduce();
 			// reload scene
 			GetTree().ReloadCurrentScene();

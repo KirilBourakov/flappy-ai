@@ -6,6 +6,8 @@ namespace NEAT{
     public class NeuralNetwork{
         public GenePool pool;
         public double fitness;
+        public double adjustedFitness;
+        public double relativeFitness;
         public List<ConnectGene> structure = new();
         // TODO: create a structure sorted by innovation number to avoid calculation when crossover occurs.
         public bool hasBias;

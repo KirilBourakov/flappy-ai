@@ -12,6 +12,7 @@ public partial class ModelState : Node
 
 	public List<ModelPlayer> models =  new(INITAL_SIZE);
 	public bool internalManaged = false;
+	public bool reproductionLocked = false;
 	private Selector selector = new Selector();
 
 	public int generationNumber = 1;
@@ -24,6 +25,7 @@ public partial class ModelState : Node
     }
 
 	public void Reproduce(){
+		reproductionLocked = true;
 		generationNumber += 1;
 		internalManaged = true;
 		furthestDistanceTraveled = Math.Max(furthestDistanceTraveled, currentGenerationDistancedTraveled);
@@ -40,6 +42,8 @@ public partial class ModelState : Node
 		}
 
 		this.models = temp;
+
+		reproductionLocked = false;
 	}
 
 }

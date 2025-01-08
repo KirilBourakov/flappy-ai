@@ -5,7 +5,8 @@ using Godot;
 namespace NEAT{
     public class Species{
         public List<NeuralNetwork> memebers;
-        public double avgFitness;
+        public double avgAdjustedFitness;
+        public double totalFitness;
         public static readonly Random random = new();
 
         public Species(NeuralNetwork firstMember){
@@ -19,14 +20,16 @@ namespace NEAT{
             this.memebers = members ?? throw new ArgumentNullException("Member cannot be null");
         }
 
-        public double updateAvgFitness(){
-            this.avgFitness = 0;
+        // todo: replace with property
+        public double updateFitnessFields(){
+            this.avgAdjustedFitness = 0;
             foreach (var member in memebers)
             {
-                avgFitness += member.fitness;
+                avgAdjustedFitness += member.adjustedFitness;
+                totalFitness += member.fitness;
             }
-            avgFitness /= memebers.Count;
-            return avgFitness;
+            avgAdjustedFitness /= memebers.Count;
+            return avgAdjustedFitness;
         }
 
         public List<NeuralNetwork> CreateNewGeneration(double globalAvg){
@@ -36,17 +39,41 @@ namespace NEAT{
             List<NeuralNetwork> newGen = new();
             int newSize = 1;
             if (globalAvg > 0) {
-                newSize = Math.Max(1, (int) (avgFitness / globalAvg) * memebers.Count);
+                newSize = Math.Max(1, (int) (avgAdjustedFitness / globalAvg) * memebers.Count);
             } 
-            // todo: update how parents are chosen;
+
+            for (int i = 0; i < memebers.Count; i++)
+            {
+                memebers[i].relativeFitness = memebers[i].fitness / totalFitness;
+            }
+            
             for (int i = 0; i < newSize; i++)
             {
-                NeuralNetwork parent1 = memebers[random.Next(0, memebers.Count)];
-                NeuralNetwork parent2 = memebers[random.Next(0, memebers.Count)];
+                double target = random.NextDouble();
+
+                NeuralNetwork parent1 = getParent();
+                NeuralNetwork parent2;
+                do {
+                    parent2 = getParent();
+                } while (parent1 == parent2 && memebers.Count != 1);
                 newGen.Add(parent1.Crossover(parent2));
             }
 
             return newGen;
+        }
+
+        private NeuralNetwork getParent(){
+            double target = random.NextDouble();
+            double curr = 0;
+
+            int i;
+            for (i = 0; i < memebers.Count && curr < target; i++)
+            {
+                curr += memebers[i].relativeFitness;
+            }
+            GD.Print("i: "+ i + " " + memebers.Count);
+
+            return memebers[Math.Min(i, memebers.Count-1)];
         }
     }
 }

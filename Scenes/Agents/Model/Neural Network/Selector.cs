@@ -37,15 +37,16 @@ namespace NEAT {
                 }
                 i++;
             }
+            GD.Print("species = " + species.Count);
 
             // adjust fitness
             double fitAvg = 0;
             foreach (var singularSpecies in species)
             {
                 foreach (var member in singularSpecies.memebers){
-                    member.fitness /= singularSpecies.memebers.Count;
+                    member.adjustedFitness = member.fitness / singularSpecies.memebers.Count;
                 }
-                fitAvg += singularSpecies.updateAvgFitness();
+                fitAvg += singularSpecies.updateFitnessFields();
             }
             fitAvg /= species.Count;
 

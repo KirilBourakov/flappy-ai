@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://da033sv1g68hd"]
+
+[ext_resource type="Script" path="res://Scenes/XOR.cs" id="1_ifxwp"]
+
+[node name="Xor" type="Node2D"]
+script = ExtResource("1_ifxwp")

@@ -14,4 +14,8 @@ public partial class Menu : Control
 	public void ExitPressed(){
 		GetTree().Quit();
 	}
+
+	public void XORPressed(){
+		GetTree().ChangeSceneToFile("res://Scenes/XOR.tscn");
+	}
 }

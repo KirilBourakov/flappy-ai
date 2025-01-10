@@ -106,6 +106,7 @@ namespace NEAT {
                 }       
             }
             double N = targetSize > baselineSize ? targetSize : baselineSize;
+            if (N<20) N=1;
             double difference = c1*(excess/N) + c2*(disjoint/N) + c3*(absDifference/matchCount);
             return difference;
         }

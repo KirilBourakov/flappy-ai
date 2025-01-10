@@ -4,6 +4,7 @@ using Godot;
 
 namespace NEAT{
     public class Species{
+        //TODO: fix encapsulation
         public List<NeuralNetwork> memebers;
         public double avgAdjustedFitness;
         public double totalFitness;
@@ -71,7 +72,6 @@ namespace NEAT{
             {
                 curr += memebers[i].relativeFitness;
             }
-            GD.Print("i: "+ i + " " + memebers.Count);
 
             return memebers[Math.Min(i, memebers.Count-1)];
         }

@@ -37,7 +37,6 @@ public partial class ModelManager : Node2D
 			}
 			ModelState.Instance.models = newModels;
 		}
-		GD.Print(modelState.pool.connectGenes.Count);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

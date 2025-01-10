@@ -16,6 +16,7 @@ namespace NEAT {
             List<NeuralNetwork> newGeneration = new();
 
             // speciation
+            // TODO: currently not working
             List<Species> species = new();
             int currentSpecies = 1;
             bool done = false;

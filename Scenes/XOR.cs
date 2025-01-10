@@ -47,7 +47,7 @@ public partial class XOR : Node2D
                 avg += network.fitness;
             }
             avg /= population.Count;
-			population.Sort((x, y) => x.fitness.CompareTo(y.fitness));
+			population.Sort((x, y) => y.fitness.CompareTo(x.fitness));
             GD.Print($"Average fitness is {avg} while highest is {population[0].fitness}");
 
             population = selector.CreateNewGeneration(population);

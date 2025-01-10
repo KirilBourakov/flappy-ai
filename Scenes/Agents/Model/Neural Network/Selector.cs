@@ -25,14 +25,12 @@ namespace NEAT {
                         singularSpecies.memebers.Add(member);
                         break;
                     }
-                    GD.Print(Compare(singularSpecies.memebers[0], member));
                 }
                 if (!matchExists){
                     species.Add(new Species(member));
                 }
             }
-            GD.Print("species = " + species.Count);
-
+            
             // adjust fitness
             double fitAvg = 0;
             foreach (var singularSpecies in species)

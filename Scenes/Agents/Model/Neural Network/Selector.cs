@@ -14,29 +14,22 @@ namespace NEAT {
         // TODO: penalize species that do not evolve
         public List<NeuralNetwork> CreateNewGeneration(List<NeuralNetwork> oldGeneration){
             List<NeuralNetwork> newGeneration = new();
-
-            // speciation
-            // TODO: currently not working
+            
             List<Species> species = new();
-            int currentSpecies = 1;
-            bool done = false;
-
-            NeuralNetwork baseLine;
-            int i = 0;
-            while (!done){
-                NeuralNetwork examined = (i >= 0 && i < oldGeneration.Count) ? oldGeneration[i] : null;
-                if (examined == null){
-                    done = true;
+            foreach (var member in oldGeneration)
+            {
+                bool matchExists = false;
+                foreach (var singularSpecies in species){
+                    if (Compare(singularSpecies.memebers[0], member) > threshold){
+                        matchExists = true;
+                        singularSpecies.memebers.Add(member);
+                        break;
+                    }
+                    GD.Print(Compare(singularSpecies.memebers[0], member));
                 }
-                else if (species.Count < currentSpecies){
-                    baseLine = examined;
-                    Species newSpeices = new(baseLine);
-                    species.Add(newSpeices);
+                if (!matchExists){
+                    species.Add(new Species(member));
                 }
-                else {
-                   species[currentSpecies-1].memebers.Add(examined);
-                }
-                i++;
             }
             GD.Print("species = " + species.Count);
 
@@ -105,9 +98,14 @@ namespace NEAT {
                     } 
                 }       
             }
+
+            double makeSafe(double inp){
+                return Double.IsFinite(inp) ? inp : 0;
+            }
+
             double N = targetSize > baselineSize ? targetSize : baselineSize;
-            if (N<20) N=1;
-            double difference = c1*(excess/N) + c2*(disjoint/N) + c3*(absDifference/matchCount);
+            if (N < 20) N=1;
+            double difference = makeSafe(c1*(excess/N)) + makeSafe(c2*(disjoint/N)) + makeSafe(c3*(absDifference/matchCount));
             return difference;
         }
     }

@@ -33,6 +33,7 @@ namespace NEAT{
             return avgAdjustedFitness;
         }
 
+        // TODO: handle species with only 1 member
         public List<NeuralNetwork> CreateNewGeneration(double globalAvg){
             if (memebers == null || memebers.Count == 0)
                 throw new InvalidOperationException("Cannot create a new generation: memebers list is null or empty.");

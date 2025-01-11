@@ -8,7 +8,8 @@ namespace NEAT{
         public List<NeuralNetwork> memebers;
         public double avgAdjustedFitness;
         public double totalFitness;
-        public static readonly Random random = new();
+        private double lastImprovement;
+        private static readonly Random random = new();
 
         public Species(NeuralNetwork firstMember){
             if (firstMember == null)
@@ -23,6 +24,7 @@ namespace NEAT{
 
         // todo: replace with property
         public double updateFitnessFields(){
+            double lastFit = avgAdjustedFitness;
             this.avgAdjustedFitness = 0;
             foreach (var member in memebers)
             {
@@ -30,6 +32,11 @@ namespace NEAT{
                 totalFitness += member.fitness;
             }
             avgAdjustedFitness /= memebers.Count;
+            if (lastFit <= this.avgAdjustedFitness){
+                lastImprovement++;
+            } else {
+                lastImprovement = 0;
+            }
             return avgAdjustedFitness;
         }
 

@@ -9,7 +9,11 @@ namespace NEAT {
         private const double c2 = 1;
         private const double c3 = 0.4;
 
-        public const double threshold = 4;
+        public double threshold {get; private set;} = 4;
+        private const double STEP = 0.3;
+        private const int SPECIES_COUNT_TARGET = 5;
+
+        private readonly Random random = new();
 
         // TODO: penalize species that do not evolve
         public List<NeuralNetwork> CreateNewGeneration(List<NeuralNetwork> oldGeneration){
@@ -48,6 +52,54 @@ namespace NEAT {
             }
 
             return newGeneration;
+        }
+
+        public List<Species> CreateNewGeneration(List<Species> oldGen){
+            List<NeuralNetwork> representatives = new();
+            List<NeuralNetwork> nonRepresentatives = new();
+            foreach (var singularSpecies in oldGen){
+                NeuralNetwork rep = singularSpecies.memebers[random.Next(0, singularSpecies.memebers.Count)];
+                representatives.Add(rep);
+                foreach (var member in singularSpecies.memebers){
+                    if (member != rep){
+                        nonRepresentatives.Add(member);
+                    }
+                }
+            }
+
+            List<Species> speciatedOldGen = new();
+            foreach(var rep in representatives){
+                Species newSpecies = new(rep);
+                foreach(var nonRep in nonRepresentatives){
+                    if (Compare(rep, nonRep) < 4){
+                        newSpecies.memebers.Add(nonRep);
+                    }
+                }
+                speciatedOldGen.Add(newSpecies);
+            }
+
+            if (speciatedOldGen.Count > SPECIES_COUNT_TARGET){
+                threshold += STEP;
+            }
+            else if (speciatedOldGen.Count < SPECIES_COUNT_TARGET){
+                threshold -= STEP;
+            }
+
+            double fitAvg = 0;
+            foreach (var singularSpecies in speciatedOldGen)
+            {
+                foreach (var member in singularSpecies.memebers){
+                    member.adjustedFitness = member.fitness / singularSpecies.memebers.Count;
+                }
+                fitAvg += singularSpecies.updateFitnessFields();
+            }
+            fitAvg /= speciatedOldGen.Count;
+
+            for (int i = 0; i<speciatedOldGen.Count; i++){
+                speciatedOldGen[i].memebers = speciatedOldGen[i].CreateNewGeneration(fitAvg);
+            }
+
+            return speciatedOldGen;
         }
 
         public double Compare(NeuralNetwork baseline, NeuralNetwork target){

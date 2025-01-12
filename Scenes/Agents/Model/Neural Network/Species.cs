@@ -78,13 +78,8 @@ namespace NEAT{
             
             for (int i = 0; i < newSize; i++)
             {
-                double target = random.NextDouble();
-
                 NeuralNetwork parent1 = getParent();
-                NeuralNetwork parent2;
-                do {
-                    parent2 = getParent();
-                } while (parent1 == parent2 && memebers.Count != 1);
+                NeuralNetwork parent2 = getParent();
                 newGen.Add(parent1.Crossover(parent2));
             }
 

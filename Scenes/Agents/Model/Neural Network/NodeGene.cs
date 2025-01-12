@@ -4,13 +4,18 @@ namespace NEAT
 {
     public class NodeGene{
     public enum Type {INPUT, HIDDEN, OUTPUT};
-    private static int IdCounter = 1;
-    public double Value;
-    public Type nodeType;
-    public int nodeId;
+    
+    // todo: add activation function on input
+    public double Value {get; set;}
+    public Type nodeType {get;}
+    public int nodeId {get;}
+    public int layer {get;}
 
-    public NodeGene(Type nodeType){
+    private static int IdCounter = 1;
+
+    public NodeGene(Type nodeType, int layer){
         this.Value = 0;
+        this.layer = layer;
         this.nodeType = nodeType;
         this.nodeId = IdCounter;
         IdCounter++;

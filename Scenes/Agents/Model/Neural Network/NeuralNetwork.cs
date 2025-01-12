@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NEAT{
     public class NeuralNetwork{
-        public GenePool pool;
+        public GenePool pool {get;}
         public double fitness;
         public double adjustedFitness;
         public double relativeFitness;
@@ -19,7 +19,13 @@ namespace NEAT{
         public static readonly int ADD_CONNECTION_RATE = 5;
         public static readonly int ADD_NODE_RATE = 3;
 
-
+        /// <summary>
+        /// Create a neural network with a preset structure
+        /// </summary>
+        /// <param name="pool"></param>
+        /// <param name="hasBias"></param>
+        /// <param name="structure"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public NeuralNetwork(GenePool pool, bool hasBias, List<ConnectGene> structure){
             if (structure == null){
                 throw new ArgumentNullException("structure cannot be null");
@@ -28,6 +34,15 @@ namespace NEAT{
             this.hasBias = hasBias;
             this.structure = structure;
         }
+
+        /// <summary>
+        /// Create a NeuralNetwork with a given number of inputs and outputs
+        /// </summary>
+        /// <param name="pool"></param>
+        /// <param name="inputs"></param>
+        /// <param name="outputs"></param>
+        /// <param name="useBias"></param>
+        /// <exception cref="Exception"></exception>
         public NeuralNetwork(GenePool pool, int inputs, int outputs, bool useBias){
             if (inputs <= 0 || outputs <= 0){
                 throw new Exception("Invalid input or output decleration");
@@ -215,6 +230,7 @@ namespace NEAT{
             return new NeuralNetwork(this.pool, this.hasBias, newStructure);
         }
 
+        // TODO: move this method to the selector class
         public ConnectGene NextGene(ref int currIndex, ref int currSize){
             ConnectGene currGene;
             do {

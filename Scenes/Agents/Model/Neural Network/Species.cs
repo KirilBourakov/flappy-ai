@@ -11,6 +11,11 @@ namespace NEAT{
         private double lastImprovement;
         private static readonly Random random = new();
 
+        /// <summary>
+        /// Create a species given an initial member
+        /// </summary>
+        /// <param name="firstMember"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public Species(NeuralNetwork firstMember){
             if (firstMember == null)
             {
@@ -18,11 +23,20 @@ namespace NEAT{
             }
             memebers = [firstMember];
         }
+        /// <summary>
+        /// Create a species given a list of it's memebers
+        /// </summary>
+        /// <param name="members"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public Species(List<NeuralNetwork> members){
             this.memebers = members ?? throw new ArgumentNullException("Member cannot be null");
         }
 
         // todo: replace with property
+        /// <summary>
+        /// Update the current population fitness based on the fitness of it's members. Also keeps track of how long ago an imporovement occured from the last update.
+        /// </summary>
+        /// <returns></returns>
         public double updateFitnessFields(){
             double lastFit = avgAdjustedFitness;
             this.avgAdjustedFitness = 0;
@@ -41,6 +55,12 @@ namespace NEAT{
         }
 
         // TODO: handle species with only 1 member
+        /// <summary>
+        /// Creates a new generation of the species 
+        /// </summary>
+        /// <param name="globalAvg"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public List<NeuralNetwork> CreateNewGeneration(double globalAvg){
             if (memebers == null || memebers.Count == 0)
                 throw new InvalidOperationException("Cannot create a new generation: memebers list is null or empty.");
@@ -71,6 +91,10 @@ namespace NEAT{
             return newGen;
         }
 
+        /// <summary>
+        /// Gets the next parent using a roulette wheel
+        /// </summary>
+        /// <returns></returns>
         private NeuralNetwork getParent(){
             double target = random.NextDouble();
             double curr = 0;

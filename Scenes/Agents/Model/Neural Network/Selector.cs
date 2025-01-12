@@ -16,6 +16,12 @@ namespace NEAT {
         private readonly Random random = new();
 
         // TODO: penalize species that do not evolve
+
+        /// <summary>
+        /// Creates a new generation given an un-speciated list 
+        /// </summary>
+        /// <param name="oldGeneration"></param>
+        /// <returns></returns>
         public List<NeuralNetwork> CreateNewGeneration(List<NeuralNetwork> oldGeneration){
             List<NeuralNetwork> newGeneration = new();
             
@@ -54,6 +60,11 @@ namespace NEAT {
             return newGeneration;
         }
 
+        /// <summary>
+        /// Creates a new generation given a list of current species
+        /// </summary>
+        /// <param name="oldGeneration"></param>
+        /// <returns></returns>
         public List<Species> CreateNewGeneration(List<Species> oldGen){
             List<NeuralNetwork> representatives = new();
             List<NeuralNetwork> nonRepresentatives = new();
@@ -102,6 +113,12 @@ namespace NEAT {
             return speciatedOldGen;
         }
 
+        /// <summary>
+        /// Compares how similar a neuralNetwork is to a baseline
+        /// </summary>
+        /// <param name="baseline"></param>
+        /// <param name="target"></param>
+        /// <returns></returns>
         public double Compare(NeuralNetwork baseline, NeuralNetwork target){
             baseline.structure.Sort((x, y) => x.innovation.CompareTo(y.innovation));
             target.structure.Sort((x, y) => x.innovation.CompareTo(y.innovation));

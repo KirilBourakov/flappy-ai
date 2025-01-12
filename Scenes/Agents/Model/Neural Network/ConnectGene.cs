@@ -47,6 +47,10 @@ namespace NEAT{
             return inp < 0 && outp < 0 || inp >= 0 && outp >= 0 ? C : -C - 1;
         }
 
+        /// <summary>
+        /// Creates a shallow copy of the ConnectGene
+        /// </summary>
+        /// <returns></returns>
         public ConnectGene Copy(){
             return (ConnectGene)this.MemberwiseClone();
         }

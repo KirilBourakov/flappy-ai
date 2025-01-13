@@ -24,31 +24,30 @@ public partial class XOR : Node2D
 	}
     
     public void Run(){
-        Selector selector = new();
-        List<Species> population = selector.CreateInitialGeneration(GEN_SIZE, 2, 1, false, out GenePool pool);
+        Population population = new(GEN_SIZE, 2, 1, false, out GenePool pool);
 
         int gen = 1;
         while (true){
-            foreach (var species in population)
+            foreach (var species in population.population)
             {
                 foreach (var member in species.memebers){
                     test(member);
                 }
             }
 
-            GD.Print($"Generation {gen} has a pool of {pool.connectGenes.Count} genes and {population.Count} members");
+            GD.Print($"Generation {gen} has a pool of {pool.connectGenes.Count} genes and {population.population.Count} members");
             double avg = 0;
-            foreach (var species in population)
+            foreach (var species in population.population)
             {
                 foreach (var member in species.memebers){
                     avg += member.fitness;
                 }
                 
             }
-            avg /= population.Count;
+            avg /= population.population.Count;
             GD.Print($"Average fitness is {avg}");
 
-            population = selector.CreateNewGeneration(population);
+            population.CreateNewGeneration();
             gen++;
         }
     }

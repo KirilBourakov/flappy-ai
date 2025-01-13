@@ -18,7 +18,7 @@ public class SelectorTest
         
         NeuralNetwork neuralNetwork = new(pool, true, pool.connectGenes);
 
-        Selector selector = new();
+        Population selector = new();
 
         Assertions.AssertThat(selector.Compare(neuralNetwork, neuralNetwork)).Equals(0d);
 
@@ -38,9 +38,9 @@ public class SelectorTest
         NeuralNetwork large = new(pool, true, pool.connectGenes);
         NeuralNetwork small = new (pool, true, [inptToHidden, HiddenToOut, inptToOut]);
 
-        Selector selector = new();
+        Population selector = new();
 
-        Assertions.AssertThat(selector.Compare(large, small)).IsLess(Selector.threshold);
+        Assertions.AssertThat(selector.Compare(large, small)).IsLess(Population.threshold);
     }
 
     [TestCase]
@@ -67,8 +67,8 @@ public class SelectorTest
         NeuralNetwork small = new(pool, true, [inpToOut]);
         NeuralNetwork large = new(pool, true, [inpToHidden, inp2ToHidden2, inp2ToHidden, inpToHidden2, HiddenToOut, Hidden2ToOut]);
 
-        Selector selector = new();
-        Assertions.AssertThat(selector.Compare(small, large)).IsGreater(Selector.threshold);
+        Population selector = new();
+        Assertions.AssertThat(selector.Compare(small, large)).IsGreater(Population.threshold);
     }
 
 }

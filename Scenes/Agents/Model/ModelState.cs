@@ -13,7 +13,7 @@ public partial class ModelState : Node
 	public List<ModelPlayer> models =  new(INITAL_SIZE);
 	public bool internalManaged = false;
 	public bool reproductionLocked = false;
-	private Selector selector = new Selector();
+	private Population selector = new Selector();
 
 	public int generationNumber = 1;
 	public float furthestDistanceTraveled = 0;

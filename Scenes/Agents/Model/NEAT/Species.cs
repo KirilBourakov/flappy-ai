@@ -54,6 +54,10 @@ namespace NEAT{
             return avgAdjustedFitness;
         }
 
+        public bool noImprovement(){
+            return lastImprovement >= 15;
+        }
+
         // TODO: handle species with only 1 member
         /// <summary>
         /// Creates a new generation of the species 

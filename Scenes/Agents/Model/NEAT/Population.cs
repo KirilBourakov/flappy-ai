@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Godot;
 
 namespace NEAT {
-    public class Selector{
+    public class Population{
 
         private const double c1 = 1;
         private const double c2 = 1;
@@ -15,7 +15,7 @@ namespace NEAT {
 
         private readonly Random random = new();
 
-        // TODO: penalize species that do not evolve
+        public List<Species> population {get;}
 
         /// <summary>
         /// Creates an initial generation of a specific size
@@ -26,7 +26,7 @@ namespace NEAT {
         /// <param name="useBias"></param>
         /// <param name="pool"></param>
         /// <returns></returns>
-        public List<Species> CreateInitialGeneration(int genSize, int inputs, int outputs, bool useBias, out GenePool pool){
+        public Population(int genSize, int inputs, int outputs, bool useBias, out GenePool pool){
             pool = new GenePool();
 
             List<Species> newGen = [];
@@ -44,13 +44,19 @@ namespace NEAT {
                     }
                 }
             }
-            return newGen;
+            population = newGen;
         }
 
-        public List<Species> Speciate(List<Species> unSpeciated){
+        /// <summary>
+        /// ReSpeciates the species
+        /// </summary>
+        /// <param name="unSpeciated"></param>
+        /// <returns></returns>
+        private void ReSpeciate(){
+            // get representatives, and unlabel labled members
             List<NeuralNetwork> representatives = new();
             List<NeuralNetwork> nonRepresentatives = new();
-            foreach (var singularSpecies in unSpeciated){
+            foreach (var singularSpecies in population){
                 NeuralNetwork rep = singularSpecies.memebers[random.Next(0, singularSpecies.memebers.Count)];
                 representatives.Add(rep);
                 foreach (var member in singularSpecies.memebers){
@@ -60,25 +66,53 @@ namespace NEAT {
                 }
             }
 
-            // TODO: does not handle species past initial ones given
-            List<Species> speciated = new();
-            foreach(var rep in representatives){
-                Species newSpecies = new(rep);
-                foreach(var nonRep in nonRepresentatives){
-                    if (Compare(rep, nonRep) < threshold){
-                        newSpecies.memebers.Add(nonRep);
-                    }
-                }
-                speciated.Add(newSpecies);
+            // clear the members of the species
+            foreach (var singleSpecies in population)
+            {
+                singleSpecies.memebers = [];
             }
 
-            if (speciated.Count > SPECIES_COUNT_TARGET){
+            // get the members for each representative
+            bool[] placed = new bool[nonRepresentatives.Count];
+            for (int i = 0; i < representatives.Count; i++){
+                List<NeuralNetwork> newMembers = [representatives[i]];
+                for (int j = 0; j < nonRepresentatives.Count; j++){
+                    if (!placed[j] && Compare(representatives[i], nonRepresentatives[j]) < threshold){
+                        placed[j] = true;
+                        newMembers.Add(nonRepresentatives[j]);
+                    }   
+                }
+                population[i].memebers = newMembers;
+            }
+
+            // get the members for species that did not have representatives 
+            for (int i = 0; i < placed.Length; i++){
+                if (!placed[i]){
+                    Species newSpecies = new(nonRepresentatives[i]);
+                    for (int j = i; j < placed.Length; i++){
+                        if (!placed[j]){
+                            newSpecies.memebers.Add(nonRepresentatives[j]);
+                            placed[j] = true;
+                        }
+                    }
+                    population.Add(newSpecies);
+                }
+            }
+
+            // pruge empty species and those that have not improved
+            for (int i = 0; i < population.Count; i++)
+            {
+                if (population[i].memebers.Count == 0 || population[i].noImprovement()){
+                    population.RemoveAt(i);
+                }
+            }
+
+            if (population.Count > SPECIES_COUNT_TARGET){
                 threshold += STEP;
             }
-            else if (speciated.Count < SPECIES_COUNT_TARGET){
+            else if (population.Count < SPECIES_COUNT_TARGET){
                 threshold -= STEP;
             }
-            return speciated;
         }
 
         /// <summary>
@@ -86,24 +120,24 @@ namespace NEAT {
         /// </summary>
         /// <param name="oldGeneration"></param>
         /// <returns></returns>
-        public List<Species> CreateNewGeneration(List<Species> oldGen){
-            oldGen = Speciate(oldGen);
+        public void CreateNewGeneration(){
 
+            //TODO: rework this loop
             double fitAvg = 0;
-            foreach (var singularSpecies in oldGen)
+            foreach (var singularSpecies in population)
             {
                 foreach (var member in singularSpecies.memebers){
                     member.adjustedFitness = member.fitness / singularSpecies.memebers.Count;
                 }
                 fitAvg += singularSpecies.updateFitnessFields();
             }
-            fitAvg /= oldGen.Count;
+            fitAvg /= population.Count;
 
-            for (int i = 0; i<oldGen.Count; i++){
-                oldGen[i].memebers = oldGen[i].CreateNewGeneration(fitAvg);
+            ReSpeciate();
+
+            for (int i = 0; i<population.Count; i++){
+                population[i].memebers = population[i].CreateNewGeneration(fitAvg);
             }
-
-            return oldGen;
         }
 
         /// <summary>

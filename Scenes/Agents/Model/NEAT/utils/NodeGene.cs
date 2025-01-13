@@ -21,5 +21,12 @@ namespace NEAT
         IdCounter++;
     }
     
+    /// <summary>
+    /// Creates a shallow copy of the NodeGene
+    /// </summary>
+    /// <returns></returns>
+    public NodeGene Clone(){
+        return (NodeGene)this.MemberwiseClone();
+    }
 }
 }

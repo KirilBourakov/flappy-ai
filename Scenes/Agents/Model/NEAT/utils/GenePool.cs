@@ -28,20 +28,24 @@ namespace NEAT
         
 
         /// <summary>
-        /// Given a type, return every node of that type
+        /// Given a type, return a copy of every node of that type
         /// </summary>
         public List<NodeGene> getGeneByType(NodeGene.Type type){
             if (!genesByType.TryGetValue(type, out List<NodeGene> layer)){
                 throw new Exception("Invalid Type: " + type);
             }
-            return layer;
+            List<NodeGene> nodes = new();
+            foreach (var item in layer)
+            {
+                nodes.Add(item.Clone());
+            }
+            return nodes;
         }
 
         /// <summary>
-        /// Create a new node
+        /// Create a new node, and return a copy of it
         /// </summary>
         public NodeGene CreateNode(NodeGene.Type type){
-
             // TODO: change this to keep track of the layer of the node (note, layers may be different between networks)
             NodeGene newNode = new(type, 0);
             if (!genesByType.TryGetValue(type, out List<NodeGene> layer)){
@@ -49,11 +53,11 @@ namespace NEAT
             }
             layer.Add(newNode);
             geneById.Add(newNode.nodeId, newNode);
-            return newNode;
+            return newNode.Clone();
         }
         
         /// <summary>
-        /// Gets a node by id, and ensures it is of an expected type
+        /// Returns a copy of a node by id, and ensures it is of an expected type
         /// </summary>
         public NodeGene SafeGetNode(int id, NodeGene.Type expected){
             if (!geneById.TryGetValue(id, out NodeGene value)){
@@ -63,21 +67,22 @@ namespace NEAT
                 throw new Exception("Node found not of type INPUT");
             }
 
-            return value;
+            return value.Clone();
         }
 
         /// <summary>
-        /// Gets a node by id.
+        /// Gets a node by id and returns a copy.
         /// </summary>
         public NodeGene SafeGetNode(int id){
             if (!geneById.TryGetValue(id, out NodeGene value)){
-                    throw new Exception($"Failure to find node in Evaluate. Node ID: {id}");
+                throw new Exception($"Failure to find node in Evaluate. Node ID: {id}");
             }   
-            return value;
+            return value.Clone();
         }
 
         /// <summary>
-        /// Creates a connection gene between those an input and output, or returns the one that already exists.
+        /// Creates a connection gene between those an input and output and returns it's copy, 
+        /// or returns a copy of one that already exists.
         /// </summary>
         public ConnectGene SafeCreateConnectionGene(int inp, int outp){
             ConnectGene connection;
@@ -91,7 +96,7 @@ namespace NEAT
                 connectGenesByHash.Add(connection.Hash(), connection);
                 connectGenes.Add(connection);
             }  
-            return connection;
+            return connection.Clone();
         }
 
         /// <summary>

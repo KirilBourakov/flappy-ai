@@ -51,7 +51,7 @@ namespace NEAT{
         /// Creates a shallow copy of the ConnectGene
         /// </summary>
         /// <returns></returns>
-        public ConnectGene Copy(){
+        public ConnectGene Clone(){
             return (ConnectGene)this.MemberwiseClone();
         }
     }

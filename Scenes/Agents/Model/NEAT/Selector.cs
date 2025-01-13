@@ -18,57 +18,39 @@ namespace NEAT {
         // TODO: penalize species that do not evolve
 
         /// <summary>
-        /// Creates a new generation given an un-speciated list 
+        /// Creates an initial generation of a specific size
         /// </summary>
-        /// <param name="oldGeneration"></param>
+        /// <param name="genSize"></param>
+        /// <param name="inputs"></param>
+        /// <param name="outputs"></param>
+        /// <param name="useBias"></param>
+        /// <param name="pool"></param>
         /// <returns></returns>
-        public List<NeuralNetwork> CreateNewGeneration(List<NeuralNetwork> oldGeneration){
-            List<NeuralNetwork> newGeneration = new();
-            
-            List<Species> species = new();
-            foreach (var member in oldGeneration)
+        public List<Species> CreateInitialGeneration(int genSize, int inputs, int outputs, bool useBias, out GenePool pool){
+            pool = new GenePool();
+
+            List<Species> newGen = [];
+            List<NeuralNetwork> representatives = [];
+            for (int i = 0; i < genSize; i++)
             {
-                bool matchExists = false;
-                foreach (var singularSpecies in species){
-                    if (Compare(singularSpecies.memebers[0], member) > threshold){
-                        matchExists = true;
-                        singularSpecies.memebers.Add(member);
-                        break;
+                NeuralNetwork newNetwork = new(pool, inputs, outputs, useBias);
+                for (int j = 0; j < representatives.Count; j++)
+                {
+                    if (Compare(representatives[j], newNetwork) < threshold){
+                        newGen[j].memebers.Add(newNetwork);
+                    } else {
+                        representatives.Add(newNetwork);
+                        newGen.Add(new Species(newNetwork));
                     }
                 }
-                if (!matchExists){
-                    species.Add(new Species(member));
-                }
             }
-            
-            // adjust fitness
-            double fitAvg = 0;
-            foreach (var singularSpecies in species)
-            {
-                foreach (var member in singularSpecies.memebers){
-                    member.adjustedFitness = member.fitness / singularSpecies.memebers.Count;
-                }
-                fitAvg += singularSpecies.updateFitnessFields();
-            }
-            fitAvg /= species.Count;
-
-            foreach (var singularSpecies in species)
-            {
-                newGeneration.AddRange(singularSpecies.CreateNewGeneration(fitAvg));
-            }
-
-            return newGeneration;
+            return newGen;
         }
 
-        /// <summary>
-        /// Creates a new generation given a list of current species
-        /// </summary>
-        /// <param name="oldGeneration"></param>
-        /// <returns></returns>
-        public List<Species> CreateNewGeneration(List<Species> oldGen){
+        public List<Species> Speciate(List<Species> unSpeciated){
             List<NeuralNetwork> representatives = new();
             List<NeuralNetwork> nonRepresentatives = new();
-            foreach (var singularSpecies in oldGen){
+            foreach (var singularSpecies in unSpeciated){
                 NeuralNetwork rep = singularSpecies.memebers[random.Next(0, singularSpecies.memebers.Count)];
                 representatives.Add(rep);
                 foreach (var member in singularSpecies.memebers){
@@ -78,39 +60,50 @@ namespace NEAT {
                 }
             }
 
-            List<Species> speciatedOldGen = new();
+            // TODO: does not handle species past initial ones given
+            List<Species> speciated = new();
             foreach(var rep in representatives){
                 Species newSpecies = new(rep);
                 foreach(var nonRep in nonRepresentatives){
-                    if (Compare(rep, nonRep) < 4){
+                    if (Compare(rep, nonRep) < threshold){
                         newSpecies.memebers.Add(nonRep);
                     }
                 }
-                speciatedOldGen.Add(newSpecies);
+                speciated.Add(newSpecies);
             }
 
-            if (speciatedOldGen.Count > SPECIES_COUNT_TARGET){
+            if (speciated.Count > SPECIES_COUNT_TARGET){
                 threshold += STEP;
             }
-            else if (speciatedOldGen.Count < SPECIES_COUNT_TARGET){
+            else if (speciated.Count < SPECIES_COUNT_TARGET){
                 threshold -= STEP;
             }
+            return speciated;
+        }
+
+        /// <summary>
+        /// Creates a new generation given a list of current species
+        /// </summary>
+        /// <param name="oldGeneration"></param>
+        /// <returns></returns>
+        public List<Species> CreateNewGeneration(List<Species> oldGen){
+            oldGen = Speciate(oldGen);
 
             double fitAvg = 0;
-            foreach (var singularSpecies in speciatedOldGen)
+            foreach (var singularSpecies in oldGen)
             {
                 foreach (var member in singularSpecies.memebers){
                     member.adjustedFitness = member.fitness / singularSpecies.memebers.Count;
                 }
                 fitAvg += singularSpecies.updateFitnessFields();
             }
-            fitAvg /= speciatedOldGen.Count;
+            fitAvg /= oldGen.Count;
 
-            for (int i = 0; i<speciatedOldGen.Count; i++){
-                speciatedOldGen[i].memebers = speciatedOldGen[i].CreateNewGeneration(fitAvg);
+            for (int i = 0; i<oldGen.Count; i++){
+                oldGen[i].memebers = oldGen[i].CreateNewGeneration(fitAvg);
             }
 
-            return speciatedOldGen;
+            return oldGen;
         }
 
         /// <summary>

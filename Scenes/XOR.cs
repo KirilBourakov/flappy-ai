@@ -24,31 +24,29 @@ public partial class XOR : Node2D
 	}
     
     public void Run(){
-        List<NeuralNetwork> population = new();
-
-        GenePool pool = new();
-        for (int i = 0; i < GEN_SIZE; i++){
-            population.Add(new NeuralNetwork(pool, 2, 1, false));
-        }
-
         Selector selector = new();
+        List<Species> population = selector.CreateInitialGeneration(GEN_SIZE, 2, 1, false, out GenePool pool);
 
         int gen = 1;
         while (true){
-            foreach (var network in population)
+            foreach (var species in population)
             {
-                test(network);
+                foreach (var member in species.memebers){
+                    test(member);
+                }
             }
 
             GD.Print($"Generation {gen} has a pool of {pool.connectGenes.Count} genes and {population.Count} members");
             double avg = 0;
-            foreach (var network in population)
+            foreach (var species in population)
             {
-                avg += network.fitness;
+                foreach (var member in species.memebers){
+                    avg += member.fitness;
+                }
+                
             }
             avg /= population.Count;
-			population.Sort((x, y) => y.fitness.CompareTo(x.fitness));
-            GD.Print($"Average fitness is {avg} while highest is {population[0].fitness}");
+            GD.Print($"Average fitness is {avg}");
 
             population = selector.CreateNewGeneration(population);
             gen++;

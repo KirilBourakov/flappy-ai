@@ -35,13 +35,13 @@ public partial class ModelState : Node
 		for (int i = 0; i < this.models.Count; i++){
 			gen.Add(this.models[i].neuralNetwork);
 		}
-		gen = selector.CreateNewGeneration(gen);
-		List<ModelPlayer> temp = new();
-		for (int i = 0; i< gen.Count; i++){
-			temp.Add(new ModelPlayer(gen[i]));
-		}
+		// gen = selector.CreateNewGeneration(gen);
+		// List<ModelPlayer> temp = new();
+		// for (int i = 0; i< gen.Count; i++){
+		// 	temp.Add(new ModelPlayer(gen[i]));
+		// }
 
-		this.models = temp;
+		// this.models = temp;
 
 		reproductionLocked = false;
 	}

@@ -109,11 +109,44 @@
       </root>
     </mxGraphModel>
   </diagram>
-  <diagram id="AUKtMr69xDGJmU8ylbU8" name="New">
-    <mxGraphModel dx="1434" dy="844" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+  <diagram id="AUKtMr69xDGJmU8ylbU8" name="Plan">
+    <mxGraphModel dx="989" dy="582" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="cTDQg5-vGf1Nqj-SqgjY-3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="cTDQg5-vGf1Nqj-SqgjY-1" target="cTDQg5-vGf1Nqj-SqgjY-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cTDQg5-vGf1Nqj-SqgjY-1" value="Population created and specieted" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="80" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="cTDQg5-vGf1Nqj-SqgjY-5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="cTDQg5-vGf1Nqj-SqgjY-2" target="cTDQg5-vGf1Nqj-SqgjY-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cTDQg5-vGf1Nqj-SqgjY-2" value="Asigned fitnesses" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="260" y="80" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="cTDQg5-vGf1Nqj-SqgjY-7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="cTDQg5-vGf1Nqj-SqgjY-4" target="cTDQg5-vGf1Nqj-SqgjY-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cTDQg5-vGf1Nqj-SqgjY-9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="cTDQg5-vGf1Nqj-SqgjY-4" target="cTDQg5-vGf1Nqj-SqgjY-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cTDQg5-vGf1Nqj-SqgjY-11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="cTDQg5-vGf1Nqj-SqgjY-4" target="cTDQg5-vGf1Nqj-SqgjY-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cTDQg5-vGf1Nqj-SqgjY-4" value="Reproduction" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="460" y="80" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="cTDQg5-vGf1Nqj-SqgjY-6" value="Track each species progress (punish those who have not progressed within 15 gen)" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="340" y="190" width="120" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="cTDQg5-vGf1Nqj-SqgjY-8" value="Apply mutation, updating layer position of nodes" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="550" y="190" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="cTDQg5-vGf1Nqj-SqgjY-10" value="" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="660" y="80" width="120" height="60" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>

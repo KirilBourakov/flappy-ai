@@ -7,9 +7,9 @@ namespace NEAT{
         public double fitness;
         public double adjustedFitness;
         public double relativeFitness;
-        public List<ConnectGene> structure = new();
+        public List<ConnectGene> structure {get; private set;} = new();
         // TODO: create a structure sorted by innovation number to avoid calculation when crossover occurs.
-        public bool hasBias;
+        public bool hasBias {get;}
 
         /// <summary>
         /// Create a neural network with a preset structure
@@ -102,8 +102,6 @@ namespace NEAT{
 
             return result;
         }
-
-        
 
         // TODO: move this method to the selector class
         public ConnectGene NextGene(ref int currIndex, ref int currSize){

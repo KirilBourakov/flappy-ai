@@ -6,8 +6,9 @@ namespace NEAT
     public enum Type {INPUT, HIDDEN, OUTPUT};
     
     // todo: add activation function on input
+    // todo: fix encapsulation
     public double Value {get; set;}
-    public Type nodeType {get;}
+    public readonly Type nodeType;
     public int nodeId {get;}
     public int layer {get;}
 

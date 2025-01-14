@@ -55,10 +55,10 @@ namespace NEAT{
                 inputs++;
             }
             List<NodeGene> createLayer(NodeGene.Type type, int amount){
-                var nodes = this.pool.getGeneByType(NodeGene.Type.INPUT);
+                var nodes = this.pool.getGeneByType(type);
                 if (nodes.Count == 0){
                     for (int i = 0; i<amount; i++){
-                        NodeGene node = this.pool.CreateNode(NodeGene.Type.INPUT);
+                        NodeGene node = this.pool.CreateNode(type, type == NodeGene.Type.INPUT ? 1 : 2);
                         nodeById[node.nodeId] = node;
                         nodes.Add(node);
                     }
@@ -87,31 +87,46 @@ namespace NEAT{
         /// <param name="inpt">A list of doubles representing the input.</param>
         /// <returns>The outputs of the network</returns>
         public double[] Evaluate(double[] inpt){
-            // prepare nodes for calculation
-            this.pool.ClearLayer(NodeGene.Type.OUTPUT);
-            this.pool.ClearLayer(NodeGene.Type.HIDDEN);
-
-            var inputNodes = this.pool.getGeneByType(NodeGene.Type.INPUT);
-            int i = 0;
-            foreach (var input in inputNodes){
-                input.Value = (i >= 0 && i < inpt.Length) ? inpt[i] : 1;
-                i++;
+            // clear values
+            foreach (KeyValuePair<int, NodeGene> entry in nodeById)
+            {
+                entry.Value.Value = 0;
             }
 
-            this.TopologicSort();
-            foreach (var connection in structure){
-                if (connection.enabled){
-                    NodeGene inp = pool.SafeGetNode(connection.inGene);
-                    NodeGene outp = pool.SafeGetNode(connection.outGene);
-                    outp.Value += connection.weight * inp.Value;
+            int getConnectionInpInt(ConnectGene inp){
+                return nodeById[inp.inGene].layer;
+            }
+            structure.Sort((a,b) => getConnectionInpInt(a).CompareTo(getConnectionInpInt(b)));
+
+            int inptLocation = 0;
+            foreach (var connction in structure)
+            {
+                NodeGene inp = nodeById[connction.inGene];
+                NodeGene outp = nodeById[connction.outGene];
+
+                if (inp.nodeType == NodeGene.Type.INPUT){
+                    inp.Value = (inptLocation >= 0 && inptLocation < inpt.Length) ? inpt[inptLocation] : 1;
+                    inptLocation = 1;
+                }
+
+                outp.Value += inp.Value * connction.weight;
+            }
+
+            //TODO: optimize
+            // Get a list of all the outputs, and order them by id (so they never change)
+            List<NodeGene> outputs = [];
+            foreach (KeyValuePair<int, NodeGene> entry in nodeById)
+            {
+                if (entry.Value.nodeType == NodeGene.Type.OUTPUT){
+                    outputs.Add(entry.Value);
                 }
             }
+            outputs.Sort((a,b) => a.nodeId.CompareTo(b.nodeId));
 
-            // get the values
-            var output = this.pool.getGeneByType(NodeGene.Type.OUTPUT);
-            double[] result = new double[output.Count];
-            for (i = 0; i < output.Count; i++){
-                result[i] = output[i].Value;
+            double[] result = new double[outputs.Count];
+            for (int i = 0; i < outputs.Count; i++)
+            {
+                result[i] = outputs[i].Value;
             }
 
             return result;

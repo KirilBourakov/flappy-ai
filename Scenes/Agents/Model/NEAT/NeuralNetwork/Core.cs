@@ -9,7 +9,7 @@ namespace NEAT{
         public double adjustedFitness {get; set;}
         public double relativeFitness {get; set;}
 
-        public Dictionary<int, NodeGene> nodeById = new();
+        public Dictionary<int, NodeGene> nodeById {get; private set;} = new();
         public List<ConnectGene> structure {get; private set;} = new();
         // TODO: create a structure sorted by innovation number to avoid calculation when crossover occurs.
         public bool hasBias {get;}
@@ -21,18 +21,26 @@ namespace NEAT{
         /// <param name="hasBias"></param>
         /// <param name="structure"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        public NeuralNetwork(GenePool pool, bool hasBias, List<ConnectGene> structure){
-            if (structure == null){
-                throw new ArgumentNullException("structure cannot be null");
-            }
-            List<ConnectGene> copy = [];
+        public NeuralNetwork(GenePool pool, bool hasBias, List<ConnectGene> structure, Dictionary<int, NodeGene> nodeById){
+            if (structure == null) throw new ArgumentNullException("structure cannot be null");
+            if (nodeById == null) throw new ArgumentNullException("nodeById cannot be null");
+            
+            List<ConnectGene> structCopy = [];
             foreach (var item in structure)
             {
-                copy.Add(item.Clone());
+                structCopy.Add(item.Clone());
             }
+
+            Dictionary<int, NodeGene> nodesCopy = [];
+            foreach (KeyValuePair<int, NodeGene> entry in nodeById)
+            {
+                nodesCopy[entry.Key] = entry.Value.Clone();
+            }
+
             this.pool = pool;
             this.hasBias = hasBias;
-            this.structure = copy;
+            this.structure = structCopy;
+            this.nodeById = nodesCopy;
         }
 
         /// <summary>

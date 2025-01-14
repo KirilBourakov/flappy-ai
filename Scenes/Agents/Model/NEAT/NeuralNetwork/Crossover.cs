@@ -5,80 +5,80 @@ using Godot;
 namespace NEAT
 {
     public partial class NeuralNetwork{
+        
         /// <summary>
         /// Given an NeuralNetwork, creates a new child NeuralNeywork
         /// </summary>
         /// <param name="other">The other NeuralNetwork</param>
-        /// <returns>A new NeuralNetwork</returns>
-        
-        // todo: crossover should copy nodeById. 
+        /// <returns>A new NeuralNetwork</returns> 
         public NeuralNetwork Crossover(NeuralNetwork other){
-            if (other == null){
-                throw new ArgumentNullException("Cannot Reproduce with other");
-            }
+            if (other == null) throw new ArgumentNullException("Cannot Reproduce with other");
+            
             var newStructure = new List<ConnectGene>();
 
-            // get the structure of the parent with the highest and lowest fitness (chosen randomly if the parents have the same fitness)
-            List<ConnectGene> highestFitness;
-            List<ConnectGene> lowestFitness;
-            if (this.fitness > other.fitness || (this.fitness == other.fitness && this.random.Next(0,2) == 0)){
-                highestFitness = new List<ConnectGene>(this.structure);
-                lowestFitness = new List<ConnectGene>(other.structure);
+            // get the structure of the parent with the highest and lowest fitness (with preference towards smaller structures if fitness is even)
+            // TODO: handle cast of equal fitness and size
+            NeuralNetwork highestFitness;
+            NeuralNetwork lowestFitness;
+            if (this.fitness > other.fitness || (this.fitness == other.fitness && this.structure.Count < other.structure.Count)){
+                highestFitness = this;
+                lowestFitness = other;
             } else {
-                highestFitness = new List<ConnectGene>(other.structure);
-                lowestFitness = new List<ConnectGene>(this.structure);
+                highestFitness = other;
+                lowestFitness = this;
             }
             
             // sort by inovation
-            highestFitness.Sort((x, y) => x.innovation.CompareTo(y.innovation));
-            lowestFitness.Sort((x, y) => x.innovation.CompareTo(y.innovation));
-
+            highestFitness.structure.Sort((x, y) => x.innovation.CompareTo(y.innovation));
+            lowestFitness.structure.Sort((x, y) => x.innovation.CompareTo(y.innovation));
 
             // cross over
-            bool done = false;
-            int i = 0;
-            while (!done){
+            int highPointer = 0;
+            int lowPointer = 0;
+            while (highPointer < highestFitness.structure.Count){
+                var currHighGene = (highPointer >= 0 && highPointer < highestFitness.structure.Count) ? highestFitness.structure[highPointer].Clone() : null;
+                var currLowGene = (lowPointer >= 0 && lowPointer < lowestFitness.structure.Count) ? lowestFitness.structure[lowPointer].Clone() : null;
                 
-                var currHighGene = (i >= 0 && i < highestFitness.Count) ? highestFitness[i] : null;
-                var currLowGene = (i >= 0 && i < lowestFitness.Count) ? lowestFitness[i] : null;
-                
-                // if i does not exist somewhere we have entered excess genes 
-                if (currHighGene == null){
-                    done = true;
+                // excess genes from the fit parent should be copied
+                if (currLowGene == null){
+                    newStructure.Add(currHighGene);
                 }
-                else if (currLowGene == null){
-                    int j = i+1;
-                    while (currHighGene != null){
-                        newStructure.Add(currHighGene.Clone());
-                        currHighGene = (j >= 0 && j < highestFitness.Count) ? highestFitness[j] : null;;
-                        j++;
-                    }
-                    done = true;
-                }
-                // innovations match
-                else if (currHighGene.innovation == currLowGene.innovation){
-                    if (this.random.Next(0,2) == 0){
-                        newStructure.Add(currHighGene.Clone());
-                    } else {
-                        newStructure.Add(currLowGene.Clone());
-                    }
-                }
-                // disjoint
-                else if (currHighGene.innovation < currLowGene.innovation){
-                    newStructure.Add(currHighGene.Clone());
-                }
+                // choose random gene if innovations match
+                else if (currLowGene.innovation == currHighGene.innovation){
+                    newStructure.Add(
+                        random.Next(0,2) == 1 ? currHighGene : currLowGene
+                    );
+                }   
+                // pass over lower parents disjoint
                 else if (currLowGene.innovation < currHighGene.innovation){
-                    newStructure.Add(currLowGene.Clone());
+                    lowPointer++;
                 }
-                i++;
-            }
-            
+                // add high parents disjoint
+                else if (currHighGene.innovation < currLowGene.innovation){
+                    structure.Add(currHighGene);
+                    highPointer++;
+                }
+                
+            }   
 
-            // TODO: blend genes when fitness is the same
-            // mutation
-            Mutate(newStructure);
+            Dictionary<int, NodeGene> newNodesById = [];
+            foreach (ConnectGene connection in newStructure)
+            {
+                foreach (int id in new int[] {connection.inGene, connection.outGene})
+                {
+                    bool success = highestFitness.nodeById.TryGetValue(id, out NodeGene val);
+                    if (!success){
+                        throw new InvalidOperationException($"New structure has node {id} that the highest parent does not have");
+                    }
+                    newNodesById[id] = val;
+                }
+            }
+
+            NeuralNetwork child = new(this.pool, this.hasBias, newStructure, newNodesById);        
+
+            Mutate(child);
             
-            return new NeuralNetwork(this.pool, this.hasBias, newStructure);
+            return child;
         }
 
         private void Mutate(NeuralNetwork child){

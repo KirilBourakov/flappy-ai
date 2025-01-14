@@ -46,7 +46,7 @@ namespace NEAT
                 else if (currLowGene == null){
                     int j = i+1;
                     while (currHighGene != null){
-                        newStructure.Add(currHighGene.Copy());
+                        newStructure.Add(currHighGene.Clone());
                         currHighGene = (j >= 0 && j < highestFitness.Count) ? highestFitness[j] : null;;
                         j++;
                     }
@@ -55,17 +55,17 @@ namespace NEAT
                 // innovations match
                 else if (currHighGene.innovation == currLowGene.innovation){
                     if (this.random.Next(0,2) == 0){
-                        newStructure.Add(currHighGene.Copy());
+                        newStructure.Add(currHighGene.Clone());
                     } else {
-                        newStructure.Add(currLowGene.Copy());
+                        newStructure.Add(currLowGene.Clone());
                     }
                 }
                 // disjoint
                 else if (currHighGene.innovation < currLowGene.innovation){
-                    newStructure.Add(currHighGene.Copy());
+                    newStructure.Add(currHighGene.Clone());
                 }
                 else if (currLowGene.innovation < currHighGene.innovation){
-                    newStructure.Add(currLowGene.Copy());
+                    newStructure.Add(currLowGene.Clone());
                 }
                 i++;
             }
@@ -103,7 +103,7 @@ namespace NEAT
                         int target_count = pool.genesByType[NodeGene.Type.INPUT].Count + pool.genesByType[NodeGene.Type.OUTPUT].Count;
                         if (inp < target_count){
                             int outp = random.Next(inp+1, target_count+1);
-                            ConnectGene newConnection = this.pool.SafeCreateConnectionGene(inp, outp).Copy();
+                            ConnectGene newConnection = this.pool.SafeCreateConnectionGene(inp, outp).Clone();
                             newConnection.weight = random.NextDouble() * random.Next(-2, 3);
                         }
                     }
@@ -112,9 +112,9 @@ namespace NEAT
                     if (MutationRoll() <= ADD_NODE_RATE){
                         connection.enabled = false;
                         NodeGene newNode = this.pool.CreateNode(NodeGene.Type.HIDDEN);
-                        ConnectGene toNew = this.pool.SafeCreateConnectionGene(connection.inGene, newNode.nodeId).Copy();
+                        ConnectGene toNew = this.pool.SafeCreateConnectionGene(connection.inGene, newNode.nodeId).Clone();
                         toNew.weight = 1;
-                        ConnectGene fromNew = this.pool.SafeCreateConnectionGene(newNode.nodeId, connection.outGene).Copy();
+                        ConnectGene fromNew = this.pool.SafeCreateConnectionGene(newNode.nodeId, connection.outGene).Clone();
                         fromNew.weight = connection.weight;
                         structure.Add(toNew);
                         structure.Add(fromNew);

@@ -8,7 +8,7 @@ public class ConnectGeneTest
     [TestCase]
     public void CopyTest(){
         var gene = new ConnectGene(1, 2);
-        var gene2 = gene.Copy();
+        var gene2 = gene.Clone();
 
         Assertions.AssertObject(gene).IsNotSame(gene2);
         Assertions.AssertThat(gene.Hash()).IsEqual(gene2.Hash());

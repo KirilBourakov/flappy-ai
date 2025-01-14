@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Godot;
 
 namespace NEAT{
     public partial class NeuralNetwork{
@@ -7,6 +8,8 @@ namespace NEAT{
         public double fitness;
         public double adjustedFitness;
         public double relativeFitness;
+
+        public Dictionary<int, NodeGene> nodeById = new();
         public List<ConnectGene> structure {get; private set;} = new();
         // TODO: create a structure sorted by innovation number to avoid calculation when crossover occurs.
         public bool hasBias {get;}
@@ -22,9 +25,14 @@ namespace NEAT{
             if (structure == null){
                 throw new ArgumentNullException("structure cannot be null");
             }
+            List<ConnectGene> copy = [];
+            foreach (var item in structure)
+            {
+                copy.Add(item.Clone());
+            }
             this.pool = pool;
             this.hasBias = hasBias;
-            this.structure = structure;
+            this.structure = copy;
         }
 
         /// <summary>
@@ -46,18 +54,24 @@ namespace NEAT{
             if (useBias){
                 inputs++;
             }
-            var inputNodes = this.pool.getGeneByType(NodeGene.Type.INPUT);
-            if (inputNodes.Count == 0){
-                for (int i = 0; i<inputs; i++){
-                    this.pool.CreateNode(NodeGene.Type.INPUT);
+            List<NodeGene> createLayer(NodeGene.Type type, int amount){
+                var nodes = this.pool.getGeneByType(NodeGene.Type.INPUT);
+                if (nodes.Count == 0){
+                    for (int i = 0; i<amount; i++){
+                        NodeGene node = this.pool.CreateNode(NodeGene.Type.INPUT);
+                        nodeById[node.nodeId] = node;
+                        nodes.Add(node);
+                    }
+                } else {
+                    foreach (var node in nodes)
+                    {
+                        nodeById[node.nodeId] = node;
+                    }
                 }
+                return nodes;
             }
-            var outputNodes = this.pool.getGeneByType(NodeGene.Type.OUTPUT);
-            if (outputNodes.Count==0){
-                for (int i = 0; i < outputs; i++){
-                    this.pool.CreateNode(NodeGene.Type.OUTPUT);
-                }
-            }
+            var inputNodes = createLayer(NodeGene.Type.OUTPUT, inputs);
+            var outputNodes = createLayer(NodeGene.Type.OUTPUT, outputs);
 
             //TODO: replace starting with a fully connected node with smarter evolution
             for (int i = 0; i < inputNodes.Count; i++){

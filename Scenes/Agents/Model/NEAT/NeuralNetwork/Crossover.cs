@@ -81,49 +81,27 @@ namespace NEAT
             return new NeuralNetwork(this.pool, this.hasBias, newStructure);
         }
 
-        private void Mutate(List<ConnectGene> newStructure){
-            int i = 0;
-            foreach (var connection in newStructure){
+        private void Mutate(NeuralNetwork child){
+            foreach (var connection in child.structure){
                 int roll = MutationRoll();
                 if (roll <= WEIGHT_MUTATION_RATE){
                     // replace or mutate weight
-
-                        if (roll <= REPLACEMENT_RATE){
+                    if (roll <= REPLACEMENT_RATE){
                         connection.weight = random.Next(-2, 3) * random.NextDouble();
                     }
                     else{
                         connection.weight += random.Next(-1, 2) * MAX_WEIGHT_CHANGE;
                     }
-
-                    // flip node   
-                    if (MutationRoll() <= FLIP_ACTIVITY_RATE){
-                        connection.enabled = !connection.enabled;
-                    }
-
-                    // create a new connection
-                    if (MutationRoll() <= ADD_CONNECTION_RATE){
-                        int inp = connection.inGene;
-                        int target_count = pool.genesByType[NodeGene.Type.INPUT].Count + pool.genesByType[NodeGene.Type.OUTPUT].Count;
-                        if (inp < target_count){
-                            int outp = random.Next(inp+1, target_count+1);
-                            ConnectGene newConnection = this.pool.SafeCreateConnectionGene(inp, outp).Clone();
-                            newConnection.weight = random.NextDouble() * random.Next(-2, 3);
-                        }
-                    }
-
-                    // create a new node
-                    if (MutationRoll() <= ADD_NODE_RATE){
-                        connection.enabled = false;
-                        NodeGene newNode = this.pool.CreateNode(NodeGene.Type.HIDDEN);
-                        ConnectGene toNew = this.pool.SafeCreateConnectionGene(connection.inGene, newNode.nodeId).Clone();
-                        toNew.weight = 1;
-                        ConnectGene fromNew = this.pool.SafeCreateConnectionGene(newNode.nodeId, connection.outGene).Clone();
-                        fromNew.weight = connection.weight;
-                        structure.Add(toNew);
-                        structure.Add(fromNew);
-                    }
                 }
-                i++;
+            }
+            if (MutationRoll() <= FLIP_ACTIVITY_RATE){
+                FlipRandomConnection(child);
+            }
+            if (MutationRoll() <= ADD_NODE_RATE){
+                AddNode(child);
+            }
+            if (MutationRoll() <= ADD_CONNECTION_RATE){
+                AddConnection(child);
             }
         }
         
@@ -199,7 +177,7 @@ namespace NEAT
         /// </summary>
         /// <returns>An int between 0-100</returns>
         private int MutationRoll(){
-            return this.random.Next(0, 101);
+            return random.Next(0, 101);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace NEAT
             if (value - _layer == 1){
                 _layer = value;
             } else {
-                throw new InvalidOperationException($"{nodeType} Layer {nodeId} is being moved more then 1 layer");
+                throw new InvalidOperationException($"{nodeType} Layer {nodeId} is being moved more then 1 layer to {value}");
             }
         } 
     }
@@ -28,7 +28,7 @@ namespace NEAT
 
     public NodeGene(Type nodeType, int layer){
         this.Value = 0;
-        this.Layer = layer;
+        this._layer = layer;
         this.nodeType = nodeType;
         this.nodeId = IdCounter;
         IdCounter++;

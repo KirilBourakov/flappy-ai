@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Godot;
 
 namespace NEAT
 {
@@ -9,6 +10,8 @@ namespace NEAT
         /// </summary>
         /// <param name="other">The other NeuralNetwork</param>
         /// <returns>A new NeuralNetwork</returns>
+        
+        // todo: crossover should copy nodeById. 
         public NeuralNetwork Crossover(NeuralNetwork other){
             if (other == null){
                 throw new ArgumentNullException("Cannot Reproduce with other");
@@ -120,10 +123,75 @@ namespace NEAT
                         structure.Add(fromNew);
                     }
                 }
-            
-
                 i++;
             }
+        }
+        
+        // TODO: should recive a child neural network and modify that, not a structure
+        /// <summary>
+        /// Flips a random connections enabled status within the network
+        /// </summary>
+        /// <param name="network"></param>
+        private static void FlipRandomConnection(NeuralNetwork network){
+            ConnectGene chosen = network.structure[network.random.Next(0, network.structure.Count)];
+            chosen.enabled = !chosen.enabled;
+        }
+
+        /// <summary>
+        /// Adds a connection between two random nodes in the network
+        /// </summary>
+        /// <param name="network"></param>
+        private static void AddConnection(NeuralNetwork network){
+            var nodes = new List<NodeGene>(network.nodeById.Values);
+            var inp = nodes[network.random.Next(0, nodes.Count)];
+
+            NodeGene outp;
+            int attempts = 0;
+            do {
+                outp = nodes[network.random.Next(0, nodes.Count)];
+                attempts++;
+            } while (attempts < 20 && inp.Layer >= outp.Layer);
+
+            if (inp.Layer < outp.Layer){
+                network.structure.Add(network.pool.SafeCreateConnectionGene(inp.nodeId, outp.nodeId));
+            }
+        }
+
+        /// <summary>
+        /// Adds a node inbetween a random neural network connection
+        /// </summary>
+        /// <param name="network"></param>
+        /// <exception cref="InvalidOperationException"></exception>
+        private static void AddNode(NeuralNetwork network){
+            // TODO: consider only adding nodes on enabled connections
+            ConnectGene chosen = network.structure[network.random.Next(0, network.structure.Count)];
+            chosen.enabled = false;
+
+            NodeGene inp = network.nodeById[chosen.inGene];
+            NodeGene outp = network.nodeById[chosen.outGene];
+
+            int newNodeLayer = inp.nodeId + 1;
+            NodeGene newNode = network.pool.CreateNode(NodeGene.Type.HIDDEN, newNodeLayer);
+            network.nodeById[newNode.nodeId] = newNode;
+
+            // if output and input are right beside eachother, a new layer is created
+            if (outp.nodeId - inp.nodeId == 1){
+                foreach (KeyValuePair<int, NodeGene> entry in network.nodeById)
+                {
+                    if (entry.Value.Layer >= newNodeLayer){
+                        entry.Value.Layer++;
+                    }
+                }
+            }
+            if (outp.nodeId <= inp.nodeId){
+                throw new InvalidOperationException($"Reccurent connection; inp node {inp.nodeId} >= out node {outp.nodeId}");
+            }
+            // create connections
+            var fromInpToNew = network.pool.SafeCreateConnectionGene(inp.nodeId, newNode.nodeId);
+            fromInpToNew.weight = chosen.weight;
+            var fromNewToOut = network.pool.SafeCreateConnectionGene(newNode.nodeId, outp.nodeId);
+            network.structure.Add(fromInpToNew);
+            network.structure.Add(fromNewToOut);
         }
 
         /// <summary>

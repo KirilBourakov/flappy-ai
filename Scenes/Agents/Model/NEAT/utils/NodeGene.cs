@@ -10,13 +10,25 @@ namespace NEAT
     public double Value {get; set;}
     public readonly Type nodeType;
     public int nodeId {get;}
-    public int layer {get;}
+
+
+    private int _layer;
+    public int Layer {
+        get => _layer; 
+        set {
+            if (value - _layer == 1){
+                _layer = value;
+            } else {
+                throw new InvalidOperationException($"{nodeType} Layer {nodeId} is being moved more then 1 layer");
+            }
+        } 
+    }
 
     private static int IdCounter = 1;
 
     public NodeGene(Type nodeType, int layer){
         this.Value = 0;
-        this.layer = layer;
+        this.Layer = layer;
         this.nodeType = nodeType;
         this.nodeId = IdCounter;
         IdCounter++;

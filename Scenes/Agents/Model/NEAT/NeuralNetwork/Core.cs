@@ -5,9 +5,9 @@ using Godot;
 namespace NEAT{
     public partial class NeuralNetwork{
         public GenePool pool {get;}
-        public double fitness;
-        public double adjustedFitness;
-        public double relativeFitness;
+        public double fitness {get; set;}
+        public double adjustedFitness {get; set;}
+        public double relativeFitness {get; set;}
 
         public Dictionary<int, NodeGene> nodeById = new();
         public List<ConnectGene> structure {get; private set;} = new();
@@ -94,7 +94,7 @@ namespace NEAT{
             }
 
             int getConnectionInpInt(ConnectGene inp){
-                return nodeById[inp.inGene].layer;
+                return nodeById[inp.inGene].Layer;
             }
             structure.Sort((a,b) => getConnectionInpInt(a).CompareTo(getConnectionInpInt(b)));
 

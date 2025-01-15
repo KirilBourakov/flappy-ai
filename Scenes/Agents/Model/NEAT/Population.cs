@@ -18,6 +18,15 @@ namespace NEAT {
 
         public List<Species> population {get;}
 
+        public int totalMembers {get {
+            int i = 0;
+            foreach (var species in population)
+            {
+                i += species.memebers.Count;   
+            }
+            return i;
+        }}
+
         /// <summary>
         /// Creates an initial generation of a specific size
         /// </summary>
@@ -70,12 +79,14 @@ namespace NEAT {
                     }
                 }
             }
+            GD.Print("labeled");
 
             // clear the members of the species
             foreach (var singleSpecies in population)
             {
                 singleSpecies.memebers = [];
             }
+            GD.Print("cleared");
 
             // get the members for each representative
             bool[] placed = new bool[nonRepresentatives.Count];
@@ -88,6 +99,7 @@ namespace NEAT {
                     }   
                 }
                 population[i].memebers = newMembers;
+                GD.Print($"representative : {i}");
             }
 
             // get the members for species that did not have representatives 
@@ -102,15 +114,17 @@ namespace NEAT {
                     }
                     population.Add(newSpecies);
                 }
+                GD.Print($"placed : {i}");
             }
 
             // pruge empty species and those that have not improved
-            for (int i = 0; i < population.Count; i++)
+            for (int i = population.Count - 1; i >= 0; i--)
             {
                 if (population[i].memebers.Count == 0 || population[i].noImprovement()){
                     population.RemoveAt(i);
                 }
             }
+            GD.Print("purged");
 
             if (population.Count > SPECIES_COUNT_TARGET){
                 threshold += STEP;
@@ -137,12 +151,15 @@ namespace NEAT {
                 fitAvg += singularSpecies.updateFitnessFields();
             }
             fitAvg /= population.Count;
+            GD.Print("adjusted fitavg");
 
             ReSpeciate();
+            GD.Print("respeciated");
 
             for (int i = 0; i<population.Count; i++){
                 population[i].memebers = population[i].CreateNewGeneration(fitAvg);
             }
+            GD.Print("created new generations (internal)");
         }
 
         /// <summary>

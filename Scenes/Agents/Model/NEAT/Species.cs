@@ -72,7 +72,7 @@ namespace NEAT{
             List<NeuralNetwork> newGen = new();
             int newSize = 1;
             if (globalAvg > 0) {
-                newSize = Math.Max(1, (int) (avgAdjustedFitness / globalAvg) * memebers.Count);
+                newSize = (int) Math.Round((avgAdjustedFitness / globalAvg) * memebers.Count);
             } 
 
             for (int i = 0; i < memebers.Count; i++)

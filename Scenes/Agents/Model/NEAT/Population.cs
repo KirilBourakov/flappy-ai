@@ -146,6 +146,8 @@ namespace NEAT {
         /// <param name="baseline"></param>
         /// <param name="target"></param>
         /// <returns></returns>
+        /// 
+        //TODO: rewrite
         public double Compare(NeuralNetwork baseline, NeuralNetwork target){
             baseline.structure.Sort((x, y) => x.innovation.CompareTo(y.innovation));
             target.structure.Sort((x, y) => x.innovation.CompareTo(y.innovation));

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using Godot;
@@ -36,6 +37,7 @@ public partial class XOR : Node2D
             }
 
             GD.Print($"Generation {gen} has a pool of {pool.connectGenes.Count} genes and {population.population.Count} members");
+
             double avg = 0;
             foreach (var species in population.population)
             {
@@ -45,7 +47,7 @@ public partial class XOR : Node2D
                 
             }
             avg /= population.population.Count;
-            GD.Print($"Average fitness is {avg}");
+            GD.Print($"Average fitness is {avg / xorInputs.Length}");
 
             population.CreateNewGeneration();
             gen++;
@@ -57,12 +59,14 @@ public partial class XOR : Node2D
         for (int i = 0; i < xorInputs.Length; i++){
             double result = network.Evaluate(xorInputs[i])[0];
 
-            if (result > 0.5 && xorOutputs[i] == 1){
-                network.fitness++;
-            }
-            else if (result < 0.5 && xorOutputs[i] == 0){
-                network.fitness++;
-            }
+            network.fitness += 1 - Math.Abs(result - xorOutputs[i]);
+
+            // if (result > 0.5 && xorOutputs[i] == 1){
+            //     network.fitness++;
+            // }
+            // else if (result < 0.5 && xorOutputs[i] == 0){
+            //     network.fitness++;
+            // }
         }
     }
 }

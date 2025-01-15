@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using Godot;
 
 namespace NEAT {
@@ -34,16 +35,20 @@ namespace NEAT {
             for (int i = 0; i < genSize; i++)
             {
                 NeuralNetwork newNetwork = new(pool, inputs, outputs, useBias);
-                for (int j = 0; j < representatives.Count; j++)
+                bool added = false;
+                for (int j = 0; j < representatives.Count && !added; j++)
                 {
-                    if (Compare(representatives[j], newNetwork) < threshold){
+                    if (Compare(representatives[j], newNetwork) < threshold && !added){
                         newGen[j].memebers.Add(newNetwork);
-                    } else {
-                        representatives.Add(newNetwork);
-                        newGen.Add(new Species(newNetwork));
+                        added = true;
                     }
                 }
+                if (!added){
+                    representatives.Add(newNetwork);
+                    newGen.Add(new Species(newNetwork));
+                }
             }
+            GD.Print(newGen.Count + " count");
             population = newGen;
         }
 

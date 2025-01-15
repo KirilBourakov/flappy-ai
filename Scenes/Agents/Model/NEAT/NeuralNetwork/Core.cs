@@ -78,7 +78,7 @@ namespace NEAT{
                 }
                 return nodes;
             }
-            var inputNodes = createLayer(NodeGene.Type.OUTPUT, inputs);
+            var inputNodes = createLayer(NodeGene.Type.INPUT, inputs);
             var outputNodes = createLayer(NodeGene.Type.OUTPUT, outputs);
 
             //TODO: replace starting with a fully connected node with smarter evolution

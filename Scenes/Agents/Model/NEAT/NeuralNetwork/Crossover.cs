@@ -42,12 +42,15 @@ namespace NEAT
                 // excess genes from the fit parent should be copied
                 if (currLowGene == null){
                     newStructure.Add(currHighGene);
+                    highPointer++;
                 }
                 // choose random gene if innovations match
                 else if (currLowGene.innovation == currHighGene.innovation){
                     newStructure.Add(
                         random.Next(0,2) == 1 ? currHighGene : currLowGene
                     );
+                    lowPointer++;
+                    highPointer++;
                 }   
                 // pass over lower parents disjoint
                 else if (currLowGene.innovation < currHighGene.innovation){

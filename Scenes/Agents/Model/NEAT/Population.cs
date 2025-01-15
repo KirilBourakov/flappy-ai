@@ -106,7 +106,7 @@ namespace NEAT {
             for (int i = 0; i < placed.Length; i++){
                 if (!placed[i]){
                     Species newSpecies = new(nonRepresentatives[i]);
-                    for (int j = i; j < placed.Length; i++){
+                    for (int j = i; j < placed.Length; j++){
                         if (!placed[j]){
                             newSpecies.memebers.Add(nonRepresentatives[j]);
                             placed[j] = true;
@@ -116,6 +116,7 @@ namespace NEAT {
                 }
                 GD.Print($"placed : {i}");
             }
+            GD.Print("finished placing");
 
             // pruge empty species and those that have not improved
             for (int i = population.Count - 1; i >= 0; i--)

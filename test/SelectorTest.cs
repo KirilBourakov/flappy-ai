@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using GdUnit4;
 using NEAT;
 
@@ -9,48 +10,56 @@ public class SelectorTest
     [TestCase]
     public void CompareSameNetworkTest(){
         GenePool pool = new();
-        var inp = pool.CreateNode(NodeGene.Type.INPUT);
-        var hidden = pool.CreateNode(NodeGene.Type.HIDDEN);
-        var output = pool.CreateNode(NodeGene.Type.OUTPUT);
+        var inp = pool.CreateNode(NodeGene.Type.INPUT, 0);
+        var hidden = pool.CreateNode(NodeGene.Type.HIDDEN, 1);
+        var output = pool.CreateNode(NodeGene.Type.OUTPUT, 2);
 
         var inptToHidden = pool.SafeCreateConnectionGene(inp.nodeId, hidden.nodeId);
         var HiddenToOut = pool.SafeCreateConnectionGene(hidden.nodeId, output.nodeId);
         
-        NeuralNetwork neuralNetwork = new(pool, true, pool.connectGenes);
+        NeuralNetwork neuralNetwork = new(pool, true, pool.connectGenes, pool.geneById);
 
-        Population selector = new();
+        Population selector = new(1, 1, 1, false, out _);
 
-        Assertions.AssertThat(selector.Compare(neuralNetwork, neuralNetwork)).Equals(0d);
+        Assertions.AssertThat(selector.Compare(neuralNetwork, neuralNetwork)).IsEqual(0d);
 
     }
 
     [TestCase]
     public void CompareSimilarNetworkTest(){
         GenePool pool = new();
-        var inp = pool.CreateNode(NodeGene.Type.INPUT);
-        var hidden = pool.CreateNode(NodeGene.Type.HIDDEN);
-        var output = pool.CreateNode(NodeGene.Type.OUTPUT);
+        var inp = pool.CreateNode(NodeGene.Type.INPUT, 0);
+        var hidden = pool.CreateNode(NodeGene.Type.HIDDEN, 1);
+        var output = pool.CreateNode(NodeGene.Type.OUTPUT, 2);
 
         var inptToHidden = pool.SafeCreateConnectionGene(inp.nodeId, hidden.nodeId);
         var HiddenToOut = pool.SafeCreateConnectionGene(hidden.nodeId, output.nodeId);
         var inptToOut = pool.SafeCreateConnectionGene(inp.nodeId, output.nodeId);
 
-        NeuralNetwork large = new(pool, true, pool.connectGenes);
-        NeuralNetwork small = new (pool, true, [inptToHidden, HiddenToOut, inptToOut]);
+        NeuralNetwork large = new(pool, true, pool.connectGenes, pool.geneById);
 
-        Population selector = new();
+        Dictionary<int, NodeGene> map = new()
+        {
+            [inp.nodeId] = inp,
+            [hidden.nodeId] = hidden,
+            [output.nodeId] = output
+        };
 
-        Assertions.AssertThat(selector.Compare(large, small)).IsLess(Population.threshold);
+        NeuralNetwork small = new (pool, true, [inptToHidden, HiddenToOut, inptToOut], map);
+
+        Population selector = new(1, 1, 1, false, out _);
+
+        Assertions.AssertThat(selector.Compare(large, small)).IsLess(selector.threshold);
     }
 
     [TestCase]
     public void CompareDifferentNetworkTest(){
         GenePool pool = new();
-        var inp = pool.CreateNode(NodeGene.Type.INPUT);
-        var inp2 = pool.CreateNode(NodeGene.Type.INPUT);
-        var hidden = pool.CreateNode(NodeGene.Type.HIDDEN);
-        var hidden2 = pool.CreateNode(NodeGene.Type.HIDDEN);
-        var output = pool.CreateNode(NodeGene.Type.OUTPUT);
+        var inp = pool.CreateNode(NodeGene.Type.INPUT, 0);
+        var inp2 = pool.CreateNode(NodeGene.Type.INPUT, 0);
+        var hidden = pool.CreateNode(NodeGene.Type.HIDDEN, 1);
+        var hidden2 = pool.CreateNode(NodeGene.Type.HIDDEN, 1);
+        var output = pool.CreateNode(NodeGene.Type.OUTPUT, 1);
 
 
         var inpToHidden = pool.SafeCreateConnectionGene(inp.nodeId, hidden.nodeId);
@@ -64,11 +73,24 @@ public class SelectorTest
         var inpToOut = pool.SafeCreateConnectionGene(inp.nodeId, output.nodeId);
 
 
-        NeuralNetwork small = new(pool, true, [inpToOut]);
-        NeuralNetwork large = new(pool, true, [inpToHidden, inp2ToHidden2, inp2ToHidden, inpToHidden2, HiddenToOut, Hidden2ToOut]);
+        Dictionary<int, NodeGene> map = new()
+        {
+            [inp.nodeId] = inp,
+            [output.nodeId] = output
+        };
+        NeuralNetwork small = new(pool, true, [inpToOut], map);
+        map = new()
+        {
+            [inp.nodeId] = inp,
+            [inp2.nodeId] = inp2,
+            [hidden.nodeId] = hidden,
+            [hidden2.nodeId] = hidden2,
+            [output.nodeId] = output
+        };
+        NeuralNetwork large = new(pool, true, [inpToHidden, inp2ToHidden2, inp2ToHidden, inpToHidden2, HiddenToOut, Hidden2ToOut], map);
 
-        Population selector = new();
-        Assertions.AssertThat(selector.Compare(small, large)).IsGreater(Population.threshold);
+        Population selector = new(1, 1, 1, false, out _);
+        Assertions.AssertThat(selector.Compare(small, large)).IsGreater(selector.threshold);
     }
 
 }

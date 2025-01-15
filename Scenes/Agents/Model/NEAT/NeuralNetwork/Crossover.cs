@@ -156,7 +156,7 @@ namespace NEAT
             network.nodeById[newNode.nodeId] = newNode;
 
             // if output and input are right beside eachother, a new layer is created
-            if (outp.nodeId - inp.nodeId == 1){
+            if (outp.Layer - inp.Layer == 1){
                 foreach (KeyValuePair<int, NodeGene> entry in network.nodeById)
                 {
                     if (entry.Value.Layer >= newNodeLayer){
@@ -164,8 +164,8 @@ namespace NEAT
                     }
                 }
             }
-            if (outp.nodeId <= inp.nodeId){
-                throw new InvalidOperationException($"Reccurent connection; inp node {inp.nodeId} >= out node {outp.nodeId}");
+            if (outp.Layer <= inp.Layer){
+                throw new InvalidOperationException($"Reccurent connection; inp node layer {inp.Layer} >= out node layer {outp.Layer}");
             }
             // create connections
             var fromInpToNew = network.pool.SafeCreateConnectionGene(inp.nodeId, newNode.nodeId);

@@ -6,7 +6,6 @@ namespace NEAT{
     public partial class NeuralNetwork{
         public GenePool pool {get;}
         public double fitness {get; set;}
-        public double adjustedFitness {get; set;}
         public double relativeFitness {get; set;}
 
         public Dictionary<int, NodeGene> nodeById {get; private set;} = new();
@@ -87,6 +86,10 @@ namespace NEAT{
                     this.structure.Add(pool.SafeCreateConnectionGene(inputNodes[i].nodeId, outputNodes[j].nodeId));
                 }
             }  
+        }
+
+        public double getAdjustedFitness(int popSize){
+            return fitness / popSize;
         }
 
         /// <summary>

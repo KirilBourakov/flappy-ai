@@ -6,8 +6,22 @@ namespace NEAT{
     public class Species{
         //TODO: fix encapsulation
         public List<NeuralNetwork> memebers;
-        public double avgAdjustedFitness;
-        public double totalFitness;
+        public double totalFitness { get{ 
+            double total = 0;
+            foreach (NeuralNetwork n in memebers)
+            {
+                total += n.fitness;
+            }
+            return total;
+        }}
+        public double avgAdjustedFitness {get {
+            double avg = 0;
+            foreach (NeuralNetwork n in memebers){
+                avg += n.getAdjustedFitness(memebers.Count);
+            }
+            return avg / memebers.Count;
+        }}
+        
         private double lastImprovement;
         private static readonly Random random = new();
 
@@ -37,22 +51,6 @@ namespace NEAT{
         /// Update the current population fitness based on the fitness of it's members. Also keeps track of how long ago an imporovement occured from the last update.
         /// </summary>
         /// <returns></returns>
-        public double updateFitnessFields(){
-            double lastFit = avgAdjustedFitness;
-            this.avgAdjustedFitness = 0;
-            foreach (var member in memebers)
-            {
-                avgAdjustedFitness += member.adjustedFitness;
-                totalFitness += member.fitness;
-            }
-            avgAdjustedFitness /= memebers.Count;
-            if (lastFit <= this.avgAdjustedFitness){
-                lastImprovement++;
-            } else {
-                lastImprovement = 0;
-            }
-            return avgAdjustedFitness;
-        }
 
         public bool noImprovement(){
             return lastImprovement >= 15;

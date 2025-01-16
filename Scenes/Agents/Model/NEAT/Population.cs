@@ -136,18 +136,15 @@ namespace NEAT {
         /// <returns></returns>
         public void CreateNewGeneration(){
 
-            //TODO: rework this loop
+            ReSpeciate();
+
             double fitAvg = 0;
             foreach (var singularSpecies in population)
             {
-                foreach (var member in singularSpecies.memebers){
-                    member.adjustedFitness = member.fitness / singularSpecies.memebers.Count;
-                }
-                fitAvg += singularSpecies.updateFitnessFields();
+                fitAvg += singularSpecies.avgAdjustedFitness;
             }
             fitAvg /= population.Count;
-
-            ReSpeciate();
+            
 
             for (int i = population.Count - 1; i >= 0; i--){
                 population[i].memebers = population[i].CreateNewGeneration(fitAvg, out bool extinct);

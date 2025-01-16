@@ -122,6 +122,7 @@ namespace NEAT
         /// Adds a connection between two random nodes in the network
         /// </summary>
         /// <param name="network"></param>
+        // TODO: check if the connection already exists
         private static void AddConnection(NeuralNetwork network){
             var nodes = new List<NodeGene>(network.nodeById.Values);
             var inp = nodes[network.random.Next(0, nodes.Count)];
@@ -145,6 +146,7 @@ namespace NEAT
         /// <exception cref="InvalidOperationException"></exception>
         private static void AddNode(NeuralNetwork network){
             // TODO: consider only adding nodes on enabled connections
+            // TODO: recalculate layer based on longest path back to input
             ConnectGene chosen = network.structure[network.random.Next(0, network.structure.Count)];
             chosen.enabled = false;
 
@@ -155,6 +157,15 @@ namespace NEAT
             NodeGene newNode = network.pool.CreateNode(NodeGene.Type.HIDDEN, newNodeLayer);
             network.nodeById[newNode.nodeId] = newNode;
 
+            if (outp.Layer <= inp.Layer){
+                GD.Print($"ERROR RAISED BY CONNECT GENE {chosen.innovation}:");
+                foreach (var item in network.structure)
+                {
+                    GD.Print($"{item.innovation} connect {item.inGene} (layer {network.nodeById[item.inGene].Layer}) and {item.outGene} (layer {network.nodeById[item.outGene].Layer})");
+                }
+                throw new InvalidOperationException($"Reccurent connection; inp node layer {inp.Layer} >= out node layer {outp.Layer}");
+            }
+
             // if output and input are right beside eachother, a new layer is created
             if (outp.Layer - inp.Layer == 1){
                 foreach (KeyValuePair<int, NodeGene> entry in network.nodeById)
@@ -163,9 +174,6 @@ namespace NEAT
                         entry.Value.Layer++;
                     }
                 }
-            }
-            if (outp.Layer <= inp.Layer){
-                throw new InvalidOperationException($"Reccurent connection; inp node layer {inp.Layer} >= out node layer {outp.Layer}");
             }
             // create connections
             var fromInpToNew = network.pool.SafeCreateConnectionGene(inp.nodeId, newNode.nodeId);

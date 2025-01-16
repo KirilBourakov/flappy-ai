@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Godot;
 
 namespace NEAT
 {
     public partial class NeuralNetwork{
-        
+
         /// <summary>
         /// Given an NeuralNetwork, creates a new child NeuralNeywork
         /// </summary>
@@ -150,29 +149,55 @@ namespace NEAT
 
             NodeGene inp = network.nodeById[chosen.inGene];
             NodeGene outp = network.nodeById[chosen.outGene];
+            if (outp.Layer <= inp.Layer){
+                throw new InvalidOperationException($"Reccurent connection; inp node layer {inp.Layer} >= out node layer {outp.Layer}");
+            }
 
             int newNodeLayer = inp.nodeId + 1;
             NodeGene newNode = network.pool.CreateNode(NodeGene.Type.HIDDEN, newNodeLayer);
             network.nodeById[newNode.nodeId] = newNode;
-
-            // if output and input are right beside eachother, a new layer is created
-            if (outp.Layer - inp.Layer == 1){
-                foreach (KeyValuePair<int, NodeGene> entry in network.nodeById)
-                {
-                    if (entry.Value.Layer >= newNodeLayer){
-                        entry.Value.Layer++;
-                    }
-                }
-            }
-            if (outp.Layer <= inp.Layer){
-                throw new InvalidOperationException($"Reccurent connection; inp node layer {inp.Layer} >= out node layer {outp.Layer}");
-            }
             // create connections
             var fromInpToNew = network.pool.SafeCreateConnectionGene(inp.nodeId, newNode.nodeId);
             fromInpToNew.weight = chosen.weight;
             var fromNewToOut = network.pool.SafeCreateConnectionGene(newNode.nodeId, outp.nodeId);
             network.structure.Add(fromInpToNew);
             network.structure.Add(fromNewToOut);
+
+            UpdateLayers(network);
+        }  
+
+
+        /// <summary>
+        /// updates the layer number for all nodes in a neuralnetwork
+        /// </summary>
+        /// <param name="network"></param>
+        // TODO: optimize
+        private static void UpdateLayers(NeuralNetwork network){
+            var nodes = new List<NodeGene>(network.nodeById.Values);
+
+            int searchNode(NodeGene nodeGene){
+                if (nodeGene.nodeType == NodeGene.Type.INPUT){
+                    return 1;
+                }
+
+                Stack<NodeGene> toSearch = new();
+                foreach (ConnectGene connection in network.structure){
+                    if (connection.outGene == nodeGene.nodeId){
+                        toSearch.Push(network.nodeById[connection.inGene]);
+                    }
+                }
+
+                int layer = -1;
+                while (toSearch.Count > 0)
+                {
+                    layer = Math.Max(layer, searchNode(toSearch.Pop()));
+                }
+                return layer+1;
+            }
+
+            foreach (var node in nodes){
+                node.Layer = searchNode(node);
+            }
         }
 
         /// <summary>

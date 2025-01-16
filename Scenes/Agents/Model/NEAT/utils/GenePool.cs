@@ -46,7 +46,6 @@ namespace NEAT
         /// Create a new node, and return a copy of it
         /// </summary>
         public NodeGene CreateNode(NodeGene.Type type, int layerNum){
-            // TODO: change this to keep track of the layer of the node (note, layers may be different between networks)
             NodeGene newNode = new(type, layerNum);
             if (!genesByType.TryGetValue(type, out List<NodeGene> layer)){
                 throw new Exception("Invalid Type: " + type);

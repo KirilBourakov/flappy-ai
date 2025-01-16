@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Godot;
 
 namespace NEAT
 {
@@ -145,7 +146,6 @@ namespace NEAT
         /// <exception cref="InvalidOperationException"></exception>
         private static void AddNode(NeuralNetwork network){
             // TODO: consider only adding nodes on enabled connections
-            // TODO: recalculate layer based on longest path back to input
             ConnectGene chosen = network.structure[network.random.Next(0, network.structure.Count)];
             chosen.enabled = false;
 

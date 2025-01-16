@@ -2,11 +2,11 @@ using System;
 
 namespace NEAT{
     public class ConnectGene{
-        public int inGene;
-        public int outGene;
-        public double weight;
-        public bool enabled;
-        public int innovation;
+        public readonly int inGene;
+        public readonly int outGene;
+        public double weight {get; set;}
+        public bool enabled {get; set;}
+        public readonly int innovation;
 
         private static int InnovationCount = 0;
         private static readonly Random random= new Random();

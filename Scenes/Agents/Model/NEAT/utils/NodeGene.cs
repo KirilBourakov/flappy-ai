@@ -16,11 +16,11 @@ namespace NEAT
         public int Layer {
             get => _layer; 
             set {
-                if (value - _layer == 1){
-                    _layer = value;
-                } else {
-                    throw new InvalidOperationException($"{nodeType} Layer {nodeId} is being moved more then 1 layer to {value}");
-                }
+                // if (Math.Abs(value - _layer) <= 1){
+                _layer = value;
+                // } else {
+                //     throw new InvalidOperationException($"{nodeType} Layer {nodeId} @ layer {_layer} is being moved more then 1 layer to {value}");
+                // }
             } 
         }
 

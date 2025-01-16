@@ -57,7 +57,7 @@ namespace NEAT {
                     newGen.Add(new Species(newNetwork));
                 }
             }
-            GD.Print(newGen.Count + " count");
+
             population = newGen;
         }
 
@@ -79,14 +79,12 @@ namespace NEAT {
                     }
                 }
             }
-            GD.Print("labeled");
 
             // clear the members of the species
             foreach (var singleSpecies in population)
             {
                 singleSpecies.memebers = [];
             }
-            GD.Print("cleared");
 
             // get the members for each representative
             bool[] placed = new bool[nonRepresentatives.Count];
@@ -99,7 +97,6 @@ namespace NEAT {
                     }   
                 }
                 population[i].memebers = newMembers;
-                GD.Print($"representative : {i}");
             }
 
             // get the members for species that did not have representatives 
@@ -114,9 +111,7 @@ namespace NEAT {
                     }
                     population.Add(newSpecies);
                 }
-                GD.Print($"placed : {i}");
             }
-            GD.Print("finished placing");
 
             // pruge empty species and those that have not improved
             for (int i = population.Count - 1; i >= 0; i--)
@@ -125,7 +120,6 @@ namespace NEAT {
                     population.RemoveAt(i);
                 }
             }
-            GD.Print("purged");
 
             if (population.Count > SPECIES_COUNT_TARGET){
                 threshold += STEP;
@@ -152,15 +146,15 @@ namespace NEAT {
                 fitAvg += singularSpecies.updateFitnessFields();
             }
             fitAvg /= population.Count;
-            GD.Print("adjusted fitavg");
 
             ReSpeciate();
-            GD.Print("respeciated");
 
-            for (int i = 0; i<population.Count; i++){
-                population[i].memebers = population[i].CreateNewGeneration(fitAvg);
+            for (int i = population.Count - 1; i >= 0; i--){
+                population[i].memebers = population[i].CreateNewGeneration(fitAvg, out bool extinct);
+                if (extinct){
+                    population.RemoveAt(i);
+                }
             }
-            GD.Print("created new generations (internal)");
         }
 
         /// <summary>

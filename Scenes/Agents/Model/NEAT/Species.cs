@@ -65,26 +65,31 @@ namespace NEAT{
         /// <param name="globalAvg"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public List<NeuralNetwork> CreateNewGeneration(double globalAvg){
+        public List<NeuralNetwork> CreateNewGeneration(double globalAvg, out bool extinct){
             if (memebers == null || memebers.Count == 0)
                 throw new InvalidOperationException("Cannot create a new generation: memebers list is null or empty.");
 
-            List<NeuralNetwork> newGen = new();
             int newSize = 1;
+
+            GD.Print("globalAvg " + avgAdjustedFitness / globalAvg);
             if (globalAvg > 0) {
                 newSize = (int) Math.Round((avgAdjustedFitness / globalAvg) * memebers.Count);
             } 
 
-            for (int i = 0; i < memebers.Count; i++)
-            {
-                memebers[i].relativeFitness = memebers[i].fitness / totalFitness;
-            }
-            
-            for (int i = 0; i < newSize; i++)
-            {
-                NeuralNetwork parent1 = getParent();
-                NeuralNetwork parent2 = getParent();
-                newGen.Add(parent1.Crossover(parent2));
+            List<NeuralNetwork> newGen = new();
+            extinct = false;
+            if (newSize == 0){
+                extinct = true;
+            } else {
+                for (int i = 0; i < memebers.Count; i++){
+                    memebers[i].relativeFitness = memebers[i].fitness / totalFitness;
+                }
+                
+                for (int i = 0; i < newSize; i++){
+                    NeuralNetwork parent1 = getParent();
+                    NeuralNetwork parent2 = getParent();
+                    newGen.Add(parent1.Crossover(parent2));
+                }
             }
 
             return newGen;

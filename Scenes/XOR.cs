@@ -37,7 +37,7 @@ public partial class XOR : Node2D
             }
 
 
-            GD.Print($"Generation {gen} has a pool of {pool.connectGenes.Count} genes and {population.totalMembers} members");
+            GD.Print($"Generation {gen} has a pool of {pool.connectGenes.Count} genes and {population.totalMembers} members split between {population.population.Count} Species");
 
             double avg = 0;
             foreach (var species in population.population)
@@ -48,12 +48,10 @@ public partial class XOR : Node2D
                 
             }
 
-            avg /= population.population.Count;
+            avg /= population.totalMembers;
             GD.Print($"Average fitness is {avg / xorInputs.Length}");
 
-            GD.Print("creating new generation");
             population.CreateNewGeneration();
-            GD.Print("created new generation");
             gen++;
         }
     }
@@ -63,7 +61,7 @@ public partial class XOR : Node2D
         for (int i = 0; i < xorInputs.Length; i++){
             double result = network.Evaluate(xorInputs[i])[0];
 
-            network.fitness += 1 - Math.Abs(result - xorOutputs[i]);
+            network.fitness += 1 - Math.Abs(result- xorOutputs[i]);
             // if (result > 0.5 && xorOutputs[i] == 1){
             //     network.fitness++;
             // }

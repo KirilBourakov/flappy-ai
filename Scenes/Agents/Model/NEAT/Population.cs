@@ -138,19 +138,44 @@ namespace NEAT {
 
             ReSpeciate();
 
-            double fitAvg = 0;
+            // shift all fitness's so they are not negative
+            double adjustVal = 0;
+            foreach (var species in population)
+            {
+                foreach (var member in species.memebers){
+                    if (member.fitness < adjustVal)
+                    {
+                        adjustVal = member.fitness;
+                    }
+                }
+            }
+            adjustVal = Math.Abs(adjustVal) + 1;
+
+            foreach (var species in population)
+            {
+                foreach (var member in species.memebers){
+                    member.fitness += adjustVal;
+                }
+            }
+            
+            double globalAvg = 0;
             foreach (var singularSpecies in population)
             {
-                fitAvg += singularSpecies.avgAdjustedFitness;
+                globalAvg += singularSpecies.avgAdjustedFitness;
             }
-            fitAvg /= population.Count;
+            globalAvg /= population.Count;
             
+            int[] allowedOffspring = new int[population.Count];
+
+            for (int i = 0; i < population.Count; i++){
+                allowedOffspring[i] = (int) Math.Round(population.Count * (population[i].avgAdjustedFitness / globalAvg));
+                GD.Print(population.Count * (population[i].avgAdjustedFitness / globalAvg));
+                GD.Print(globalAvg);
+            }
+            GD.Print(allowedOffspring);
 
             for (int i = population.Count - 1; i >= 0; i--){
-                population[i].memebers = population[i].CreateNewGeneration(fitAvg, out bool extinct);
-                if (extinct){
-                    population.RemoveAt(i);
-                }
+                population[i].memebers = population[i].CreateNewGeneration(allowedOffspring[i]);
             }
         }
 

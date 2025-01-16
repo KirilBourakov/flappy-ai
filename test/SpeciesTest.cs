@@ -22,14 +22,4 @@ public class SpeciesTest
         Species species = new(members);
         return species;
     }
-
-    [TestCase]
-    public void CreateNewGenerationCorrectLengthTest(){
-        Species species = genSpecies();
-
-        //Assertions.AssertThat(species.avgAdjustedFitness).IsEqual(1100);
-        Assertions.AssertInt(species.CreateNewGeneration(species.avgAdjustedFitness, out _).Count).IsEqual(species.memebers.Count);
-        Assertions.AssertInt(species.CreateNewGeneration(species.avgAdjustedFitness*2, out _).Count).IsEqual((int) Math.Round(species.memebers.Count/2d));
-        Assertions.AssertInt(species.CreateNewGeneration(species.avgAdjustedFitness/2, out _).Count).IsEqual(species.memebers.Count*2);
-    }
 }

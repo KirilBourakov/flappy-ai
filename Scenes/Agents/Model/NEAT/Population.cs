@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using Godot;
 
@@ -13,6 +14,7 @@ namespace NEAT {
         public double threshold {get; private set;} = 4;
         private const double STEP = 0.3;
         private const int SPECIES_COUNT_TARGET = 5;
+        private const int TOTAL_TARGET = 50;
 
         private readonly Random random = new();
 
@@ -138,26 +140,6 @@ namespace NEAT {
 
             ReSpeciate();
 
-            // shift all fitness's so they are not negative
-            double adjustVal = 0;
-            foreach (var species in population)
-            {
-                foreach (var member in species.memebers){
-                    if (member.fitness < adjustVal)
-                    {
-                        adjustVal = member.fitness;
-                    }
-                }
-            }
-            adjustVal = Math.Abs(adjustVal) + 1;
-
-            foreach (var species in population)
-            {
-                foreach (var member in species.memebers){
-                    member.fitness += adjustVal;
-                }
-            }
-            
             double globalAvg = 0;
             foreach (var singularSpecies in population)
             {
@@ -166,13 +148,12 @@ namespace NEAT {
             globalAvg /= population.Count;
             
             int[] allowedOffspring = new int[population.Count];
-
+            // fix population collapse happening here
             for (int i = 0; i < population.Count; i++){
-                allowedOffspring[i] = (int) Math.Round(population.Count * (population[i].avgAdjustedFitness / globalAvg));
-                GD.Print(population.Count * (population[i].avgAdjustedFitness / globalAvg));
-                GD.Print(globalAvg);
+                allowedOffspring[i] = (int) Math.Round(population[i].memebers.Count *  Math.Abs(population[i].avgAdjustedFitness /globalAvg));
+                GD.Print(i + " population[i].avgAdjustedFitness: " +  population[i].avgAdjustedFitness);
+                GD.Print(i + " globalAvg " + globalAvg);
             }
-            GD.Print(allowedOffspring);
 
             for (int i = population.Count - 1; i >= 0; i--){
                 population[i].memebers = population[i].CreateNewGeneration(allowedOffspring[i]);

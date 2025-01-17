@@ -58,16 +58,17 @@ public partial class XOR : Node2D
 
     public static void test(NeuralNetwork network){
         network.fitness = 0;
+        double tolerance = 0.05;
         for (int i = 0; i < xorInputs.Length; i++){
             double result = network.Evaluate(xorInputs[i])[0];
 
-            network.fitness += 1 - Math.Abs(result- xorOutputs[i]);
-            // if (result > 0.5 && xorOutputs[i] == 1){
-            //     network.fitness++;
-            // }
-            // else if (result < 0.5 && xorOutputs[i] == 0){
-            //     network.fitness++;
-            // }
+            if (Math.Abs(result - xorOutputs[i]) < tolerance){
+                network.fitness += 1;  // Exact match or within tolerance
+            }
+            else{
+                network.fitness += Math.Max(0, 1 - Math.Abs(result - xorOutputs[i]) / tolerance);
+            }
         }
+        network.fitness /= xorInputs.Length;
     }
 }

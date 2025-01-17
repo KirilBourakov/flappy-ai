@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 namespace NEAT{
@@ -69,6 +70,7 @@ namespace NEAT{
 
             for (int i = 0; i < memebers.Count; i++){
                 memebers[i].relativeFitness = memebers[i].fitness / totalFitness;
+                GD.Print("relative " + i);
             }
             
             List<NeuralNetwork> newGen = [];
@@ -76,6 +78,7 @@ namespace NEAT{
                 NeuralNetwork parent1 = getParent();
                 NeuralNetwork parent2 = getParent();
                 newGen.Add(parent1.Crossover(parent2));
+                GD.Print($"new size {i} = {newSize}");
             }
 
             memebers = newGen;
@@ -86,6 +89,10 @@ namespace NEAT{
         /// </summary>
         /// <returns></returns>
         private NeuralNetwork getParent(){
+            if (totalFitness == 0 || memebers.All(m => m.relativeFitness == 0)) {
+                return memebers[random.Next(memebers.Count)]; 
+            }
+            
             double target = random.NextDouble();
             double curr = 0;
 
@@ -93,8 +100,10 @@ namespace NEAT{
             for (i = 0; i < memebers.Count && curr < target; i++)
             {
                 curr += memebers[i].relativeFitness;
-            }
 
+                GD.Print($"curr {i} = {curr}");
+            }
+            GD.Print("Min: " + Math.Min(i, memebers.Count-1));
             return memebers[Math.Min(i, memebers.Count-1)];
         }
     }

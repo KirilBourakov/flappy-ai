@@ -10,7 +10,7 @@ namespace NEAT{
 
         public Dictionary<int, NodeGene> nodeById {get; private set;} = new();
         public List<ConnectGene> structure {get; private set;} = new();
-        // TODO: create a structure sorted by innovation number to avoid calculation when crossover occurs.
+
         public bool hasBias {get;}
 
         /// <summary>

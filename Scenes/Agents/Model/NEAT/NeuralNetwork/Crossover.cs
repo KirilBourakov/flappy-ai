@@ -126,7 +126,6 @@ namespace NEAT
             }
         }
         
-        // TODO: should recive a child neural network and modify that, not a structure
         /// <summary>
         /// Flips a random connections enabled status within the network
         /// </summary>

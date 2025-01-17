@@ -48,12 +48,6 @@ namespace NEAT{
             this.memebers = members ?? throw new ArgumentNullException("Member cannot be null");
         }
 
-        // todo: replace with property
-        /// <summary>
-        /// Update the current population fitness based on the fitness of it's members. Also keeps track of how long ago an imporovement occured from the last update.
-        /// </summary>
-        /// <returns></returns>
-
         public bool noImprovement(){
             return lastImprovement >= 15;
         }
@@ -92,7 +86,7 @@ namespace NEAT{
             if (totalFitness == 0 || memebers.All(m => m.relativeFitness == 0)) {
                 return memebers[random.Next(memebers.Count)]; 
             }
-            
+
             double target = random.NextDouble();
             double curr = 0;
 

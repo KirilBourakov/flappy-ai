@@ -15,6 +15,7 @@ namespace NEAT{
         /// Creates a ConnectGene given an input and output id
         /// </summary>
         public ConnectGene(int inGene, int outGene){
+            if (outGene == inGene) throw new InvalidOperationException($"Creating recursive connection; {inGene} and {outGene} are the same node");
             this.inGene = inGene;
             this.outGene = outGene;
             this.enabled = true;

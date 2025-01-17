@@ -69,11 +69,29 @@ namespace NEAT
             {
                 foreach (int id in new int[] {connection.inGene, connection.outGene})
                 {
-                    bool success = highestFitness.nodeById.TryGetValue(id, out NodeGene val);
-                    if (!success){
-                        throw new InvalidOperationException($"New structure has node {id} that the highest parent does not have");
-                    }
-                    newNodesById[id] = val;
+                    //TODO: find why this causes errors. Linked to recurrent connection issue
+                    // bool success = highestFitness.pool.ge(id, out NodeGene val);
+                    // if (!success){
+                    //     GD.Print("ERROR HERE");
+                    //     foreach (var item in highestFitness.nodeById)
+                    //     {
+                    //         GD.Print("High node " + item.Value.nodeId);
+                    //     }
+                    //     foreach (var item in highestFitness.structure){
+                    //         GD.Print($"High connection: {item.inGene} -> {item.outGene} ({item.innovation})");
+                    //     }
+
+                    //     foreach (var item in lowestFitness.nodeById)
+                    //     {
+                    //         GD.Print("LOw node " + item.Value.nodeId);
+                    //     }
+                    //     foreach (var item in lowestFitness.structure){
+                    //         GD.Print($"Low connection: {item.inGene} -> {item.outGene} ({item.innovation})");
+                    //     }
+                    //     throw new InvalidOperationException($"New structure has node {id} that the highest parent does not have");
+                    // }
+                    
+                    newNodesById[id] = highestFitness.pool.GetGeneById(id);
                 }
             }
 

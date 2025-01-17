@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using GdUnit4;
+using Godot;
 using NEAT;
 
 namespace Test;
@@ -17,7 +18,12 @@ public class SelectorTest
         var inptToHidden = pool.SafeCreateConnectionGene(inp.nodeId, hidden.nodeId);
         var HiddenToOut = pool.SafeCreateConnectionGene(hidden.nodeId, output.nodeId);
         
-        NeuralNetwork neuralNetwork = new(pool, true, pool.connectGenes, pool.geneById);
+        Dictionary<int, NodeGene> map = new Dictionary<int, NodeGene>(){
+            [inp.nodeId] = inp,
+            [hidden.nodeId] = hidden,
+            [output.nodeId] = output,
+        };
+        NeuralNetwork neuralNetwork = new(pool, true, pool.connectGenes, map);
 
         Population selector = new(1, 1, 1, false, out _);
 
@@ -36,9 +42,14 @@ public class SelectorTest
         var HiddenToOut = pool.SafeCreateConnectionGene(hidden.nodeId, output.nodeId);
         var inptToOut = pool.SafeCreateConnectionGene(inp.nodeId, output.nodeId);
 
-        NeuralNetwork large = new(pool, true, pool.connectGenes, pool.geneById);
+        Dictionary<int, NodeGene> map = new Dictionary<int, NodeGene>(){
+            [inp.nodeId] = inp,
+            [hidden.nodeId] = hidden,
+            [output.nodeId] = output,
+        };
+        NeuralNetwork large = new(pool, true, pool.connectGenes, map);
 
-        Dictionary<int, NodeGene> map = new()
+        map = new()
         {
             [inp.nodeId] = inp,
             [hidden.nodeId] = hidden,

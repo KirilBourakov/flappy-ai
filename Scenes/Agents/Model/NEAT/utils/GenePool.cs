@@ -15,7 +15,7 @@ namespace NEAT
         /// <summary>
         /// A dictionary that stores each node gene by it's id.
         /// </summary>
-        public Dictionary<int, NodeGene> geneById = new();
+        private Dictionary<int, NodeGene> geneById = new();
 
         /// <summary>
         /// A List that stores every connection gene
@@ -40,6 +40,15 @@ namespace NEAT
                 nodes.Add(item.Clone());
             }
             return nodes;
+        }
+
+        public NodeGene GetGeneById(int id){
+            bool success = geneById.TryGetValue(id, out NodeGene val);
+            if (!success){
+                throw new Exception(id + " not found");
+            }
+
+            return val.Clone();
         }
 
         /// <summary>

@@ -70,6 +70,7 @@ namespace NEAT {
         /// <returns></returns>
         private void ReSpeciate(){
             // get representatives, and unlabel labled members
+            GD.Print("before assignn. rep");
             List<NeuralNetwork> representatives = new();
             List<NeuralNetwork> nonRepresentatives = new();
             foreach (var singularSpecies in population){
@@ -81,6 +82,7 @@ namespace NEAT {
                     }
                 }
             }
+            GD.Print("before after");
 
             // clear the members of the species
             foreach (var singleSpecies in population)
@@ -102,6 +104,7 @@ namespace NEAT {
             }
 
             // get the members for species that did not have representatives 
+            GD.Print("get the members for species that did not have representatives ");
             for (int i = 0; i < placed.Length; i++){
                 if (!placed[i]){
                     Species newSpecies = new(nonRepresentatives[i]);
@@ -110,11 +113,14 @@ namespace NEAT {
                             newSpecies.memebers.Add(nonRepresentatives[j]);
                             placed[j] = true;
                         }
+                         GD.Print("j " + j);
                     }
                     population.Add(newSpecies);
                 }
+                GD.Print("I " + i);
             }
 
+            GD.Print("pre-purge");
             // pruge empty species and those that have not improved
             for (int i = population.Count - 1; i >= 0; i--)
             {
@@ -122,6 +128,7 @@ namespace NEAT {
                     population.RemoveAt(i);
                 }
             }
+            GD.Print("pruged");
 
             if (population.Count > SPECIES_COUNT_TARGET){
                 threshold += STEP;
@@ -138,7 +145,9 @@ namespace NEAT {
         /// <returns></returns>
         public void CreateNewGeneration(){
 
+            GD.Print("before ReSpeciate");
             ReSpeciate();
+            GD.Print("after ReSpeciate");
 
             double globalAvg = 0;
             foreach (var singularSpecies in population)
@@ -158,6 +167,7 @@ namespace NEAT {
             for (int i = population.Count - 1; i >= 0; i--){
                 population[i].NextGeneration(allowedOffspring[i]);
             }
+            GD.Print("got next gen");
         }
 
         /// <summary>

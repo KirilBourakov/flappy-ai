@@ -32,7 +32,7 @@ public class GenePoolTest
     public void CreateNodeTest(){
         GenePool pool = new();
         var gene = pool.CreateNode(NodeGene.Type.INPUT, 0);
-        Assertions.AssertInt(pool.geneById[gene.nodeId].nodeId).IsEqual(gene.nodeId);
+        Assertions.AssertInt(pool.GetGeneById(gene.nodeId).nodeId).IsEqual(gene.nodeId);
         Assertions.AssertInt(pool.genesByType[NodeGene.Type.INPUT][0].nodeId).IsEqual(gene.nodeId);
     }
 

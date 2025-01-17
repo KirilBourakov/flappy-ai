@@ -156,7 +156,7 @@ namespace NEAT {
             }
 
             for (int i = population.Count - 1; i >= 0; i--){
-                population[i].memebers = population[i].CreateNewGeneration(allowedOffspring[i]);
+                population[i].NextGeneration(allowedOffspring[i]);
             }
         }
 

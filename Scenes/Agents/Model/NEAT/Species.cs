@@ -22,6 +22,7 @@ namespace NEAT{
             return avg / memebers.Count;
         }}
         
+        // TODO: punish species that do not improve
         private double lastImprovement;
         private static readonly Random random = new();
 
@@ -63,7 +64,7 @@ namespace NEAT{
         /// <param name="globalAvg"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public List<NeuralNetwork> CreateNewGeneration(int newSize){
+        public void NextGeneration(int newSize){
             if (memebers == null || memebers.Count == 0) throw new InvalidOperationException("Cannot create a new generation: memebers list is null or empty.");
 
             for (int i = 0; i < memebers.Count; i++){
@@ -77,7 +78,7 @@ namespace NEAT{
                 newGen.Add(parent1.Crossover(parent2));
             }
 
-            return newGen;
+            memebers = newGen;
         }
 
         /// <summary>

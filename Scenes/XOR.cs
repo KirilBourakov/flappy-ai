@@ -20,12 +20,16 @@ public partial class XOR : Node2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+        var v = new Visualizer();
+        v.drawTest();
+        
 		thread = new(Run);
 		thread.Start();
 	}
     
     public void Run(){
         Population population = new(GEN_SIZE, 2, 1, false, out GenePool pool);
+        population.population[0].memebers[0].visualize("1.jpg");
 
         int gen = 1;
         while (true){

@@ -34,6 +34,7 @@ namespace NEAT{
         public void visualize(string outputPath)
         {
             List<List<PositionedNode>> nodes = [];
+            Dictionary<int, PositionedNode> positionNodeById = [];
             foreach (NodeGene nodeGene in nodeById.Values)
             {
                 int listIndex = nodeGene.Layer - 1;
@@ -44,7 +45,9 @@ namespace NEAT{
                         nodes.Add([]);
                     }
                 }
-                nodes[listIndex].Add(new PositionedNode(nodeGene));
+                PositionedNode p = new PositionedNode(nodeGene);
+                positionNodeById[nodeGene.nodeId] = p;
+                nodes[listIndex].Add(p);
             }
             updatedPos(nodes, out int networkWidth, out int networkDepth);
             
@@ -57,8 +60,19 @@ namespace NEAT{
             {
                 graphics.Clear(Color.Black);
                 Brush brush = new SolidBrush(Color.Blue);
+                Pen pen = new (brush, 5);
                 foreach (var layer in nodes)
                 {
+                    foreach (var connection in structure)
+                    {
+                        var inNode = positionNodeById[connection.inGene];
+                        var outNode = positionNodeById[connection.outGene];
+                        graphics.DrawLine(pen, 
+                            new Point((int)inNode.position.Value.X+(nodeSize/2), (int)inNode.position.Value.Y+(nodeSize/2)),
+                            new Point((int)outNode.position.Value.X+(nodeSize/2), (int)outNode.position.Value.Y+(nodeSize/2))
+                        );
+                    }
+
                     foreach (var node in layer)
                     {
                         if (node.position == null) throw new ArgumentNullException("Node position not updated.");
@@ -91,8 +105,8 @@ namespace NEAT{
 
         private Vector2 GetPosition(int numInLayer, int layer){
             return  new Vector2(
-                (numInLayer+1)*(nodeSize+2*padding), 
-                (layer+1)*distanceBetweenLayers
+                (layer+1)*distanceBetweenLayers,
+                (numInLayer+1)*(nodeSize+2*padding)
             );
         }
     }

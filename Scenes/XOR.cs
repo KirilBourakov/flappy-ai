@@ -20,9 +20,6 @@ public partial class XOR : Node2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-        var v = new Visualizer();
-        v.drawTest();
-        
 		thread = new(Run);
 		thread.Start();
 	}

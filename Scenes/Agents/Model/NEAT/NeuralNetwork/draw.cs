@@ -22,18 +22,13 @@ namespace NEAT{
                 }
             }
             public Vector2 leftHandCorner {
-                get => new Vector2(_position.Value.X-(nodeSize/2), _position.Value.Y-(nodeSize/2));
+                get => new Vector2(_position.Value.X-(MIN_CELL_SIZE/2), _position.Value.Y-(MIN_CELL_SIZE/2));
             }
 
             public PositionedNode(NodeGene node){
                 this.node = node;
             }
         }
-
-        private const int nodeSize = 30;
-       
-        private const int distanceBetweenLayers = 55;
-
 
         private const int MIN_CELL_SIZE = 30;
         private const int PADDING = 10;
@@ -94,7 +89,7 @@ namespace NEAT{
                     foreach (var node in layer)
                     {
                         if (node.position == null) throw new ArgumentNullException("Node position not updated.");
-                        Rectangle rect = new Rectangle((int)node.leftHandCorner.X, (int)node.leftHandCorner.Y, nodeSize, nodeSize);
+                        Rectangle rect = new Rectangle((int)node.leftHandCorner.X, (int)node.leftHandCorner.Y, MIN_CELL_SIZE, MIN_CELL_SIZE);
                         graphics.FillEllipse(blue, rect);
 
                     }

@@ -21,6 +21,9 @@ namespace NEAT{
                     _position = value;
                 }
             }
+            public Vector2 leftHandCorner {
+                get => new Vector2(_position.Value.X-(nodeSize/2), _position.Value.Y-(nodeSize/2));
+            }
 
             public PositionedNode(NodeGene node){
                 this.node = node;
@@ -35,9 +38,6 @@ namespace NEAT{
         private const int MIN_CELL_SIZE = 30;
         private const int PADDING = 10;
         public void Visualize(string outputPath){
-            // get int number of largest layer
-            // get int number of last layer
-
             List<List<PositionedNode>> nodes = [];
             Dictionary<int, PositionedNode> positionNodeById = [];
             foreach (NodeGene nodeGene in nodeById.Values)
@@ -75,29 +75,33 @@ namespace NEAT{
             using (Graphics graphics = Graphics.FromImage(bitmap))
             {
                 graphics.Clear(Color.Black);
-                Brush brush = new SolidBrush(Color.Blue);
-                Pen pen = new (brush, 5);
+                Brush blue = new SolidBrush(Color.Blue);
+                Brush red = new SolidBrush(Color.Red);
+                Pen bluePen = new (blue, 5);
+                Pen redPen = new (red, 5);
                 foreach (var layer in nodes)
                 {
                     foreach (var connection in structure)
                     {
                         var inNode = positionNodeById[connection.inGene];
                         var outNode = positionNodeById[connection.outGene];
-                        graphics.DrawLine(pen, 
-                            new Point((int)inNode.position.Value.X+(nodeSize/2), (int)inNode.position.Value.Y+(nodeSize/2)),
-                            new Point((int)outNode.position.Value.X+(nodeSize/2), (int)outNode.position.Value.Y+(nodeSize/2))
+                        graphics.DrawLine(connection.enabled ? bluePen : redPen, 
+                            new Point((int)inNode.position.Value.X, (int)inNode.position.Value.Y),
+                            new Point((int)outNode.position.Value.X, (int)outNode.position.Value.Y)
                         );
                     }
 
                     foreach (var node in layer)
                     {
                         if (node.position == null) throw new ArgumentNullException("Node position not updated.");
-                        Rectangle rect = new Rectangle((int)node.position.Value.X, (int)node.position.Value.Y, nodeSize, nodeSize);
-                        graphics.FillEllipse(brush, rect);
+                        Rectangle rect = new Rectangle((int)node.leftHandCorner.X, (int)node.leftHandCorner.Y, nodeSize, nodeSize);
+                        graphics.FillEllipse(blue, rect);
 
                     }
                 }
-                brush.Dispose();
+
+                red.Dispose();
+                blue.Dispose();
             }
 
             bitmap.Save(outputPath, ImageFormat.Jpeg);
@@ -114,7 +118,7 @@ namespace NEAT{
                 for (int j = 0; j < layer.Count; j++)
                 {
                     int xPos = (2*i+1)*MIN_CELL_SIZE + (MIN_CELL_SIZE/2);
-                    int yPos = (j) * cellSize + (cellSize/2);
+                    int yPos = j * (cellSize+PADDING) + (cellSize/2);
                     layer[j].position = new Vector2(xPos, yPos);
                 }
             }

@@ -26,7 +26,7 @@ public partial class XOR : Node2D
     
     public void Run(){
         Population population = new(GEN_SIZE, 2, 1, false, out GenePool pool);
-        population.population[0].memebers[0].visualize("1.jpg");
+        population.population[0].memebers[0].Visualize("1.jpg");
 
         int gen = 1;
         while (true){

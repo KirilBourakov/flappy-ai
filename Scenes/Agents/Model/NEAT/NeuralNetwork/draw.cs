@@ -28,11 +28,16 @@ namespace NEAT{
         }
 
         private const int nodeSize = 30;
-        private const int padding = 10;
+       
         private const int distanceBetweenLayers = 55;
 
-        public void visualize(string outputPath)
-        {
+
+        private const int MIN_CELL_SIZE = 30;
+        private const int PADDING = 10;
+        public void Visualize(string outputPath){
+            // get int number of largest layer
+            // get int number of last layer
+
             List<List<PositionedNode>> nodes = [];
             Dictionary<int, PositionedNode> positionNodeById = [];
             foreach (NodeGene nodeGene in nodeById.Values)
@@ -49,12 +54,23 @@ namespace NEAT{
                 positionNodeById[nodeGene.nodeId] = p;
                 nodes[listIndex].Add(p);
             }
-            updatedPos(nodes, out int networkWidth, out int networkDepth);
-            
-            // Define the image size
-            int width = distanceBetweenLayers * (networkDepth+2);
-            int height = nodeSize * (networkWidth+4);
-            Bitmap bitmap = new Bitmap(width, height);
+
+            int largestLayer = 0;
+            foreach (var layer in nodes)
+            {
+                if (layer.Count > largestLayer){
+                    largestLayer = layer.Count;
+                }
+            }
+            int networkLength = nodes.Count;
+
+            int bitmapHight = largestLayer * MIN_CELL_SIZE;
+            int bitmapWidth = networkLength * 2 * MIN_CELL_SIZE;
+            // update node position
+            updatePos(nodes, bitmapHight, bitmapWidth);
+
+            // draw
+            Bitmap bitmap = new Bitmap(bitmapWidth*3, bitmapHight*3);
 
             using (Graphics graphics = Graphics.FromImage(bitmap))
             {
@@ -89,27 +105,19 @@ namespace NEAT{
             Godot.GD.Print($"Image saved as {outputPath}");
         }
 
-        private void updatedPos(List<List<PositionedNode>> nodes, out int networkWidth, out int networkDepth){
-            int maxLength = 0;
-            for (int i = 0; i < nodes.Count; i++){
-                if (nodes[i].Count > maxLength) maxLength = nodes[i].Count;
 
-                for (int j = 0; j < nodes[i].Count; j++)
+        private void updatePos(List<List<PositionedNode>> nodes, int bitmapHight, int bitmapWidth){
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                List<PositionedNode> layer = nodes[i];
+                int cellSize = bitmapHight / layer.Count;
+                for (int j = 0; j < layer.Count; j++)
                 {
-                    nodes[i][j].position = GetPosition(j, i);
+                    int xPos = (2*i+1)*MIN_CELL_SIZE + (MIN_CELL_SIZE/2);
+                    int yPos = (j) * cellSize + (cellSize/2);
+                    layer[j].position = new Vector2(xPos, yPos);
                 }
             }
-            networkWidth = maxLength;
-            networkDepth = nodes.Count;
         }
-
-        private Vector2 GetPosition(int numInLayer, int layer){
-            return  new Vector2(
-                (layer+1)*distanceBetweenLayers,
-                (numInLayer+1)*(nodeSize+2*padding)
-            );
-        }
-    }
-
-    
+    }    
 }

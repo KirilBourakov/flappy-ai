@@ -28,11 +28,12 @@ public partial class XOR : Node2D
         Population population = new(GEN_SIZE, 2, 1, false, out GenePool pool);
         NeuralNetwork testMem = population.population[0].memebers[0];
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 15; i++)
         {
             NeuralNetwork.AddNode(testMem);
-            testMem.Visualize($"{i}.jpg");
+            
         }
+        testMem.Visualize($"output/{0}.jpg");
 
         int gen = 1;
         while (true){

@@ -162,9 +162,15 @@ namespace NEAT
         /// <param name="network"></param>
         /// <exception cref="InvalidOperationException"></exception>
         public static void AddNode(NeuralNetwork network){
-            // TODO: consider only adding nodes on enabled connections
-            // SHOULD ONLY WORK ON ENABLED CONNECTIONS
             ConnectGene chosen = network.structure[network.random.Next(0, network.structure.Count)];
+            int count = 0;
+            while (chosen.enabled == false && count < 20){
+                chosen = network.structure[network.random.Next(0, network.structure.Count)];
+                count++;
+            }
+            if (chosen.enabled == false){
+                return;
+            }
             chosen.enabled = false;
 
             NodeGene inp = network.nodeById[chosen.inGene];

@@ -130,7 +130,7 @@ namespace NEAT
         /// Flips a random connections enabled status within the network
         /// </summary>
         /// <param name="network"></param>
-        private static void FlipRandomConnection(NeuralNetwork network){
+        public static void FlipRandomConnection(NeuralNetwork network){
             ConnectGene chosen = network.structure[network.random.Next(0, network.structure.Count)];
             chosen.enabled = !chosen.enabled;
         }
@@ -140,7 +140,7 @@ namespace NEAT
         /// </summary>
         /// <param name="network"></param>
         // TODO: check if the connection already exists
-        private static void AddConnection(NeuralNetwork network){
+        public static void AddConnection(NeuralNetwork network){
             var nodes = new List<NodeGene>(network.nodeById.Values);
             var inp = nodes[network.random.Next(0, nodes.Count)];
 
@@ -161,8 +161,9 @@ namespace NEAT
         /// </summary>
         /// <param name="network"></param>
         /// <exception cref="InvalidOperationException"></exception>
-        private static void AddNode(NeuralNetwork network){
+        public static void AddNode(NeuralNetwork network){
             // TODO: consider only adding nodes on enabled connections
+            // SHOULD ONLY WORK ON ENABLED CONNECTIONS
             ConnectGene chosen = network.structure[network.random.Next(0, network.structure.Count)];
             chosen.enabled = false;
 
@@ -200,7 +201,7 @@ namespace NEAT
         /// </summary>
         /// <param name="network"></param>
         // TODO: optimize
-        private static void UpdateLayers(NeuralNetwork network){
+        public static void UpdateLayers(NeuralNetwork network){
             var nodes = new List<NodeGene>(network.nodeById.Values);
 
             int searchNode(NodeGene nodeGene){

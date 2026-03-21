@@ -14,7 +14,7 @@ A evolutionary algorithm that trains an AI to play Flappy Bird using an **Evolut
 * **Language:** C#
 * **AI Concept:** Evolutionary Algorithms / Neural Networks
 
-## 📁 Project Structure
+## Project Structure
 
 ```text
 flappy-ai/
